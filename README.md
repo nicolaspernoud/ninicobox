@@ -5,7 +5,7 @@ A home cloud providing file explorer with permissions and access control lists t
 
 ```bash
 git clone https://github.com/nicolaspernoud/ninicobox.git
-cd proxy-box
+cd ninicobox
 npm run setup
 npm run build
 ```
