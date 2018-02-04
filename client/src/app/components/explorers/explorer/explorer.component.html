@@ -1,0 +1,46 @@
+<mat-nav-list>
+    <a mat-list-item *ngIf="!!currentPath" tabindex="0" (click)="goBack()">
+        <mat-icon matListIcon>arrow_back</mat-icon>
+        <h3 mat-line>..</h3>
+    </a>
+    <a mat-list-item *ngFor="let file of files" tabindex="0" (click)="file.isDir ? explore(file) : ''">
+        <mat-icon mat-list-icon *ngIf="file.isDir">folder</mat-icon>
+        <mat-icon mat-list-icon *ngIf="!file.isDir">insert_drive_file</mat-icon>
+        <h3 matLine *ngIf="!file.isRenaming"> {{file.name}} </h3>
+        <h3 matLine *ngIf="file.isRenaming">
+            <mat-form-field>
+                <input matInput type="text" [(ngModel)]="file.name" (click)="$event.stopPropagation()" [appFocus]="renameFocusTriggeringEventEmitter"/>
+            </mat-form-field>
+        </h3>
+        <button mat-icon-button (click)="rename($event, file)" *ngIf="file.isRenaming">
+            <mat-icon>check</mat-icon>
+        </button>
+        <button mat-icon-button (click)="cancelRename($event, file)" *ngIf="file.isRenaming">
+            <mat-icon>clear</mat-icon>
+        </button>
+        <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()" *ngIf="!file.isRenaming && (permissions=='rw' || !file.isDir)">
+            <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item *ngIf="!file.isDir" (click)="download($event, file);">
+                <mat-icon>file_download</mat-icon>
+                <span>Download</span>
+            </button>
+            <button mat-menu-item (click)="enterRenameMode($event, file)" *ngIf="permissions=='rw'">
+                <mat-icon>edit</mat-icon>
+                <span>Rename</span>
+            </button>
+            <button mat-menu-item (click)="delete($event, file);" *ngIf="permissions=='rw'">
+                <mat-icon>delete</mat-icon>
+                <span>Delete</span>
+            </button>
+        </mat-menu>
+    </a>
+</mat-nav-list>
+
+<div class="actions-fabs">
+    <button mat-mini-fab (click)="createDir()" *ngIf="permissions=='rw'">
+        <mat-icon>create_new_folder</mat-icon>
+    </button>
+    <app-file-uploader [path]="currentPath" (UploadComplete)="onUploadComplete($event)" [urlBase]="urlBase" *ngIf="permissions=='rw'"></app-file-uploader>
+</div>

@@ -1,0 +1,13 @@
+[
+    {
+        "name": "Reflex test",
+        "url": "http://localhost:3000",
+        "icon": "home"
+    },
+    {
+        "name": "Seedbox",
+        "url": "http://192.168.1.2:9091/transmission-key-5nLVABCKqHmvmgYQyD7DrWLv5aeJGw09Y91yxQaQtmw8",
+        "customHeader": "",
+        "icon": "home"
+    }
+]

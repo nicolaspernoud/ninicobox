@@ -1,0 +1,24 @@
+<h1 mat-dialog-title>Add proxy</h1>
+<mat-form-field>
+  <input matInput #proxyName>
+  <mat-placeholder><mat-icon>edit</mat-icon>Proxy name</mat-placeholder>
+</mat-form-field>
+<mat-form-field>
+  <input matInput #proxyURL>
+  <mat-placeholder><mat-icon>link</mat-icon>Proxy url</mat-placeholder>
+</mat-form-field>
+<mat-form-field>
+  <input matInput #proxyCustomHeader>
+  <mat-placeholder><mat-icon>build</mat-icon>Proxy custom header</mat-placeholder>
+</mat-form-field>
+<mat-form-field>
+  <input matInput #proxyIcon>
+  <mat-placeholder><mat-icon>color_lens</mat-icon>Proxy icon</mat-placeholder>
+</mat-form-field>
+<button mat-raised-button color="primary" (click)="dialogRef.close({
+      name: proxyName.value,
+      url: proxyURL.value,
+      customHeader: proxyCustomHeader.value,
+      icon: proxyIcon.value
+    })">Save</button>
+<button mat-raised-button (click)="dialogRef.close()">Close dialog</button>

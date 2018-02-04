@@ -1,0 +1,18 @@
+<mat-card>
+  <form role="form" (submit)="login()">
+    <mat-form-field>
+      <input matInput type="text" required [(ngModel)]="user.login" id="login" name="login">
+      <mat-placeholder>
+        <mat-icon>account_circle</mat-icon>Login</mat-placeholder>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [type]="hide ? 'password' : 'text'" required [(ngModel)]="user.password" id="password" name="password">
+      <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+      <mat-placeholder>
+        <mat-icon>vpn_key</mat-icon>Password</mat-placeholder>
+    </mat-form-field>
+    <button mat-fab color="primary" type="submit" name="action">
+      <mat-icon>lock_open</mat-icon>
+    </button>
+  </form>
+</mat-card>

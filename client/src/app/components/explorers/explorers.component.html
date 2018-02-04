@@ -1,0 +1,11 @@
+<mat-expansion-panel *ngFor="let filesac of filesacl">
+    <mat-expansion-panel-header>
+        <mat-panel-title>
+            {{filesac.name}}
+        </mat-panel-title>
+        <mat-panel-title>
+            {{filesac.currentPath}}
+        </mat-panel-title>
+    </mat-expansion-panel-header>
+    <app-explorer [name]="filesac.name" [permissions]="filesac.permissions" [basePath]="filesac.basepath" (CurrentPathChanged)="currentPathChanged($event)"></app-explorer>
+</mat-expansion-panel>

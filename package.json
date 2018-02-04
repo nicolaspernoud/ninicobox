@@ -1,0 +1,19 @@
+{
+  "version": "0.1.0",
+  "description": "A home cloud providing file explorer with permissions and access control lists to share files with friends, and acting as a proxy for other services with content rewriting. Based on NodeJS, Express, JWT, Angular 5, Material Design, with TypeScript for both client and server.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nicolaspernoud/ninicobox"
+  },
+  "author": "Nicolas PERNOUD",
+  "license": "GPL v3",
+  "scripts": {
+    "start": "cd server && npm run serve",
+    "setup": "npm install && cd server && npm install && cd ../client && npm install",
+    "debug": "concurrently -k -p \"[{name}]\" -n \"Server,Client\" -c \"cyan.bold,green.bold\" \"cd server && npm run watch-debug\" \"cd client && ng serve\"",
+    "build": "concurrently -k -p \"[{name}]\" -n \"Server,Client\" -c \"cyan.bold,green.bold\" \"cd server && npm run build\" \"cd client && ng build --prod\""
+  },
+  "devDependencies": {
+    "concurrently": "^3.5.1"
+  }
+}

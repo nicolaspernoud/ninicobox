@@ -1,0 +1,18 @@
+[
+    {
+        "id": 1,
+        "login": "admin",
+        "name": "Nicolas",
+        "surname": "PERNOUD",
+        "role": "admin",
+        "passwordHash": "$2a$10$2qsnhFHh4RFnJbgaA6FCG.rRIRHU3NFz7jhIbveLJvqxutoSeSIqi"
+    },
+    {
+        "id": 2,
+        "login": "nicolaspernoud",
+        "name": "Nicolas",
+        "surname": "PERNOUD",
+        "role": "user",
+        "passwordHash": "$2a$10$vZYSOZsiqU1nv/ukr46V1ezFNfTbTghip7.O4velOcwiog5SslwC."
+    }
+]

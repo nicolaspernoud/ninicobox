@@ -1,0 +1,4 @@
+<button mat-mini-fab (click)="fileUploadInput.click()">
+  <mat-icon>file_upload</mat-icon>
+</button>
+<input #fileUploadInput type="file" (change)="onChange($event)" hidden />
