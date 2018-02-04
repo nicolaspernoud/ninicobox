@@ -1,4 +1,4 @@
-# Ninicobox
+# NinicoBox
 A home cloud providing file explorer with permissions and access control lists to share files with friends, and acting as a proxy for other services with content rewriting. Based on NodeJS, Express, JWT, Angular 5, Material Design, with TypeScript for both client and server.
 
 ## Installation
