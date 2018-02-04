@@ -22,7 +22,9 @@ app.use(passport.initialize());
 // Express configuration
 app.set("port", process.env.PORT || 3000);
 app.use(compression());
-app.use(logger("dev"));
+if (app.get("env") === "development") {
+  app.use(logger("dev"));
+}
 
 // Necessary to proxy POST request containing json or url encoded form data
 app.use(
