@@ -1,7 +1,7 @@
 [
     {
         "name": "Reflex test",
-        "url": "http://localhost:3000",
+        "url": "http://localhost:3000/test",
         "icon": "home"
     },
     {

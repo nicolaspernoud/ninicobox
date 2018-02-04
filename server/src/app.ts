@@ -50,9 +50,11 @@ app.use(function (req, res, next) {
 });
 
 // Unsecured app routes
-app.get("/", function (req, res) {
+app.get("/test", function (req, res) {
   res.send(`Usage : http://localhost:${app.get("port")}/proxy?url=[http://webServerToPro.xy]`);
 });
+// Serving client
+app.use(express.static("../client/dist"));
 app.post("/api/unsecured/login", authUser);
 
 // Role based security

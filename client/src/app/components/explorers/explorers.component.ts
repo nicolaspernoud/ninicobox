@@ -12,7 +12,7 @@ import { FilesAC } from '../../../../../common/interfaces';
 })
 export class ExplorersComponent implements OnInit {
 
-  private filesacl: FileACFront[];
+  public filesacl: FileACFront[];
 
   constructor(private fileACLService: FilesaclService, private authService: AuthService) { }
 

@@ -10,7 +10,7 @@ import { $ } from 'protractor';
 })
 export class UsersComponent implements OnInit {
 
-  private users: User[];
+  public users: User[];
 
   constructor(private usersService: UsersService) { }
 

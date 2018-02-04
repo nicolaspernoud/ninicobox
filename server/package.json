@@ -2,7 +2,7 @@
   "name": "ninicobox-server",
   "scripts": {
     "start": "npm run serve",
-    "build": "npm run build-sass && npm run build-ts && npm run tslint",
+    "build": "npm run build-ts && npm run tslint",
     "serve": "node dist/server/src/server.js",
     "watch-node": "nodemon dist/server/src/server.js",
     "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run watch-node\"",

@@ -13,7 +13,7 @@ import { AddProxyDialogComponent } from './add-proxy-dialog/add-proxy-dialog.com
 })
 export class ProxysComponent implements OnInit {
 
-  private proxys: Proxy[];
+  public proxys: Proxy[];
   private proxyBase = `${environment.apiEndPoint}/secured/proxy`;
   private proxytoken: string;
 
