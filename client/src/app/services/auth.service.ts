@@ -67,7 +67,6 @@ export class AuthService {
     }
 
     login(user): Observable<TokenResponse> {
-        console.log('entering login');
         const loginObservable = this.http.post<TokenResponse>(`${this.url}/api/unsecured/login`, user);
         loginObservable.subscribe
             (data => {

@@ -1,5 +1,5 @@
-import {Component, Input, Output, EventEmitter} from '@angular/core';
-import {FilesService} from '../../../../services/files.service';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { FilesService } from '../../../../services/files.service';
 
 @Component({
     selector: 'app-file-uploader',
@@ -16,11 +16,13 @@ export class FileUploadComponent {
 
     onChange(event) {
         if (event.target.files.length > 0) {
-            this.fileService.upload(this.urlBase, this.path, event.target.files[0]).then(() => {
-                if (!!this.UploadComplete) {
-                    this.UploadComplete.emit(event.target.files[0].name);
-                }
-            });
+            this.fileService.upload(this.urlBase, this.path, event.target.files[0]).subscribe(
+                data => {
+                    if (!!this.UploadComplete) {
+                        this.UploadComplete.emit(event.target.files[0].name);
+                    }
+                },
+                err => { console.log(err); });
         }
     }
 }

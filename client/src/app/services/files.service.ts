@@ -1,6 +1,5 @@
 ﻿import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import 'rxjs/add/operator/toPromise';
 import { File } from '../../../../common/interfaces';
 
 @Injectable()
@@ -29,11 +28,7 @@ export class FilesService {
     upload(urlBase, path, file) {
         const formData: FormData = new FormData();
         formData.append('uploadFile', file, file.name);
-        console.log('urlBase :' + urlBase + 'path :' + path + 'file :' + file);
-        return this.http.post(`${urlBase}${path.length > 0 ? '/' + encodeURIComponent(path) : ''}/upload`, formData)
-            .toPromise()
-            .then(res => console.log(res))
-            .catch(err => console.log(err));
+        return this.http.post(`${urlBase}${path.length > 0 ? '/' + encodeURIComponent(path) : ''}/upload`, formData);
     }
 
     download(urlBase, path) {
@@ -46,8 +41,8 @@ export class FilesService {
             });
     }
 
-    delete(urlBase, path) {
-        return this.executeRequest(`${urlBase}${path.length > 0 ? '/' + encodeURIComponent(path) : ''}`, 'DELETE');
+    delete(urlBase, path, isDir) {
+        return this.executeRequest(`${urlBase}${path.length > 0 ? '/' + encodeURIComponent(path) : ''}`, 'DELETE', { isDir: isDir });
     }
 
     private executeRequest(url, method = 'GET', sentData = null, params = null) {

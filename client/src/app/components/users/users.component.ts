@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UsersService } from '../../services/users.service';
 import { User } from '../../../../../common/interfaces';
 import { $ } from 'protractor';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-users',
@@ -15,7 +16,7 @@ export class UsersComponent implements OnInit {
   constructor(private usersService: UsersService) { }
 
   ngOnInit() {
-    this.usersService.getUsers().subscribe(data => this.users = data );
+    this.usersService.getUsers().subscribe(data => this.users = data);
   }
 
   addUser() {
@@ -33,7 +34,10 @@ export class UsersComponent implements OnInit {
   }
 
   save() {
-    this.usersService.setUsers(this.users).toPromise().then(value => { this.usersService.getUsers().subscribe(data => this.users); });
+    this.usersService.setUsers(this.users).pipe(
+      switchMap(
+        value => this.usersService.getUsers()
+      )).subscribe(data => this.users);
   }
 
 }

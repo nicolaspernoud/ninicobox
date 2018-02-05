@@ -7,5 +7,7 @@
             {{filesac.currentPath}}
         </mat-panel-title>
     </mat-expansion-panel-header>
-    <app-explorer [name]="filesac.name" [permissions]="filesac.permissions" [basePath]="filesac.basepath" (CurrentPathChanged)="currentPathChanged($event)"></app-explorer>
+    <ng-template matExpansionPanelContent>
+        <app-explorer [name]="filesac.name" [permissions]="filesac.permissions" [basePath]="filesac.basepath" (CurrentPathChanged)="currentPathChanged($event)"></app-explorer>
+    </ng-template>
 </mat-expansion-panel>

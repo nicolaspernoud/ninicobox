@@ -68,7 +68,7 @@ export class ExplorerComponent implements OnInit {
     }
 
     openRename(file: File) {
-        const dialogRef = this.dialog.open(RenameDialogComponent, {data: file});
+        const dialogRef = this.dialog.open(RenameDialogComponent, { data: file });
         dialogRef.afterClosed().subscribe(fileAfterRename => {
             if (fileAfterRename && fileAfterRename.name) {
                 const newPath = `${this.currentPath}/${fileAfterRename.name}`;
@@ -85,7 +85,7 @@ export class ExplorerComponent implements OnInit {
     }
 
     delete(file: File) {
-        this.fileService.delete(this.urlBase, file.path).subscribe(() => {
+        this.fileService.delete(this.urlBase, file.path, file.isDir).subscribe(() => {
             this.files = this.files.filter((item) => {
                 return item.name.toLowerCase() !== file.name.toLowerCase();
             });
