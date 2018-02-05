@@ -46,7 +46,7 @@ filesRouter.get('/:permissions/:basepath/:path?/explore', function (req: Request
     explorer.on('file', function (file: string) {
         files.push({
             name: path.basename(file),
-            path: file.substring(req.params.basepath.length - 1),
+            path: file.substring(req.params.basepath.length),
             isDir: false
         });
     });
@@ -54,7 +54,7 @@ filesRouter.get('/:permissions/:basepath/:path?/explore', function (req: Request
     explorer.on('dir', function (dir: string) {
         files.push({
             name: path.basename(dir),
-            path: dir.substring(req.params.basepath.length - 1),
+            path: dir.substring(req.params.basepath.length),
             isDir: true
         });
     });

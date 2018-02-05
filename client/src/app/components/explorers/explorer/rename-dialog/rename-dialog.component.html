@@ -1,0 +1,9 @@
+<h1 mat-dialog-title>Rename</h1>
+<mat-form-field>
+  <input matInput #fileName [value]="data.name">
+  <mat-placeholder><mat-icon>edit</mat-icon>New name</mat-placeholder>
+</mat-form-field>
+<button mat-raised-button color="primary" (click)="dialogRef.close({
+      name: fileName.value
+    })">Save</button>
+<button mat-raised-button (click)="dialogRef.close()">Close dialog</button>

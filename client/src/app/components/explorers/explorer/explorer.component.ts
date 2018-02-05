@@ -1,12 +1,9 @@
 import { Component, EventEmitter, OnInit, Input, Output } from '@angular/core';
-import { FilesService,  } from '../../../services/files.service';
+import { FilesService, } from '../../../services/files.service';
 import { environment } from '../../../../environments/environment';
-import { File as BaseFile } from '../../../../../../common/interfaces';
-
-interface File extends BaseFile {
-    isRenaming?: boolean;
-    oldName?: string;
-}
+import { File } from '../../../../../../common/interfaces';
+import { MatDialog } from '@angular/material';
+import { RenameDialogComponent } from './rename-dialog/rename-dialog.component';
 
 @Component({
     selector: 'app-explorer',
@@ -24,20 +21,14 @@ export class ExplorerComponent implements OnInit {
     @Output() CurrentPathChanged = new EventEmitter<[string, string]>();
     urlBase: string;
 
-    constructor(private fileService: FilesService) {
+    constructor(private fileService: FilesService, public dialog: MatDialog) {
     }
-
-    public renameFocusTriggeringEventEmitter = new EventEmitter<boolean>();
 
     ngOnInit() {
         this.urlBase = `${environment.apiEndPoint}/secured/admin_user/files/${this.permissions}/${encodeURIComponent(this.basePath)}`;
         this.fileService.explore(this.urlBase, this.currentPath).subscribe(data => {
             this.files = data.sort(fileSortFunction);
         });
-    }
-
-    onFileNameTextBoxBlur(file: File) {
-        file.isRenaming = false;
     }
 
     createDir() {
@@ -60,8 +51,7 @@ export class ExplorerComponent implements OnInit {
         this.files.push({
             name: directoryName,
             path: `${this.currentPath}\\${directoryName}`,
-            isDir: true,
-            isRenaming: true
+            isDir: true
         });
     }
 
@@ -77,36 +67,24 @@ export class ExplorerComponent implements OnInit {
         this.fileService.explore(this.urlBase, this.currentPath).subscribe(files => this.files = files.sort(fileSortFunction));
     }
 
-    rename(event, file: File) {
-        event.stopPropagation();
-        file.isRenaming = false;
-        const newPath = this.currentPath + '/' + file.name;
-        this.fileService.rename(this.urlBase, file.path, newPath).subscribe(() => {
-            file.path = `${this.currentPath}\\${file.name}`;
+    openRename(file: File) {
+        const dialogRef = this.dialog.open(RenameDialogComponent, {data: file});
+        dialogRef.afterClosed().subscribe(fileAfterRename => {
+            if (fileAfterRename && fileAfterRename.name) {
+                const newPath = `${this.currentPath}/${fileAfterRename.name}`;
+                this.fileService.rename(this.urlBase, file.path, newPath).subscribe(() => {
+                    file.path = newPath;
+                });
+                this.files.sort(fileSortFunction);
+            }
         });
-        this.files.sort(fileSortFunction);
     }
 
-    cancelRename(event, file: File) {
-        event.stopPropagation();
-        file.isRenaming = false;
-        file.name = file.oldName;
-    }
-
-    enterRenameMode(event, file: File) {
-        this.renameFocusTriggeringEventEmitter.emit(true);
-        event.stopPropagation();
-        file.oldName = file.name;
-        file.isRenaming = true;
-    }
-
-    download(event, file: File) {
-        event.stopPropagation();
+    download(file: File) {
         this.fileService.download(this.urlBase, file.path);
     }
 
-    delete(event, file: File) {
-        event.stopPropagation();
+    delete(file: File) {
         this.fileService.delete(this.urlBase, file.path).subscribe(() => {
             this.files = this.files.filter((item) => {
                 return item.name.toLowerCase() !== file.name.toLowerCase();
