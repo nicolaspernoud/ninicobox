@@ -32,7 +32,7 @@ npm run debug
 - [x] Refactor server api
 - [x] Add user api and models
 - [x] Restrict file writing on read access control
-- [ ] Add tests on files acl system ; check that ".." is not allowed
+- [x] Add tests on files acl system ; check that ".." is not allowed
 - [x] Add get acl api
 - [x] Add proxy api and models
 - [ ] Add basic logging
@@ -58,6 +58,7 @@ npm run debug
 - [ ] Add basic service worker and manifest
 - [ ] Add i18n
 - [ ] Add filesACL management
+- [ ] Add user add dialog
 - [ ] Remove unused components from client and unused librairies
 - [ ] Improve global error handling
 

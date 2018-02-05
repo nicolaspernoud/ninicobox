@@ -1,11 +1,11 @@
-import * as fs from "fs";
-import * as bcrypt from "bcrypt";
-import { User } from "../../../common/interfaces";
+import * as fs from 'fs';
+import * as bcrypt from 'bcrypt';
+import { User } from '../../../common/interfaces';
 
 const bcryptRounds = 10;
 
 export function getUsers(): User[] {
-    const data: string = fs.readFileSync("./config/users.json", "utf-8");
+    const data: string = fs.readFileSync('./config/users.json', 'utf-8');
     return JSON.parse(data);
 }
 
@@ -16,5 +16,5 @@ export function setUsers(users: User[]): void {
             delete user.password;
         }
     }
-    fs.writeFileSync("./config/users.json", JSON.stringify(users), "utf-8");
+    fs.writeFileSync('./config/users.json', JSON.stringify(users), 'utf-8');
 }

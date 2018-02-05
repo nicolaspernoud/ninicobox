@@ -2,7 +2,7 @@
 // Project: brackets-proxy
 // Definitions by: Nicolas Pernoud (https://github.com/nicolaspernoud/brackets-proxy)
 
-declare module "replacestream" {
+declare module 'replacestream' {
   interface ReplaceStreamOptions {
     limit?: number;
     encoding?: string;
