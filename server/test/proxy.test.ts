@@ -1,14 +1,14 @@
 import * as request from "supertest";
 import { app } from "../src/app";
 
-describe("GET /api/secured/admin/proxy?url=[http://example.com/] without authentication", () => {
+describe("GET /api/secured/proxy?url=[http://example.com/] without authentication", () => {
   it("should return 401 Unauthorized", () => {
-    return request(app).get("/api/secured/admin/proxy?url=[http://example.com/]")
+    return request(app).get("/api/secured/proxy?url=[http://example.com/]")
       .expect(401);
   });
 });
 
-describe("GET /api/secured/admin/proxy?url=[http://example.com/] with authentication", () => {
+describe("GET /api/secured/proxy?url=[http://example.com/] with authentication", () => {
   it("should return 200 OK", (done) => {
     const agent = request(app);
     agent
@@ -16,10 +16,16 @@ describe("GET /api/secured/admin/proxy?url=[http://example.com/] with authentica
       .send({ "login": "admin", "password": "password" })
       .end((req, res) => {
         agent
-          .get("/api/secured/admin/proxy?url=[http://example.com/]")
+          .get("/api/secured/admin/getproxytoken")
           .set("Accept", "application/json")
           .set("Authorization", "JWT " + res.body.token)
-          .expect(200, done);
+          .end((req, res) => {
+            agent
+              .get(`/api/secured/proxy?JWT=${res.body.token}url=[http://example.com/]`)
+              .set("Accept", "application/json")
+              .set("Authorization", "JWT " + res.body.token)
+              .expect(200, done);
+          });
       });
   });
 });

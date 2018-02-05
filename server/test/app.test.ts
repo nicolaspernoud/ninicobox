@@ -6,16 +6,16 @@ const usersIn = [
   {
     "id": 1,
     "login": "admin",
-    "name": "Nicolas",
-    "surname": "PERNOUD",
+    "name": "Ad",
+    "surname": "MIN",
     "password": "password",
     "role": "admin"
   },
   {
     "id": 2,
-    "login": "nicolaspernoud",
-    "name": "Nicolas",
-    "surname": "PERNOUD",
+    "login": "user",
+    "name": "Us",
+    "surname": "ER",
     "password": "password",
     "role": "user"
   }
@@ -26,6 +26,13 @@ setUsers(usersIn);
 
 // Get stored results with hashed passwords
 const usersOut = getUsers();
+
+describe("GET /", () => {
+  it("should return 200 OK", () => {
+    return request(app).get("/")
+      .expect(200);
+  });
+});
 
 describe("GET /random-url", () => {
   it("should return 404", (done) => {
@@ -64,7 +71,7 @@ describe("GET users on admin route with user authentication", () => {
     const agent = request(app);
     agent
       .post("/api/unsecured/login")
-      .send({ "login": "nicolaspernoud", "password": "password" })
+      .send({ "login": "user", "password": "password" })
       .end((req, res) => {
         agent
           .get("/api/secured/admin/users")
@@ -80,7 +87,7 @@ describe("GET users on user route with user authentication", () => {
     const agent = request(app);
     agent
       .post("/api/unsecured/login")
-      .send({ "login": "nicolaspernoud", "password": "password" })
+      .send({ "login": "user", "password": "password" })
       .end((req, res) => {
         agent
           .get("/api/secured/user/users")
