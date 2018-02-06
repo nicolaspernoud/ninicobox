@@ -4,6 +4,7 @@ import { environment } from '../../../../environments/environment';
 import { File } from '../../../../../../common/interfaces';
 import { MatDialog } from '@angular/material';
 import { RenameDialogComponent } from './rename-dialog/rename-dialog.component';
+import { switchMap } from 'rxjs/operators/switchMap';
 
 @Component({
     selector: 'app-explorer',
@@ -20,6 +21,7 @@ export class ExplorerComponent implements OnInit {
     @Input() basePath: string;
     @Output() CurrentPathChanged = new EventEmitter<[string, string]>();
     urlBase: string;
+    cutCopyFile: [File, boolean]; // Boolean is true if operation is a copy, false if it is a cut
 
     constructor(private fileService: FilesService, public dialog: MatDialog) {
     }
@@ -78,6 +80,27 @@ export class ExplorerComponent implements OnInit {
                 this.files.sort(fileSortFunction);
             }
         });
+    }
+
+    cut(file: File) {
+        this.cutCopyFile = [file, false];
+    }
+
+    copy(file: File) {
+        this.cutCopyFile = [file, true];
+    }
+
+    paste() {
+        if (this.cutCopyFile[1] === false) {
+            const newPath = `${this.currentPath}/${this.cutCopyFile[0].name}`;
+            this.fileService.rename(this.urlBase, this.cutCopyFile[0].path, newPath)
+                .pipe(switchMap(data =>
+                    this.fileService.explore(this.urlBase, this.currentPath)
+                )).subscribe(data => { this.files = data.sort(fileSortFunction); });
+        } else if (this.cutCopyFile[1] === true) {
+
+        }
+        this.cutCopyFile = undefined;
     }
 
     download(file: File) {
