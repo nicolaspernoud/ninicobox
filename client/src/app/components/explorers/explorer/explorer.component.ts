@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnInit, Input, Output } from '@angular/core';
 import { FilesService, } from '../../../services/files.service';
 import { environment } from '../../../../environments/environment';
 import { File } from '../../../../../../common/interfaces';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { RenameDialogComponent } from './rename-dialog/rename-dialog.component';
 import { switchMap } from 'rxjs/operators/switchMap';
 
@@ -23,7 +23,7 @@ export class ExplorerComponent implements OnInit {
     urlBase: string;
     cutCopyFile: [File, boolean]; // Boolean is true if operation is a copy, false if it is a cut
 
-    constructor(private fileService: FilesService, public dialog: MatDialog) {
+    constructor(private fileService: FilesService, public dialog: MatDialog, public snackBar: MatSnackBar) {
     }
 
     ngOnInit() {
@@ -74,7 +74,7 @@ export class ExplorerComponent implements OnInit {
         dialogRef.afterClosed().subscribe(fileAfterRename => {
             if (fileAfterRename && fileAfterRename.name) {
                 const newPath = `${this.currentPath}/${fileAfterRename.name}`;
-                this.fileService.rename(this.urlBase, file.path, newPath).subscribe(() => {
+                this.fileService.renameOrCopy(this.urlBase, file.path, newPath, false).subscribe(() => {
                     file.path = newPath;
                 });
                 this.files.sort(fileSortFunction);
@@ -91,15 +91,16 @@ export class ExplorerComponent implements OnInit {
     }
 
     paste() {
-        if (this.cutCopyFile[1] === false) {
-            const newPath = `${this.currentPath}/${this.cutCopyFile[0].name}`;
-            this.fileService.rename(this.urlBase, this.cutCopyFile[0].path, newPath)
-                .pipe(switchMap(data =>
-                    this.fileService.explore(this.urlBase, this.currentPath)
-                )).subscribe(data => { this.files = data.sort(fileSortFunction); });
-        } else if (this.cutCopyFile[1] === true) {
-
-        }
+        const newPath = `${this.currentPath}/${this.cutCopyFile[0].name}`;
+        const action = this.cutCopyFile[1] === true ? 'Copy' : 'Cut';
+        this.snackBar.openFromComponent(CutCopyProgressBarComponent);
+        this.fileService.renameOrCopy(this.urlBase, this.cutCopyFile[0].path, newPath, this.cutCopyFile[1])
+            .pipe(switchMap(data =>
+                this.fileService.explore(this.urlBase, this.currentPath)
+            )).subscribe(data => {
+                this.files = data.sort(fileSortFunction);
+                this.snackBar.open(`${action} done`, 'OK', { duration: 3000 });
+            });
         this.cutCopyFile = undefined;
     }
 
@@ -131,3 +132,9 @@ function fileSortFunction(a: File, b: File): number {
         return a.name.localeCompare(b.name);
     }
 }
+
+@Component({
+    selector: 'app-cut-copy-progress-bar',
+    template: 'Operation in progress...<mat-progress-bar mode="indeterminate"></mat-progress-bar>',
+  })
+  export class CutCopyProgressBarComponent {}

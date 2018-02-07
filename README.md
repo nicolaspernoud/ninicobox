@@ -52,8 +52,8 @@ npm run debug
 - [x] Check if style is compliant to material guidelines
 - [x] Add proxy services components
 - [x] Improve explorer context menu
-- [ ] Add cut to explorer
-- [ ] Add copy to explorer
+- [x] Add cut to explorer
+- [x] Add copy to explorer
 - [ ] Add tests
 - [ ] Add basic service worker and manifest
 - [ ] Add i18n

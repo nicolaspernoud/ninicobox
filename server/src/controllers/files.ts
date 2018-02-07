@@ -95,6 +95,18 @@ filesRouter.put('/:permissions/:basepath/:path?/rename', function (req: Request,
     });
 });
 
+// Copy file or directory
+filesRouter.put('/:permissions/:basepath/:path?/copy', function (req: Request, res: Response) {
+    const oldPath = path.join(req.params.basepath, req.params.path);
+    const newPath = path.join(req.params.basepath, req.body.newpath);
+    fs.copy(oldPath, newPath, function (err: NodeJS.ErrnoException) {
+        if (err) {
+            console.log(err);
+        }
+        res.end();
+    });
+});
+
 // Upload
 filesRouter.post('/:permissions/:basepath/:path?/upload', function (req: Request, res: Response) {
     const busboy = new Busboy({ headers: req.headers });

@@ -20,7 +20,7 @@ import { LoginComponent } from './components/login/login.component';
 import { ExplorersComponent } from './components/explorers/explorers.component';
 import { FileUploadComponent } from './components/explorers/explorer/file-upload/file-upload.component';
 import { AuthService } from './services/auth.service';
-import { ExplorerComponent } from './components/explorers/explorer/explorer.component';
+import { ExplorerComponent, CutCopyProgressBarComponent } from './components/explorers/explorer/explorer.component';
 import { ProxysService } from './services/proxys.service';
 import { ProxysComponent } from './components/proxys/proxys.component';
 import { UsersComponent } from './components/users/users.component';
@@ -37,6 +37,7 @@ import { RenameDialogComponent } from './components/explorers/explorer/rename-di
     FileUploadComponent,
     ExplorersComponent,
     ExplorerComponent,
+    CutCopyProgressBarComponent,
     ProxysComponent,
     AddProxyDialogComponent,
     UsersComponent,
@@ -67,6 +68,6 @@ import { RenameDialogComponent } from './components/explorers/explorer/rename-di
     UsersService
   ],
   bootstrap: [AppComponent],
-  entryComponents: [AddProxyDialogComponent, RenameDialogComponent]
+  entryComponents: [AddProxyDialogComponent, RenameDialogComponent, CutCopyProgressBarComponent]
 })
 export class AppModule { }

@@ -6,7 +6,8 @@
     <a mat-list-item *ngFor="let file of files" tabindex="0" (click)="file.isDir ? explore(file) : ''">
         <mat-icon mat-list-icon *ngIf="file.isDir">folder</mat-icon>
         <mat-icon mat-list-icon *ngIf="!file.isDir">insert_drive_file</mat-icon>
-        <mat-icon color="primary" *ngIf="cutCopyFile !== undefined && file === cutCopyFile[0]">content_cut</mat-icon>
+        <mat-icon color="primary" *ngIf="cutCopyFile !== undefined && file === cutCopyFile[0] && cutCopyFile[1] === false">content_cut</mat-icon>
+        <mat-icon color="primary" *ngIf="cutCopyFile !== undefined && file === cutCopyFile[0] && cutCopyFile[1] === true">content_copy</mat-icon>
         <h3 matLine>{{file.name}}</h3>
         <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()" *ngIf="permissions=='rw' || !file.isDir">
             <mat-icon>more_vert</mat-icon>
@@ -23,6 +24,10 @@
             <button mat-menu-item (click)="cut(file);" *ngIf="permissions=='rw'">
                 <mat-icon>content_cut</mat-icon>
                 <span>Cut</span>
+            </button>
+            <button mat-menu-item (click)="copy(file);" *ngIf="permissions=='rw'">
+                <mat-icon>content_copy</mat-icon>
+                <span>Copy</span>
             </button>
             <button mat-menu-item (click)="delete(file);" *ngIf="permissions=='rw'">
                 <mat-icon>delete</mat-icon>

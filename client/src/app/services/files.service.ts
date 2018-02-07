@@ -19,10 +19,16 @@ export class FilesService {
         });
     }
 
-    rename(urlBase, oldpath, newpath) {
-        return this.executeRequest(`${urlBase}${oldpath.length > 0 ? '/' + encodeURIComponent(oldpath) : ''}/rename`, 'PUT', {
-            newpath: newpath
-        });
+    renameOrCopy(urlBase, oldpath, newpath, isCopy: boolean) {
+        if (!isCopy) {
+            return this.executeRequest(`${urlBase}${oldpath.length > 0 ? '/' + encodeURIComponent(oldpath) : ''}/rename`, 'PUT', {
+                newpath: newpath
+            });
+        } else {
+            return this.executeRequest(`${urlBase}${oldpath.length > 0 ? '/' + encodeURIComponent(oldpath) : ''}/copy`, 'PUT', {
+                newpath: newpath
+            });
+        }
     }
 
     upload(urlBase, path, file) {
