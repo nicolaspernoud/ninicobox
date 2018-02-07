@@ -136,5 +136,6 @@ function fileSortFunction(a: File, b: File): number {
 @Component({
     selector: 'app-cut-copy-progress-bar',
     template: 'Operation in progress...<mat-progress-bar mode="indeterminate"></mat-progress-bar>',
-  })
-  export class CutCopyProgressBarComponent {}
+    styles: [':host {font-size: 14px;}']
+})
+export class CutCopyProgressBarComponent { }
