@@ -1,6 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { File } from '../../../../../../../common/interfaces';
 
 @Component({
   selector: 'app-rename-dialog',

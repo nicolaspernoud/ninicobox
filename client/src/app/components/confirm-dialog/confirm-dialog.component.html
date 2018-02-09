@@ -1,0 +1,6 @@
+<h1 mat-dialog-title>Confirm</h1>
+<h2>Are you sure ?</h2>
+<button mat-raised-button color="primary" (click)="dialogRef.close({
+      confirmed: true
+    })">Yes</button>
+<button mat-raised-button (click)="dialogRef.close()">No</button>

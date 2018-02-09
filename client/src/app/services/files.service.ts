@@ -25,6 +25,7 @@ export class FilesService {
                 newpath: newpath
             });
         } else {
+            newpath = oldpath !== newpath ? newpath : newpath + ' (copy)';
             return this.executeRequest(`${urlBase}${oldpath.length > 0 ? '/' + encodeURIComponent(oldpath) : ''}/copy`, 'PUT', {
                 newpath: newpath
             });

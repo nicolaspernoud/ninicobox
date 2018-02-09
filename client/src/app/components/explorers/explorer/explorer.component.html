@@ -4,8 +4,8 @@
         <h3 mat-line>..</h3>
     </a>
     <a mat-list-item *ngFor="let file of files" tabindex="0" (click)="file.isDir ? explore(file) : ''">
-        <mat-icon mat-list-icon *ngIf="file.isDir">folder</mat-icon>
-        <mat-icon mat-list-icon *ngIf="!file.isDir">insert_drive_file</mat-icon>
+        <mat-icon mat-list-icon *ngIf="file.isDir" [@appearDisappear]>folder</mat-icon>
+        <mat-icon mat-list-icon *ngIf="!file.isDir" [@appearDisappear]>insert_drive_file</mat-icon>
         <mat-icon color="primary" *ngIf="cutCopyFile !== undefined && file === cutCopyFile[0] && cutCopyFile[1] === false">content_cut</mat-icon>
         <mat-icon color="primary" *ngIf="cutCopyFile !== undefined && file === cutCopyFile[0] && cutCopyFile[1] === true">content_copy</mat-icon>
         <h3 matLine>{{file.name}}</h3>
@@ -42,10 +42,10 @@
         <mat-icon>create_new_folder</mat-icon>
     </button>
     <app-file-uploader [path]="currentPath" (UploadComplete)="onUploadComplete($event)" [urlBase]="urlBase" *ngIf="permissions=='rw'"></app-file-uploader>
-    <button mat-mini-fab (click)="paste()" *ngIf="cutCopyFile !== undefined">
+    <button mat-mini-fab (click)="paste()" *ngIf="cutCopyFile !== undefined" [@appearDisappear]>
         <mat-icon>content_paste</mat-icon>
     </button>
-    <button mat-mini-fab (click)="cutCopyFile = undefined" *ngIf="cutCopyFile !== undefined" >
+    <button mat-mini-fab (click)="cutCopyFile = undefined" *ngIf="cutCopyFile !== undefined" [@appearDisappear]>
         <mat-icon>cancel</mat-icon>
     </button>
 </div>

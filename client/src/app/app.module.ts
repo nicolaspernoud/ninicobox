@@ -27,6 +27,7 @@ import { UsersComponent } from './components/users/users.component';
 import { UsersService } from './services/users.service';
 import { AddProxyDialogComponent } from './components/proxys/add-proxy-dialog/add-proxy-dialog.component';
 import { RenameDialogComponent } from './components/explorers/explorer/rename-dialog/rename-dialog.component';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { RenameDialogComponent } from './components/explorers/explorer/rename-di
     AddProxyDialogComponent,
     UsersComponent,
     RenameDialogComponent,
+    ConfirmDialogComponent,
   ],
   imports: [
     FormsModule,
@@ -68,6 +70,6 @@ import { RenameDialogComponent } from './components/explorers/explorer/rename-di
     UsersService
   ],
   bootstrap: [AppComponent],
-  entryComponents: [AddProxyDialogComponent, RenameDialogComponent, CutCopyProgressBarComponent]
+  entryComponents: [AddProxyDialogComponent, RenameDialogComponent, CutCopyProgressBarComponent, ConfirmDialogComponent]
 })
 export class AppModule { }

@@ -5,12 +5,28 @@ import { File } from '../../../../../../common/interfaces';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { RenameDialogComponent } from './rename-dialog/rename-dialog.component';
 import { switchMap } from 'rxjs/operators/switchMap';
+import { trigger, transition, style, animate } from '@angular/animations';
+import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 
 @Component({
     selector: 'app-explorer',
     templateUrl: './explorer.component.html',
     styleUrls: ['./explorer.component.css'],
-    providers: [FilesService]
+    providers: [FilesService],
+    animations: [
+        trigger(
+            'appearDisappear', [
+                transition(':enter', [
+                    style({ transform: 'scale(0)', opacity: 0 }),
+                    animate('200ms', style({ transform: 'scale(1)', opacity: 1 }))
+                ]),
+                transition(':leave', [
+                    style({ transform: 'scale(1)', opacity: 1 }),
+                    animate('200ms', style({ transform: 'scale(0)', opacity: 0 }))
+                ])
+            ]
+        )
+    ]
 })
 
 export class ExplorerComponent implements OnInit {
@@ -76,6 +92,7 @@ export class ExplorerComponent implements OnInit {
                 const newPath = `${this.currentPath}/${fileAfterRename.name}`;
                 this.fileService.renameOrCopy(this.urlBase, file.path, newPath, false).subscribe(() => {
                     file.path = newPath;
+                    file.name = fileAfterRename.name;
                 });
                 this.files.sort(fileSortFunction);
             }
@@ -109,10 +126,15 @@ export class ExplorerComponent implements OnInit {
     }
 
     delete(file: File) {
-        this.fileService.delete(this.urlBase, file.path, file.isDir).subscribe(() => {
-            this.files = this.files.filter((item) => {
-                return item.name.toLowerCase() !== file.name.toLowerCase();
-            });
+        const dialogRef = this.dialog.open(ConfirmDialogComponent);
+        dialogRef.afterClosed().subscribe(confirmed => {
+            if (confirmed) {
+                this.fileService.delete(this.urlBase, file.path, file.isDir).subscribe(() => {
+                    this.files = this.files.filter((item) => {
+                        return item.name.toLowerCase() !== file.name.toLowerCase();
+                    });
+                });
+            }
         });
     }
 
