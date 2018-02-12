@@ -151,7 +151,7 @@ filesRouter.delete('/:permissions/:basepath/:path?', function (req: Request, res
             if (err) {
                 console.log(err);
             }
-            log(`File deleted : ${filePath}`, req);
+            log(`Directory deleted : ${filePath}`, req);
             res.end();
         });
     }
