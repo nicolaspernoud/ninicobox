@@ -8,6 +8,8 @@ const ExtractJwt = passportJWT.ExtractJwt;
 const JwtStrategy = passportJWT.Strategy;
 import { getUsers, setUsers } from './models/users';
 
+const env = process.env.NODE_ENV || 'development';
+
 interface JwtOptions {
     jwtFromRequest: passportJWT.JwtFromRequestFunction;
     secretOrKey: string;
@@ -17,7 +19,7 @@ interface JwtOptions {
 const jwtOptions: JwtOptions = {
     // jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme("JWT"),
     jwtFromRequest: ExtractJwt.fromExtractors([ExtractJwt.fromAuthHeaderWithScheme('JWT'), ExtractJwt.fromUrlQueryParameter('JWT')]),
-    secretOrKey: 'thisisnotsosecretchangeit',
+    secretOrKey: env === 'development' ? 'toBeUsedInDevelopmentOnly' : process.env.SECRET ? process.env.SECRET : randomString(48),
     jsonWebTokenOptions: { expiresIn: '1h' }
 };
 
@@ -73,3 +75,13 @@ export const rolesFilter = function (req: express.Request, res: express.Response
 };
 
 passport.use(strategy);
+
+function randomString(length: number) {
+    let text = '';
+    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for ( let i = 0; i < length; i++) {
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return text;
+}
+
