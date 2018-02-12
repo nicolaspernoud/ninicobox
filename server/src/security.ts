@@ -7,6 +7,7 @@ import * as passportJWT from 'passport-jwt';
 const ExtractJwt = passportJWT.ExtractJwt;
 const JwtStrategy = passportJWT.Strategy;
 import { getUsers, setUsers } from './models/users';
+import { log } from './logger';
 
 const env = process.env.NODE_ENV || 'development';
 
@@ -44,14 +45,16 @@ export const authUser = function (req: express.Request, res: express.Response) {
         const password = req.body.password;
         const user = users[_.findIndex(users, { login: login })];
         if (!user) {
+            log('Login failure : unknown user', req, login);
             res.status(401).json({ message: 'no such user found' });
         }
         if (bcrypt.compareSync(password, user.passwordHash)) {
-            // from now on we'll identify the user by the id and the id is the only personalized value that goes into our token
             const payload = { id: user.id, role: user.role };
             const token = jwt.sign(payload, jwtOptions.secretOrKey, jwtOptions.jsonWebTokenOptions);
+            log('Login success', req, user.login);
             res.json({ message: 'ok', token: token });
         } else {
+            log('Login failure : wrong password', req, user.login);
             res.status(401).json({ message: 'passwords did not match' });
         }
     } else {
@@ -68,6 +71,7 @@ export const getProxyToken = function (req: express.Request, res: express.Respon
 export const rolesFilter = function (req: express.Request, res: express.Response, next: express.NextFunction) {
     const roles = req.params.roles.split('_');
     if (!(roles.includes(req.user.role) || roles[0] === 'all')) {
+        log('Forbidden access', req);
         res.sendStatus(403);
         return;
     }

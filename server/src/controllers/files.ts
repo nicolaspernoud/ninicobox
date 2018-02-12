@@ -8,6 +8,7 @@ import * as path from 'path';
 import * as Busboy from 'busboy';
 import * as mime from 'mime';
 import { File } from '../../../common/interfaces';
+import { log } from '../logger';
 
 export const filesRouter = Router();
 
@@ -78,6 +79,7 @@ filesRouter.post('/:permissions/:basepath/:path?/createdir', function (req: Requ
             if (err) {
                 console.log(err);
             }
+            log(`Directory created : ${req.body.directoryname}`, req);
             res.end();
         });
     });
@@ -91,6 +93,7 @@ filesRouter.put('/:permissions/:basepath/:path?/rename', function (req: Request,
         if (err) {
             console.log(err);
         }
+        log(`File renamed or moved : ${oldPath} > ${newPath}`, req);
         res.end();
     });
 });
@@ -103,6 +106,7 @@ filesRouter.put('/:permissions/:basepath/:path?/copy', function (req: Request, r
         if (err) {
             console.log(err);
         }
+        log(`File copied : ${oldPath} > ${newPath}`, req);
         res.end();
     });
 });
@@ -120,6 +124,7 @@ filesRouter.post('/:permissions/:basepath/:path?/upload', function (req: Request
 
         file.on('end', function () {
             // console.log("File [" + fieldname + "] Finished");
+            log(`File uploaded : ${filename}`, req);
         });
     });
 
@@ -134,6 +139,7 @@ filesRouter.post('/:permissions/:basepath/:path?/upload', function (req: Request
 // Download
 filesRouter.get('/:permissions/:basepath/:path?/download', function (req: Request, res: Response) {
     const filePath = path.join(req.params.basepath, decodeURIComponent(req.params.path));
+    log(`File downloaded : ${filePath}`, req);
     res.download(filePath);
 });
 
@@ -145,6 +151,7 @@ filesRouter.delete('/:permissions/:basepath/:path?', function (req: Request, res
             if (err) {
                 console.log(err);
             }
+            log(`File deleted : ${filePath}`, req);
             res.end();
         });
     }
@@ -153,6 +160,7 @@ filesRouter.delete('/:permissions/:basepath/:path?', function (req: Request, res
             if (err) {
                 console.log(err);
             }
+            log(`File deleted : ${filePath}`, req);
             res.end();
         });
     }
