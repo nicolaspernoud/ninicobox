@@ -35,8 +35,8 @@ npm run debug
 - [x] Add tests on files acl system ; check that ".." is not allowed
 - [x] Add get acl api
 - [x] Add proxy api and models
-- [ ] Add basic logging
-- [ ] Add ip location loggin
+- [x] Add basic logging
+- [x] Add ip location logging
 - [ ] Add helmet to protect server api
 - [x] Rebase server api on typescript sdk for express
 - [ ] Add environnement production conf to server api, randomize secret
