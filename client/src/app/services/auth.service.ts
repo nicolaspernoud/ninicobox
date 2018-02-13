@@ -6,6 +6,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { TokenResponse } from '../../../../common/interfaces';
+import { environment } from '../../environments/environment';
 
 export const TOKEN_NAME = 'jwt_token';
 export const NOT_LOGGED = 'not_logged';
@@ -16,7 +17,7 @@ export class AuthService {
     private userRoleSubject = new BehaviorSubject<string>(NOT_LOGGED);
     public userRole = this.userRoleSubject.asObservable();
 
-    private url = 'http://localhost:3000';
+    private apiEndPoint = `${environment.apiEndPoint}`;
 
     constructor(private http: HttpClient, private router: Router, private snackBar: MatSnackBar) { }
 
@@ -67,7 +68,7 @@ export class AuthService {
     }
 
     login(user): Observable<TokenResponse> {
-        const loginObservable = this.http.post<TokenResponse>(`${this.url}/api/unsecured/login`, user);
+        const loginObservable = this.http.post<TokenResponse>(`${this.apiEndPoint}/unsecured/login`, user);
         loginObservable.subscribe
             (data => {
                 this.setToken(data.token);
