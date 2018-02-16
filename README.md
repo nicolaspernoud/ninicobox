@@ -55,7 +55,7 @@ npm run debug
 - [x] Add cut to explorer
 - [x] Add copy to explorer
 - [x] Add tests
-- [ ] Add basic service worker and manifest
+- [x] Add basic service worker and manifest
 - [ ] Add i18n
 - [ ] Add filesACL management
 - [ ] Add user add dialog
