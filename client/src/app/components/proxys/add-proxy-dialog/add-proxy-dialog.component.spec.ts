@@ -1,25 +1,50 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { AddProxyDialogComponent } from './add-proxy-dialog.component';
+import { async, TestBed, inject } from '@angular/core/testing';
+import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDialog } from '@angular/material/dialog';
+import { OverlayContainer } from '@angular/cdk/overlay';
+import { MaterialModule } from '../../../material.module';
 
 describe('AddProxyDialogComponent', () => {
-  let component: AddProxyDialogComponent;
-  let fixture: ComponentFixture<AddProxyDialogComponent>;
+  let dialog: MatDialog;
+  let overlayContainer: OverlayContainer;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AddProxyDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [AddProxyDialogComponent],
+      imports: [
+        MaterialModule,
+        BrowserAnimationsModule
+      ]
+    });
+
+    TestBed.overrideModule(BrowserDynamicTestingModule, {
+      set: {
+        entryComponents: [AddProxyDialogComponent]
+      }
+    });
+
+    TestBed.compileComponents();
   }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(AddProxyDialogComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+  beforeEach(inject([MatDialog, OverlayContainer],
+    (d: MatDialog, oc: OverlayContainer) => {
+      dialog = d;
+      overlayContainer = oc;
+    })
+  );
+
+  afterEach(() => {
+    overlayContainer.ngOnDestroy();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should open a dialog with a component', () => {
+    const dialogRef = dialog.open(AddProxyDialogComponent, {
+      data: { param: '1' }
+    });
+
+    // verify
+    expect(dialogRef.componentInstance instanceof AddProxyDialogComponent).toBe(true);
   });
 });

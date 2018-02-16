@@ -1,11 +1,11 @@
 import { TestBed, inject } from '@angular/core/testing';
-
 import { ProxysService } from './proxys.service';
+import { HttpClient, HttpHandler } from '@angular/common/http';
 
 describe('ProxysService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ProxysService]
+      providers: [ProxysService, HttpClient, HttpHandler]
     });
   });
 

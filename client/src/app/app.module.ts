@@ -13,7 +13,6 @@ import { routes } from './app.routes';
 import { TokenInterceptor } from './services/token.interceptor';
 import { ErrorInterceptor } from './services/errors.interceptor';
 import { RouteGuard } from './services/route.guard';
-import { FocusDirective } from './directives/focus.directive';
 import { ShowToRolesDirective } from './directives/showtoroles.directive';
 // Business modules
 import { LoginComponent } from './components/login/login.component';
@@ -33,7 +32,6 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
   declarations: [
     AppComponent,
     LoginComponent,
-    FocusDirective,
     ShowToRolesDirective,
     FileUploadComponent,
     ExplorersComponent,

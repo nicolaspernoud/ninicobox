@@ -1,11 +1,11 @@
 import { TestBed, inject } from '@angular/core/testing';
-
 import { FilesService } from './files.service';
+import { HttpClient, HttpHandler } from '@angular/common/http';
 
 describe('FilesService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [FilesService]
+      providers: [FilesService, HttpClient, HttpHandler]
     });
   });
 
