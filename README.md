@@ -37,9 +37,9 @@ npm run debug
 - [x] Add proxy api and models
 - [x] Add basic logging
 - [x] Add ip location logging
-- [ ] Add helmet to protect server api
+- [x] Add helmet to protect server api
 - [x] Rebase server api on typescript sdk for express
-- [ ] Add environnement production conf to server api, randomize secret
+- [x] Add environnement production conf to server api, randomize secret
 - [x] Create separates route for admin[r, rw], family[r, rw], user[r, rw] file api
 - [x] Add credentials to proxy routes
 - [x] Remove unused librairies
@@ -54,12 +54,12 @@ npm run debug
 - [x] Improve explorer context menu
 - [x] Add cut to explorer
 - [x] Add copy to explorer
-- [ ] Add tests
+- [x] Add tests
 - [ ] Add basic service worker and manifest
 - [ ] Add i18n
 - [ ] Add filesACL management
 - [ ] Add user add dialog
-- [ ] Remove unused components from client and unused librairies
+- [x] Remove unused components from client and unused librairies
 - [ ] Improve global error handling
 
 ### Deployment

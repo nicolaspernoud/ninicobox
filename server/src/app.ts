@@ -2,6 +2,7 @@ import * as express from 'express';
 import * as compression from 'compression';  // compresses requests
 import * as bodyParser from 'body-parser';
 import * as logger from 'morgan';
+import * as helmet from 'helmet';
 
 // Security middleware
 import { authUser, rolesFilter, getProxyToken } from './security';
@@ -17,6 +18,7 @@ import { getProxys } from './models/proxys';
 
 // Create Express server
 export const app = express();
+app.use(helmet());
 app.use(passport.initialize());
 
 // Express configuration
