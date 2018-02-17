@@ -63,4 +63,4 @@ npm run debug
 - [ ] Improve global error handling
 
 ### Deployment
-- [ ] Put everything in docker containers
+- [x] Put everything in docker containers (not tested)

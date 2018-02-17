@@ -7,7 +7,7 @@
     "url": "https://github.com/nicolaspernoud/ninicobox"
   },
   "author": "Nicolas PERNOUD",
-  "license": "GPL v3",
+  "license": "GPL-3.0-or-later",
   "scripts": {
     "start": "cd server && npm run serve",
     "setup": "npm install && cd server && npm install && cd ../client && npm install",

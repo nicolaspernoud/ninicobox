@@ -1,5 +1,13 @@
 {
   "name": "ninicobox-client",
+  "version": "0.1.0",
+  "description": "Client for NinicoBox",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nicolaspernoud/ninicobox"
+  },
+  "author": "Nicolas PERNOUD",
+  "license": "GPL-3.0-or-later",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
