@@ -1,0 +1,19 @@
+version: "2"
+services:
+  node:
+    image: "node:8"
+    user: "node"
+    working_dir: /home/node/app
+    environment:
+      - NODE_ENV=production
+      - IP_DB_LOCATION=/home/box/services/ipgeodatabase/
+      - PORT=3000
+      - LOG_FILE=/var/log/ninicobox.log
+    volumes:
+      - ./:/home/node/app
+      - /media:/media
+      - /home/box/services/ipgeodatabase/:/home/box/services/ipgeodatabase/
+      - /var/log/ninicobox.log:/var/log/ninicobox.log
+    expose:
+      - "3000"
+    command: "npm start"
