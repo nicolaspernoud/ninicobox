@@ -28,7 +28,7 @@ export function log(message: string, req?: Request, customUser?: string) {
             }
             else {
                 const cityObj = cityLookup.get('ip');
-                city = `${cityObj.postal.code} ${cityObj.city.names['en']}, ${cityObj.country.names['en']}`;
+                city = cityObj ? `${cityObj.postal.code} ${cityObj.city.names['en']}, ${cityObj.country.names['en']}` : 'unknown location';
             }
             const entry = `${date} | ${user} | ${message} | ${ip} | ${city}\n`;
             fs.appendFile(logFile, entry, 'utf-8', err => console.log(err));
