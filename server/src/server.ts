@@ -1,4 +1,6 @@
 import { app } from './app';
+import * as fs from 'fs';
+import * as https from 'https';
 
 /**
  * Start Express server.
@@ -9,3 +11,16 @@ const server = app.listen(app.get('port'), () => {
 });
 
 export = server;
+
+
+/**
+ * Start HTTPS server.
+ */
+if (app.get('env') === 'production') {
+  const securePort = process.env.SECURE_PORT ? process.env.SECURE_PORT : 443;
+  const options = {
+    cert: fs.readFileSync(process.env.SSL_CERT_LOCATION + '/fullchain.pem'),
+    key: fs.readFileSync(process.env.SSL_CERT_LOCATION + '/privkey.pem')
+  };
+  https.createServer(options, app).listen(securePort);
+}
