@@ -68,17 +68,30 @@ export class AuthService {
     }
 
     login(user): Observable<TokenResponse> {
-        const loginObservable = this.http.post<TokenResponse>(`${this.apiEndPoint}/unsecured/login`, user);
-        loginObservable.subscribe
-            (data => {
-                this.setToken(data.token);
-                this.userRoleSubject.next(this.getRoleFromToken());
-                this.snackBar.open('Login success', 'OK', {
-                    duration: 2000,
-                });
-                this.router.navigate(['/']);
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                success => {
+                    user.position = `latitude: ${success.coords.latitude}, longitude: ${success.coords.longitude}`;
+                    const loginObservable = this.http.post<TokenResponse>(`${this.apiEndPoint}/unsecured/login`, user);
+                    loginObservable.subscribe(
+                        data => {
+                            this.setToken(data.token);
+                            this.userRoleSubject.next(this.getRoleFromToken());
+                            this.snackBar.open('Login success', 'OK', { duration: 2000 });
+                            this.router.navigate(['/']);
+                        });
+                    return loginObservable;
+                },
+                error => {
+                    this.snackBar.open('Please allow geolocation to login', 'OK', { duration: 2000 });
+                    return null;
+                }
+            );
+        } else {
+            this.snackBar.open('Browser not compatible', 'OK', {
+                duration: 2000,
             });
-        return loginObservable;
-
+            return null;
+        }
     }
 }

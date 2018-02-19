@@ -39,22 +39,22 @@ const strategy = new JwtStrategy(jwtOptions, function (jwt_payload, next) {
 });
 
 export const authUser = function (req: express.Request, res: express.Response) {
-    if (req.body.login && req.body.password) {
+    if (req.body.login && req.body.password && req.body.position) {
         const users = getUsers();
         const login = req.body.login;
         const password = req.body.password;
         const user = users[_.findIndex(users, { login: login })];
         if (!user) {
-            log('Login failure : unknown user', req, login);
+            log('Login failure : unknown user', req);
             res.status(401).json({ message: 'no such user found' });
         }
         if (bcrypt.compareSync(password, user.passwordHash)) {
             const payload = { id: user.id, role: user.role };
             const token = jwt.sign(payload, jwtOptions.secretOrKey, jwtOptions.jsonWebTokenOptions);
-            log('Login success', req, user.login);
+            log('Login success', req);
             res.json({ message: 'ok', token: token });
         } else {
-            log('Login failure : wrong password', req, user.login);
+            log('Login failure : wrong password', req);
             res.status(401).json({ message: 'passwords did not match' });
         }
     } else {
