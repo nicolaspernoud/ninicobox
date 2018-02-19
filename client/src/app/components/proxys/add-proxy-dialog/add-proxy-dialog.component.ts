@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material';
+import { Component, OnInit, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
   selector: 'app-add-proxy-dialog',
@@ -8,7 +8,7 @@ import { MatDialogRef } from '@angular/material';
 })
 export class AddProxyDialogComponent implements OnInit {
 
-  constructor(public dialogRef: MatDialogRef<AddProxyDialogComponent>) { }
+  constructor(public dialogRef: MatDialogRef<AddProxyDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
   }

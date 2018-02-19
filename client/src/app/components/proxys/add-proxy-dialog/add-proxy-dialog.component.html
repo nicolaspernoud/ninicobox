@@ -1,18 +1,18 @@
 <h1 mat-dialog-title>Add proxy</h1>
 <mat-form-field>
-  <input matInput #proxyName>
+  <input matInput #proxyName [value]="data ? data.name : ''">
   <mat-placeholder><mat-icon>edit</mat-icon>Proxy name</mat-placeholder>
 </mat-form-field>
 <mat-form-field>
-  <input matInput #proxyURL>
+  <input matInput #proxyURL [value]="data ? data.url : ''">
   <mat-placeholder><mat-icon>link</mat-icon>Proxy url</mat-placeholder>
 </mat-form-field>
 <mat-form-field>
-  <input matInput #proxyCustomHeader>
+  <input matInput #proxyCustomHeader [value]="data && !!data.customHeader ? data.customHeader : ''">
   <mat-placeholder><mat-icon>build</mat-icon>Proxy custom header</mat-placeholder>
 </mat-form-field>
 <mat-form-field>
-  <input matInput #proxyIcon>
+  <input matInput #proxyIcon [value]="data ? data.icon : ''">
   <mat-placeholder><mat-icon>color_lens</mat-icon>Proxy icon</mat-placeholder>
 </mat-form-field>
 <button mat-raised-button color="primary" (click)="dialogRef.close({

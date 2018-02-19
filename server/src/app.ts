@@ -18,7 +18,7 @@ import { getProxys } from './models/proxys';
 
 // Create Express server
 export const app = express();
-app.use(helmet());
+if (app.get('env') === 'production') { app.use(helmet()); }
 app.use(passport.initialize());
 
 // Express configuration

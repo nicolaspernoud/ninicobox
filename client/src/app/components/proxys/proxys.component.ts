@@ -36,13 +36,25 @@ export class ProxysComponent implements OnInit {
       });
   }
 
-  addProxy() {
+  add() {
     const dialogRef = this.dialog.open(AddProxyDialogComponent);
     dialogRef.afterClosed().subscribe(proxy => {
       if (proxy) {
         // tslint:disable-next-line:max-line-length
         proxy.completeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`${this.proxyBase}?JWT=${this.proxytoken}${proxy.customHeader ? '&customHeader=' + encodeURIComponent(proxy.customHeader) : ''}&url=[${proxy.url}]`);
         this.proxys.push(proxy);
+      }
+    });
+  }
+
+  edit(proxy: Proxy) {
+    const dialogRef = this.dialog.open(AddProxyDialogComponent, { data: proxy });
+    dialogRef.afterClosed().subscribe(data => {
+      if (data) {
+        const editedProxy = this.proxys.find(value => value.name === proxy.name);
+        Object.assign(editedProxy, data);
+        // tslint:disable-next-line:max-line-length
+        editedProxy.completeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`${this.proxyBase}?JWT=${this.proxytoken}${proxy.customHeader ? '&customHeader=' + encodeURIComponent(proxy.customHeader) : ''}&url=[${proxy.url}]`);
       }
     });
   }
