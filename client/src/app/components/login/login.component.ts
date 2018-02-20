@@ -8,8 +8,6 @@ import { AuthService } from '../../services/auth.service';
 })
 export class LoginComponent {
 
-  public hide = true;
-
   public user = {
     login: '',
     password: ''

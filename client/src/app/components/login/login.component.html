@@ -6,8 +6,7 @@
         <mat-icon>account_circle</mat-icon>Login</mat-placeholder>
     </mat-form-field>
     <mat-form-field>
-      <input matInput [type]="hide ? 'password' : 'text'" required [(ngModel)]="user.password" id="password" name="password">
-      <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+      <input matInput type="password" required [(ngModel)]="user.password" id="password" name="password">
       <mat-placeholder>
         <mat-icon>vpn_key</mat-icon>Password</mat-placeholder>
     </mat-form-field>

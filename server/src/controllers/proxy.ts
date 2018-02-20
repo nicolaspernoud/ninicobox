@@ -78,6 +78,8 @@ export let doProxy = (req: Request, res: Response) => {
       res.setHeader(response.rawHeaders[i], response.rawHeaders[i + 1]);
       i = i + 2;
     }
+    // Remove content-length since text replacements can increase it
+    res.removeHeader('Content-Length');
     res.status(response.statusCode);
 
     // If the resource is code and must be altered (inner links to other resources must be altered to use the proxy), we do it
@@ -85,6 +87,16 @@ export let doProxy = (req: Request, res: Response) => {
     // const replaceRegex = /((?:background=|action=|href=|src=|url\()(?:"|'?))((?:\.?)(?:\/?)(?!data:|about:|\/)[^"'\)\()]+)(\)|"\)|'\)|"|')/g;
     const replaceRegexCSS = /((?:url\()(?:"|'?))((?:\.?)(?:\/?)[^"'\)\()]+)(\)|"\)|'\))/g;
     const replaceRegexHTML = /((?:background=|action=|href=|src ?= ?)(?:"|'))((?:\.?)(?:\/?)(?!data:|about:|\/)[^"'\)\()]+)("|')/g;
+    const replaceXHROpenPrototype =
+    `<head>
+      <script>
+      var originalXHROpen = window.XMLHttpRequest.prototype.open;
+      window.XMLHttpRequest.prototype.open = function() {
+          newArgs = [].slice.call(arguments);
+          newArgs[1] = "${proxyServerBase}" + "[" + new URL(newArgs[1], "${url}").href + "]";
+          return originalXHROpen.apply(this, newArgs);
+      };
+      </script>`;
     if (contentType !== undefined && (contentType.includes('css') || contentType.includes('html') || contentType.includes('javascript'))) {
       res.setHeader('content-type', contentType); // Put correct content type after code alteration
       if (contentType.includes('css')) {
@@ -110,17 +122,7 @@ export let doProxy = (req: Request, res: Response) => {
         ).pipe(
           // Alter XMLHttpRequest open method to proxy ajax request
           replaceStream(
-            '<head>',
-            `<head>
-                  <script>
-                  var originalXHROpen = window.XMLHttpRequest.prototype.open;
-                  window.XMLHttpRequest.prototype.open = function() {
-                      newArgs = [].slice.call(arguments);
-                      newArgs[1] = "${proxyServerBase}" + "[" + new URL(newArgs[1], "${url}").href + "]";
-                      return originalXHROpen.apply(this, newArgs);
-                  };
-                  </script>
-                  `
+            '<head>', replaceXHROpenPrototype
           )
           ).pipe(res);
       }
