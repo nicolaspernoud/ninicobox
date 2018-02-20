@@ -1,0 +1,9 @@
+:host {
+    display: flex;
+    flex-direction: column;
+}
+
+img, object {
+    max-height: 600px;
+    margin-bottom: 10px;
+}

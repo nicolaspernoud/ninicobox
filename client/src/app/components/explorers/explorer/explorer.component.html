@@ -3,7 +3,7 @@
         <mat-icon matListIcon>arrow_back</mat-icon>
         <h3 mat-line>..</h3>
     </a>
-    <a mat-list-item *ngFor="let file of files" tabindex="0" (click)="file.isDir ? explore(file) : ''">
+    <a mat-list-item *ngFor="let file of files" tabindex="0" (click)="file.isDir ? explore(file) : preview(file)">
         <mat-icon mat-list-icon *ngIf="file.isDir" [@appearDisappear]>folder</mat-icon>
         <mat-icon mat-list-icon *ngIf="!file.isDir" [@appearDisappear]>insert_drive_file</mat-icon>
         <mat-icon color="primary" *ngIf="cutCopyFile !== undefined && file === cutCopyFile[0] && cutCopyFile[1] === false">content_cut</mat-icon>

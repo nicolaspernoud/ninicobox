@@ -29,6 +29,7 @@ import { RenameDialogComponent } from './components/explorers/explorer/rename-di
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { PreviewComponent } from './components/explorers/explorer/preview/preview.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { environment } from '../environments/environment';
     UsersComponent,
     RenameDialogComponent,
     ConfirmDialogComponent,
+    PreviewComponent,
   ],
   imports: [
     FormsModule,
@@ -71,6 +73,6 @@ import { environment } from '../environments/environment';
     UsersService
   ],
   bootstrap: [AppComponent],
-  entryComponents: [AddProxyDialogComponent, RenameDialogComponent, CutCopyProgressBarComponent, ConfirmDialogComponent]
+  entryComponents: [AddProxyDialogComponent, RenameDialogComponent, CutCopyProgressBarComponent, ConfirmDialogComponent, PreviewComponent]
 })
 export class AppModule { }

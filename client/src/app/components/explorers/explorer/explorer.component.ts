@@ -7,6 +7,8 @@ import { RenameDialogComponent } from './rename-dialog/rename-dialog.component';
 import { switchMap } from 'rxjs/operators/switchMap';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
+import { PreviewComponent } from './preview/preview.component';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-explorer',
@@ -39,7 +41,8 @@ export class ExplorerComponent implements OnInit {
     urlBase: string;
     cutCopyFile: [File, boolean]; // Boolean is true if operation is a copy, false if it is a cut
 
-    constructor(private fileService: FilesService, public dialog: MatDialog, public snackBar: MatSnackBar) {
+    // tslint:disable-next-line:max-line-length
+    constructor(private fileService: FilesService, public dialog: MatDialog, public snackBar: MatSnackBar, private sanitizer: DomSanitizer) {
     }
 
     ngOnInit() {
@@ -96,6 +99,14 @@ export class ExplorerComponent implements OnInit {
                 });
                 this.files.sort(fileSortFunction);
             }
+        });
+    }
+
+    preview(file: File) {
+        this.fileService.getPreview(this.urlBase, file.path).subscribe(data => {
+            const src = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(data));
+            // tslint:disable-next-line:max-line-length
+            const dialogRef = this.dialog.open(PreviewComponent, { data: { url: src, file: file, isImage: /[^/]+(jpg|png|gif)$/.test(file.name) } });
         });
     }
 

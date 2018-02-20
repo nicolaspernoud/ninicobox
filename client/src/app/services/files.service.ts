@@ -48,6 +48,10 @@ export class FilesService {
             });
     }
 
+    getPreview(urlBase, path) {
+        return this.http.get(`${urlBase}${path.length > 0 ? '/' + encodeURIComponent(path) : ''}/download`, { responseType: 'blob' });
+    }
+
     delete(urlBase, path, isDir) {
         return this.executeRequest(`${urlBase}${path.length > 0 ? '/' + encodeURIComponent(path) : ''}`, 'DELETE', { isDir: isDir });
     }
