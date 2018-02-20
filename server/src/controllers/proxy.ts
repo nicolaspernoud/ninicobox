@@ -52,7 +52,7 @@ export let doProxy = (req: Request, res: Response) => {
     if (req.headers['content-type'] === 'application/x-www-form-urlencoded') {
       requestTo.form(req.body);
     }
-    if (req.headers['content-type'].includes('json')) {
+    if (req.headers['content-type'].includes('json') || req.headers['content-type'].includes('text/plain')) {
       requestTo.json(req.body);
     }
   }
@@ -86,7 +86,7 @@ export let doProxy = (req: Request, res: Response) => {
     const contentType = response.headers['content-type'];
     // const replaceRegex = /((?:background=|action=|href=|src=|url\()(?:"|'?))((?:\.?)(?:\/?)(?!data:|about:|\/)[^"'\)\()]+)(\)|"\)|'\)|"|')/g;
     const replaceRegexCSS = /((?:url\()(?:"|'?))((?:\.?)(?:\/?)[^"'\)\()]+)(\)|"\)|'\))/g;
-    const replaceRegexHTML = /((?:background=|action=|href=|src ?= ?)(?:"|'))((?:\.?)(?:\/?)(?!data:|about:|\/)[^"'\)\()]+)("|')/g;
+    const replaceRegexHTML = /((?:background=|action=|href=|src ?= ?|url ?= ?)(?:"|'))((?:\.?)(?:\/?)(?!data:|about:|javascript:|\/)[^"'\)\()]+)("|')/g;
     const replaceXHROpenPrototype =
     `<head>
       <script>
