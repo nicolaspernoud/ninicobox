@@ -43,6 +43,7 @@ npm run debug
 - [x] Create separates route for admin[r, rw], family[r, rw], user[r, rw] file api
 - [x] Add credentials to proxy routes
 - [x] Remove unused librairies
+- [ ] Add http to https redirecting
 
 ### Client
 
@@ -56,11 +57,13 @@ npm run debug
 - [x] Add copy to explorer
 - [x] Add tests
 - [x] Add basic service worker and manifest
+- [ ] Allow sorting of proxy services
 - [ ] Add i18n
 - [ ] Add filesACL management
 - [ ] Add user add dialog
 - [x] Remove unused components from client and unused librairies
 - [ ] Improve global error handling
+- [ ] Provide basic text file editing in explorer
 
 ### Deployment
 - [x] Put everything in docker containers (not tested)

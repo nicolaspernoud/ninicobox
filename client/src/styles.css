@@ -3,6 +3,7 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 body {
     font-family: Roboto, 'Helvetica Neue', sans-serif;
+    overscroll-behavior-y: contain;
 }
 
 .mat-card {

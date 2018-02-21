@@ -4,6 +4,14 @@
 }
 
 img, object {
-    max-height: 600px;
     margin-bottom: 10px;
+}
+
+img {
+    max-height: 60vh;
+}
+
+object {
+    height: 60vh;
+    width: 70vw;
 }
