@@ -27,9 +27,15 @@ export class ProxysService {
   }
 
   setProxys(proxys: Proxy[]): Observable<void> {
-    proxys.forEach(proxy => delete proxy.completeUrl);
+    const sendProxys: Proxy[] = [];
+    proxys.forEach(proxy => {
+      const sendProxy: Proxy = { ...proxy };
+      delete sendProxy.completeUrl;
+      sendProxys.push(sendProxy);
+    }
+    );
     return this.http
-      .post(this.endpoint, proxys)
+      .post(this.endpoint, sendProxys)
       .catch(this.handleError);
   }
 

@@ -15,10 +15,15 @@
   <input matInput #proxyIcon [value]="data ? data.icon : ''">
   <mat-placeholder><mat-icon>color_lens</mat-icon>Proxy icon</mat-placeholder>
 </mat-form-field>
+<mat-form-field>
+  <input matInput type="number" #proxyRank [value]="data && !!data.rank ? data.rank : 0">
+  <mat-placeholder><mat-icon>sort</mat-icon>Proxy display rank</mat-placeholder>
+</mat-form-field>
 <button mat-raised-button color="primary" (click)="dialogRef.close({
       name: proxyName.value,
       url: proxyURL.value,
       customHeader: proxyCustomHeader.value,
-      icon: proxyIcon.value
+      icon: proxyIcon.value,
+      rank: proxyRank.value
     })">Save</button>
 <button mat-raised-button (click)="dialogRef.close()">Close dialog</button>

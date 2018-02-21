@@ -27,9 +27,8 @@ export class ProxysComponent implements OnInit {
         return this.proxysService.getProxys();
       }))
       .subscribe(data => {
-        this.proxys = data.map(value => (
-          // tslint:disable-next-line:max-line-length
-          { ...value, completeUrl: this.sanitizer.bypassSecurityTrustResourceUrl(`${this.proxyBase}?JWT=${this.proxytoken}${value.customHeader ? '&customHeader=' + encodeURIComponent(value.customHeader) : ''}&url=[${value.url}]`) }
+        this.proxys = data.map(proxy => (
+          { ...proxy, completeUrl: this.getIFrameUrl(proxy) }
         ));
       }, err => {
         console.log(err);
@@ -40,9 +39,9 @@ export class ProxysComponent implements OnInit {
     const dialogRef = this.dialog.open(AddProxyDialogComponent);
     dialogRef.afterClosed().subscribe(proxy => {
       if (proxy) {
-        // tslint:disable-next-line:max-line-length
-        proxy.completeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`${this.proxyBase}?JWT=${this.proxytoken}${proxy.customHeader ? '&customHeader=' + encodeURIComponent(proxy.customHeader) : ''}&url=[${proxy.url}]`);
+        proxy.completeUrl = this.getIFrameUrl(proxy);
         this.proxys.push(proxy);
+        this.proxys.sort((a, b) => a.rank - b.rank);
       }
     });
   }
@@ -53,8 +52,8 @@ export class ProxysComponent implements OnInit {
       if (data) {
         const editedProxy = this.proxys.find(value => value.name === proxy.name);
         Object.assign(editedProxy, data);
-        // tslint:disable-next-line:max-line-length
-        editedProxy.completeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`${this.proxyBase}?JWT=${this.proxytoken}${proxy.customHeader ? '&customHeader=' + encodeURIComponent(proxy.customHeader) : ''}&url=[${proxy.url}]`);
+        editedProxy.completeUrl = this.getIFrameUrl(editedProxy);
+        this.proxys.sort((a, b) => a.rank - b.rank);
       }
     });
   }
@@ -69,4 +68,11 @@ export class ProxysComponent implements OnInit {
     this.proxys.splice(this.proxys.findIndex(value => value.url === proxy.url), 1);
   }
 
+  getIFrameUrl(proxy: Proxy) {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(
+      `${this.proxyBase}?
+JWT=${this.proxytoken}
+${proxy.customHeader ? '&customHeader=' + encodeURIComponent(proxy.customHeader) : ''}
+&url=[${proxy.url}]`);
+  }
 }

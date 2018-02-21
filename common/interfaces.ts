@@ -6,6 +6,7 @@ export interface Proxy {
     customHeader?: string;
     icon?: string;
     completeUrl?: SafeResourceUrl;
+    rank?: number;
 }
 
 export interface FilesAC {
