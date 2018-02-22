@@ -10,7 +10,7 @@ export class FilesaclService {
   constructor(private http: HttpClient) { }
 
   getFilesACL(): Observable<FilesAC[]> {
-    return this.http.get<FilesAC[]>(`${environment.apiEndPoint}/secured/admin_user/filesacl`);
+    return this.http.get<FilesAC[]>(`${environment.apiEndPoint}/secured/all/filesacl`);
   }
 
 }

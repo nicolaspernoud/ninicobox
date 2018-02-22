@@ -27,16 +27,16 @@ setUsers(usersIn);
 // Get stored results with hashed passwords
 const usersOut = getUsers();
 
-describe('GET /', () => {
+describe('GET /test', () => {
   it('should return 200 OK', () => {
-    return request(app).get('/')
+    return request(app).get('/test')
       .expect(200);
   });
 });
 
 describe('GET /random-url', () => {
   it('should return 404', (done) => {
-    request(app).get('/reset')
+    request(app).get('/random-url')
       .expect(404, done);
   });
 });

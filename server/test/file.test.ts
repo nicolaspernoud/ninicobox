@@ -6,7 +6,7 @@ import { app } from '../src/app';
 describe('Access explorer without token', () => {
   it('should return 401 Unauthorized status', () => {
     return request(app)
-      .get('/api/secured/admin_user/files/rw/..%2Fdata%2Fadmins/explore')
+      .get('/api/secured/all/files/rw/..%2Fdata%2Fadmins/explore')
       .set('Accept', 'application/json')
       .expect(401);
   });
@@ -20,7 +20,7 @@ describe('Access explorer with token', () => {
       .send({ 'login': 'admin', 'password': 'password', 'position': 'test' })
       .end((req, res) => {
         agent
-          .get('/api/secured/admin_user/files/rw/..%2Fdata%2Fadmins/explore')
+          .get('/api/secured/all/files/rw/..%2Fdata%2Fadmins/explore')
           .set('Accept', 'application/json')
           .set('Authorization', 'JWT ' + res.body.token)
           .expect(200, done);
@@ -36,7 +36,7 @@ describe('Access explorer with token but incorrect basepath', () => {
       .send({ 'login': 'admin', 'password': 'password', 'position': 'test' })
       .end((req, res) => {
         agent
-          .get('/api/secured/admin_user/files/rw/..%2F/explore')
+          .get('/api/secured/all/files/rw/..%2F/explore')
           .set('Accept', 'application/json')
           .set('Authorization', 'JWT ' + res.body.token)
           .expect(403, done);
@@ -52,7 +52,7 @@ describe('Access explorer with token but incorrect path', () => {
       .send({ 'login': 'admin', 'password': 'password', 'position': 'test' })
       .end((req, res) => {
         agent
-          .get('/api/secured/admin_user/files/rw/..%2Fdata%2Fadmins/..%2F/explore')
+          .get('/api/secured/all/files/rw/..%2Fdata%2Fadmins/..%2F/explore')
           .set('Accept', 'application/json')
           .set('Authorization', 'JWT ' + res.body.token)
           .expect(403, done);
@@ -68,7 +68,7 @@ describe('Create a directory with token', () => {
       .send({ 'login': 'admin', 'password': 'password', 'position': 'test' })
       .end((req, res) => {
         agent
-          .post('/api/secured/admin_user/files/rw/..%2Fdata%2Fadmins/createdir')
+          .post('/api/secured/all/files/rw/..%2Fdata%2Fadmins/createdir')
           .send({ directoryname: 'Test'})
           .set('Accept', 'application/json')
           .set('Authorization', 'JWT ' + res.body.token)
@@ -85,7 +85,7 @@ describe('Delete a directory with token', () => {
       .send({ 'login': 'admin', 'password': 'password', 'position': 'test' })
       .end((req, res) => {
         agent
-          .delete('/api/secured/admin_user/files/rw/..%2Fdata%2Fadmins/Test')
+          .delete('/api/secured/all/files/rw/..%2Fdata%2Fadmins/Test')
           .send({isDir: true})
           .set('Accept', 'application/json')
           .set('Authorization', 'JWT ' + res.body.token)

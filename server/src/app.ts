@@ -59,6 +59,8 @@ app.get('/test', function (req, res) {
 });
 // Serving client
 app.use(express.static('../client/dist'));
+
+// Login route
 app.post('/api/unsecured/login', authUser);
 
 // Role based security
@@ -91,5 +93,5 @@ app.post('/api/secured/admin/proxys', function (req: express.Request, res: expre
 });
 
 // Common secured app routes
-app.get('/api/secured/admin_user/filesacl', (req, res) => res.json(getFilesACL()));
-app.use('/api/secured/admin_user/files', filesRouter);
+app.get('/api/secured/all/filesacl', (req, res) => res.json(getFilesACL()));
+app.use('/api/secured/all/files', filesRouter);

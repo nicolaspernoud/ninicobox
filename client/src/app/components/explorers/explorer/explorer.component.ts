@@ -46,7 +46,7 @@ export class ExplorerComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.urlBase = `${environment.apiEndPoint}/secured/admin_user/files/${this.permissions}/${encodeURIComponent(this.basePath)}`;
+        this.urlBase = `${environment.apiEndPoint}/secured/all/files/${this.permissions}/${encodeURIComponent(this.basePath)}`;
         this.fileService.explore(this.urlBase, this.currentPath).subscribe(data => {
             this.files = data.sort(fileSortFunction);
         });
@@ -106,7 +106,9 @@ export class ExplorerComponent implements OnInit {
         this.fileService.getPreview(this.urlBase, file.path).subscribe(data => {
             const src = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(data));
             // tslint:disable-next-line:max-line-length
-            const dialogRef = this.dialog.open(PreviewComponent, { data: { url: src, file: file, isImage: /[^/]+(jpg|png|gif)$/.test(file.name) } });
+            const isImage = /[^/]+(jpg|png|gif|svg|jpeg)$/.test(file.name.toLowerCase());
+            const isText = /[^/]+(txt|md|csv)$/.test(file.name.toLowerCase());
+            const dialogRef = this.dialog.open(PreviewComponent, { data: { url: src, file: file, isImage: isImage, isText: isText } });
         });
     }
 
