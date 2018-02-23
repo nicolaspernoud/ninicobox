@@ -7,6 +7,8 @@ import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { TokenResponse } from '../../../../common/interfaces';
 import { environment } from '../../environments/environment';
+import { switchMap } from 'rxjs/operators';
+import { handleHTTPError } from '../utility_functions';
 
 export const TOKEN_NAME = 'jwt_token';
 export const NOT_LOGGED = 'not_logged';
@@ -67,31 +69,45 @@ export class AuthService {
         }
     }
 
-    login(user): Observable<TokenResponse> {
+    getAddressFromPosition(coords): Observable<Address> {
+        // tslint:disable-next-line:max-line-length
+        return this.http.get<Address>(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${coords.latitude}&lon=${coords.longitude}`)
+            .catch(handleHTTPError);
+    }
+
+    login(user) {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 success => {
                     user.position = `latitude: ${success.coords.latitude}, longitude: ${success.coords.longitude}`;
-                    const loginObservable = this.http.post<TokenResponse>(`${this.apiEndPoint}/unsecured/login`, user);
-                    loginObservable.subscribe(
-                        data => {
-                            this.setToken(data.token);
-                            this.userRoleSubject.next(this.getRoleFromToken());
-                            this.snackBar.open('Login success', 'OK', { duration: 2000 });
-                            this.router.navigate(['/']);
-                        });
-                    return loginObservable;
+                    this.getAddressFromPosition(success.coords)
+                        .pipe(switchMap(
+                            data => {
+                                user.position += `, address: ${data.display_name}`;
+                                return this.http.post<TokenResponse>(`${this.apiEndPoint}/unsecured/login`, user);
+                            }
+                        )).catch((e) => {
+                            return this.http.post<TokenResponse>(`${this.apiEndPoint}/unsecured/login`, user);
+                        }).subscribe(
+                            data => {
+                                this.setToken(data.token);
+                                this.userRoleSubject.next(this.getRoleFromToken());
+                                this.snackBar.open('Login success', 'OK', { duration: 2000 });
+                                this.router.navigate(['/']);
+                            });
                 },
                 error => {
                     this.snackBar.open('Please allow geolocation to login', 'OK', { duration: 2000 });
-                    return null;
                 }
             );
         } else {
             this.snackBar.open('Browser not compatible', 'OK', {
                 duration: 2000,
             });
-            return null;
         }
     }
+}
+
+interface Address {
+    display_name: string;
 }

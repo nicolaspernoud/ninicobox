@@ -5,6 +5,7 @@ import 'rxjs/add/operator/catch';
 import { environment } from '../../environments/environment';
 import { SafeResourceUrl } from '@angular/platform-browser/src/security/dom_sanitization_service';
 import { TokenResponse, Proxy } from '../../../../common/interfaces';
+import { handleHTTPError } from '../utility_functions';
 
 @Injectable()
 export class ProxysService {
@@ -17,13 +18,13 @@ export class ProxysService {
   getProxyToken(): Observable<TokenResponse> {
     return this.http
       .get<TokenResponse>(this.tokenEndpoint)
-      .catch(this.handleError);
+      .catch(handleHTTPError);
   }
 
   getProxys(): Observable<Proxy[]> {
     return this.http
       .get<Proxy[]>(this.endpoint)
-      .catch(this.handleError);
+      .catch(handleHTTPError);
   }
 
   setProxys(proxys: Proxy[]): Observable<void> {
@@ -36,21 +37,7 @@ export class ProxysService {
     );
     return this.http
       .post(this.endpoint, sendProxys)
-      .catch(this.handleError);
+      .catch(handleHTTPError);
   }
 
-  private handleError(error: HttpErrorResponse) {
-    console.error(error);
-    let errorMessage = '';
-    if (error instanceof Error) {
-      // A client-side or network error occurred. Handle it accordingly.
-      errorMessage = `An error occurred: ${error.message}`;
-    } else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong,
-      errorMessage = `Server returned code: ${error.status}, error message is: ${error.message}`;
-    }
-    console.error(errorMessage);
-    return Observable.throw(errorMessage);
-  }
 }
