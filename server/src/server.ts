@@ -16,11 +16,11 @@ export = server;
 /**
  * Start HTTPS server.
  */
-if (app.get('env') === 'production') {
-  const securePort = process.env.SECURE_PORT ? process.env.SECURE_PORT : 443;
-  const options = {
-    cert: fs.readFileSync(process.env.SSL_CERT_LOCATION + '/fullchain.pem'),
-    key: fs.readFileSync(process.env.SSL_CERT_LOCATION + '/privkey.pem')
-  };
-  https.createServer(options, app).listen(securePort);
-}
+const securePort = process.env.SECURE_PORT ? process.env.SECURE_PORT : 443;
+const certPath = process.env.SSL_CERT_LOCATION ? process.env.SSL_CERT_LOCATION + '/fullchain.pem' : './certificates/localhost.crt';
+const keyPath = process.env.SSL_CERT_LOCATION ? process.env.SSL_CERT_LOCATION + '/fullchain.pem' : './certificates/localhost.key';
+const options = {
+  cert: fs.readFileSync(certPath),
+  key: fs.readFileSync(keyPath)
+};
+https.createServer(options, app).listen(securePort);
