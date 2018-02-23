@@ -1,0 +1,24 @@
+Login;Utilisateur
+Password;Mot de passe
+Name;Prénom
+Surname;Nom
+Toggle theme;Changer les couleurs
+Explorer;Explorateur
+Proxys services;Services
+Users management;Gestion des utilisateurs
+Rename;Renommer
+Cut;Couper
+Copy;Copier
+Delete;Supprimer
+Proxy name;Nom du proxy
+Proxy url;Adresse du proxy
+Proxy custom header;En-tête http personnalisé
+Proxy icon;Icone
+Proxy display rank;Ordre d'affichage
+Save;Enregistrer
+Close dialog;Fermer
+Login success;Connexion acceptée
+Please allow geolocation to login;Merci d'activer la géolocalisation pour vous connecter
+Browser not compatible;Navigateur incompatible
+Authentication error;Erreur d'authentification
+ done; : effectué

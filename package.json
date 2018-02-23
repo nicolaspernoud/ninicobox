@@ -12,7 +12,8 @@
     "start": "cd server && npm run serve",
     "setup": "npm install && cd server && npm install && cd ../client && npm install",
     "debug": "concurrently -k -p \"[{name}]\" -n \"Server,Client\" -c \"cyan.bold,green.bold\" \"cd server && npm run watch-debug\" \"cd client && ng serve\"",
-    "build": "concurrently -p \"[{name}]\" -n \"Server,Client\" -c \"cyan.bold,green.bold\" \"cd server && npm run build\" \"cd client && npm run build\""
+    "build": "concurrently -p \"[{name}]\" -n \"Server,Client\" -c \"cyan.bold,green.bold\" \"cd server && npm run build\" \"cd client && npm run build\"",
+    "translate": "node translate"
   },
   "devDependencies": {
     "concurrently": "^3.5.1"
