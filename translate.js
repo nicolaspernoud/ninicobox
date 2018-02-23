@@ -37,14 +37,16 @@ function translateFiles(dir, done) {
                     results.push(file);
                     // Translate the file
                     if (/.*main.*bundle.js/.test(file)) {
-                        let fileContent = fs.readFileSync(file, 'utf-8');
-                        for (let line of translationsArray) {
-                            fileContent = fileContent.replace(`"${line.originalText}"`, `"${line.translatedText}"`);
-                            fileContent = fileContent.replace(`'${line.originalText}'`, `'${line.translatedText}'`);
-                        }
-                        fs.writeFile(file, fileContent, 'utf-8', (err) => {
+                        fs.readFile(file, 'utf-8', (err, data) => {
                             if (err) throw err;
-                            console.log(file + ' has been saved !');
+                            for (let line of translationsArray) {
+                                data = data.replace(new RegExp(`"${line.originalText}"`, 'g'), `"${line.translatedText}"`)
+                                    .replace(new RegExp(`'${line.originalText}'`, 'g'), `'${line.translatedText}'`);
+                            }
+                            fs.writeFile(file, data, 'utf-8', (err) => {
+                                if (err) throw err;
+                                console.log(file + ' has been saved !');
+                            });
                         });
                     }
                     if (!--pending) done(null, results);

@@ -57,10 +57,9 @@ npm run debug
 - [x] Add copy to explorer
 - [x] Add tests
 - [x] Add basic service worker and manifest
-- [ ] Allow sorting of proxy services
-- [ ] Add i18n
+- [x] Allow sorting of proxy services
+- [x] Add i18n
 - [ ] Add filesACL management
-- [ ] Add user add dialog
 - [x] Remove unused components from client and unused librairies
 - [ ] Improve global error handling
 - [ ] Provide basic text file editing in explorer
