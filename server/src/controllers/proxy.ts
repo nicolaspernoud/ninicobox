@@ -22,7 +22,8 @@ export let doProxy = (req: Request, res: Response) => {
     method: req.method,
     jar: true,
     followRedirect: false,
-    headers: {}
+    headers: {},
+    strictSSL: false
   };
 
   // Allow proxying of transmission bittorrent client, remove if not useful
@@ -88,7 +89,7 @@ export let doProxy = (req: Request, res: Response) => {
     const replaceRegexCSS = /((?:url\()(?:"|'?))((?:\.?)(?:\/?)[^"'\)\()]+)(\)|"\)|'\))/g;
     const replaceRegexHTML = /((?:background=|action=|href=|src ?= ?|url ?= ?)(?:"|'))((?:\.?)(?:\/?)(?!data:|about:|javascript:|\/)[^"'\)\()]+)("|')/g;
     const replaceXHROpenPrototype =
-    `<head>
+      `<head>
       <script>
       var originalXHROpen = window.XMLHttpRequest.prototype.open;
       window.XMLHttpRequest.prototype.open = function() {
@@ -100,31 +101,15 @@ export let doProxy = (req: Request, res: Response) => {
     if (contentType !== undefined && (contentType.includes('css') || contentType.includes('html') || contentType.includes('javascript'))) {
       res.setHeader('content-type', contentType); // Put correct content type after code alteration
       if (contentType.includes('css')) {
-        this.pipe(
-          replaceStream(
-            replaceRegexCSS,
-            replaceFn
-          )
-        ).pipe(res);
-      } else if (contentType.includes('javascript')) {
-        this.pipe(
-          replaceStream(
-            replaceRegexHTML,
-            replaceFn
-          )
-        ).pipe(res);
-      } else if (contentType.includes('html')) {
-        this.pipe(
-          replaceStream(
-            replaceRegexHTML,
-            replaceFn
-          )
-        ).pipe(
+        this
+          .pipe(replaceStream(replaceRegexCSS, replaceFn))
+          .pipe(res);
+      } else if (contentType.includes('javascript') || contentType.includes('html')) {
+        this
+          .pipe(replaceStream(replaceRegexHTML, replaceFn))
           // Alter XMLHttpRequest open method to proxy ajax request
-          replaceStream(
-            '<head>', replaceXHROpenPrototype
-          )
-          ).pipe(res);
+          .pipe(replaceStream('<head>', replaceXHROpenPrototype))
+          .pipe(res);
       }
     }
     else {
