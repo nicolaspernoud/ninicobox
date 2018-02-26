@@ -1,4 +1,3 @@
-<h1 mat-dialog-title>Preview</h1>
 <object *ngIf="data.isText" [data]="data.url"></object>
 <img *ngIf="data.isImage" [src]="data.url">
 <button mat-raised-button (click)="dialogRef.close()">Close dialog</button>

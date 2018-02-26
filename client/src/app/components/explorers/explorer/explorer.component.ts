@@ -107,8 +107,10 @@ export class ExplorerComponent implements OnInit {
             const src = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(data));
             // tslint:disable-next-line:max-line-length
             const isImage = /[^/]+(jpg|png|gif|svg|jpeg)$/.test(file.name.toLowerCase());
-            const isText = /[^/]+(txt|md|csv)$/.test(file.name.toLowerCase());
-            const dialogRef = this.dialog.open(PreviewComponent, { data: { url: src, file: file, isImage: isImage, isText: isText } });
+            const isText = /[^/]+(txt|md|csv|sh)$/.test(file.name.toLowerCase());
+            if (isImage || isText) {
+                const dialogRef = this.dialog.open(PreviewComponent, { data: { url: src, file: file, isImage: isImage, isText: isText } });
+            }
         });
     }
 
