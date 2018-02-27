@@ -4,7 +4,7 @@ ENV           BUILD_FOLDER=/usr/src/app
 
 WORKDIR       ${BUILD_FOLDER}
 
-COPY          *.* ${BUILD_FOLDER}/
+COPY          * ${BUILD_FOLDER}/
 RUN           npm run setup
 RUN           cd server && npm run test
 RUN           npm run build
