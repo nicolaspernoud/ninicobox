@@ -1,13 +1,30 @@
+FROM          node:8 as builder
+
+ENV           BUILD_FOLDER=/usr/src/app
+
+WORKDIR       ${BUILD_FOLDER}
+
+COPY          *.* ${BUILD_FOLDER}/
+RUN           npm run setup
+RUN           cd server && npm run test
+RUN           npm run build
+RUN           npm run translate
+
+RUN           cd server && npm prune --production
+
+#
+
 FROM          node:8
 
+ENV           NODE_ENV=production
 ENV           APP_PATH=/usr/src/app
 
 WORKDIR       ${APP_PATH}
 
-COPY          . ${APP_PATH}/
 
-RUN           npm run setup && npm run build
+COPY          --from=builder /usr/src/app/server/ ${APP_PATH}
+COPY          --from=builder /usr/src/app/client/dist/ ${APP_PATH}/client/
 
-EXPOSE        3000
+EXPOSE        443
 
 CMD           ["npm start"]

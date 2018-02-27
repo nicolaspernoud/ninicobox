@@ -1,0 +1,20 @@
+sudo: required
+
+language: generic
+
+env:
+  global:
+    - secure: XpCVN7oK6IF8yl4bdmqLSvaEY1YFKnYCgpybb2/dxOs/Wz/x1cHCBN7ld9P4uxigVicVLaPFPbvb+lOnGlH+EEh2MOKVQlk1HwsOA7LF5lj+DOwpBZdedH+QOlO0CShEWvRKh63gxP95j+DIs6oKVRskPcRD+Ke8c334uvHxS5tryrgbrsaylT73nv1s+UqsYIp8kSOIr6efXLp0n+ok/Mpwwnq9Dqugp0A30GATtR0esT0YmM4NkL+mg4yhyonztK1A+ZKPCxXU0vJCUIKnr1/BzKssR8QeEGqRYxW4Agg4sZD5zjE/qNO4fExdDcMin9d+q/2hGZMPhr2j2P3kJeQVPQFmcXhBdojkUfQR4v0mpKMDo/aREJDvqpDpReIjHv9xMnt+gaa+Pi+X79XCnI3bX4wVD5NnGcoc23hr6kQHySW3TS9RSar9RMd6Lf1M/ltCHFYkDGYdE/RbJrfNARV9xFvGIXAXFNXEJfeGAP045AX+X7wcVkFaTFFUzSGQhJU2cWN1diGhR3Pk3Ql3QekzNbJCpUsuJta/Smg7g/NIbCC6QpWAiEww88uEID8EQqzp+mwjOAOSXv7CLZfHlNDyik0c3ztCHIEL1MZzYMekGLiSnx58dCiwdACdCPVjtt9LlwDPgQCukayBWEItwk/+QkI0iKADT57xd9b4L+U=
+
+services:
+  - docker
+
+script:
+  - set -e
+  - export REPO=nicolaspernoud/ninicobox
+  - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+  - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH; fi`
+  - echo $REPO:$TAG:$TRAVIS_BUILD_NUMBER
+  - docker build -t $REPO:$TRAVIS_BUILD_NUMBER .
+  - docker tag $REPO:$TRAVIS_BUILD_NUMBER $REPO:$TAG
+  - docker push $REPO
