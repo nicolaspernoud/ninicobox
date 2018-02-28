@@ -5,10 +5,18 @@
     align-items: center;
 }
 
-.toolbar-spacer {
+.flex-spacer {
     flex: 1 1 auto;
 }
 
 mat-sidenav {
     width: 250px;
+    display: flex;
+    flex-direction: column;
+}
+
+.version {
+    padding: 16px;
+    display: flex;
+    flex-direction: line;
 }

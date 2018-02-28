@@ -1,23 +1,33 @@
 <h1 mat-dialog-title>Add proxy</h1>
 <mat-form-field>
-  <input matInput #proxyName [value]="data ? data.name : ''">
-  <mat-placeholder><mat-icon>edit</mat-icon>Proxy name</mat-placeholder>
+  <input matInput #proxyName [value]="data.name">
+  <mat-placeholder>
+    <mat-icon>edit</mat-icon>Proxy name</mat-placeholder>
 </mat-form-field>
 <mat-form-field>
-  <input matInput #proxyURL [value]="data ? data.url : ''">
-  <mat-placeholder><mat-icon>link</mat-icon>Proxy url</mat-placeholder>
+  <input matInput #proxyURL [value]="data.url">
+  <mat-placeholder>
+    <mat-icon>link</mat-icon>Proxy url</mat-placeholder>
 </mat-form-field>
 <mat-form-field>
-  <input matInput #proxyCustomHeader [value]="data && !!data.customHeader ? data.customHeader : ''">
-  <mat-placeholder><mat-icon>build</mat-icon>Proxy custom header</mat-placeholder>
+  <input matInput #proxyCustomHeader [value]="!!data.customHeader ? data.customHeader : ''">
+  <mat-placeholder>
+    <mat-icon>build</mat-icon>Proxy custom header</mat-placeholder>
 </mat-form-field>
 <mat-form-field>
-  <input matInput #proxyIcon [value]="data ? data.icon : ''">
-  <mat-placeholder><mat-icon>color_lens</mat-icon>Proxy icon</mat-placeholder>
+  <mat-select #proxyIcon placeholder="Proxy icon" [(value)]="data.icon">
+    <mat-select-trigger>
+      <mat-icon>{{ data.icon }}</mat-icon>
+    </mat-select-trigger>
+    <mat-option *ngFor="let icon of icons" [value]="icon.value">
+      <mat-icon>{{ icon.name }}</mat-icon>
+    </mat-option>
+  </mat-select>
 </mat-form-field>
 <mat-form-field>
-  <input matInput type="number" #proxyRank [value]="data && !!data.rank ? data.rank : 0">
-  <mat-placeholder><mat-icon>sort</mat-icon>Proxy display rank</mat-placeholder>
+  <input matInput type="number" #proxyRank [value]="!!data.rank ? data.rank : 0">
+  <mat-placeholder>
+    <mat-icon>sort</mat-icon>Proxy display rank</mat-placeholder>
 </mat-form-field>
 <button mat-raised-button color="primary" (click)="dialogRef.close({
       name: proxyName.value,

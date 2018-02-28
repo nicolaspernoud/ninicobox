@@ -13,7 +13,8 @@ export class TokenInterceptor implements HttpInterceptor {
     constructor(public injector: Injector) { }
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         const authService = this.injector.get(AuthService);
-        if (authService.hasToken()) {
+        const isRequestToBackend = new URL(request.url).hostname === window.location.hostname;
+        if (isRequestToBackend && authService.hasToken()) {
             request = request.clone({
                 setHeaders: {
                     Authorization: `JWT ${authService.getToken()}`

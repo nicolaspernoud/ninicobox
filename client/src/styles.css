@@ -13,3 +13,8 @@ body {
 .nopadding .mat-expansion-panel-body {
     padding: 0px;
 }
+
+.mat-option-text {
+    display: flex !important;
+    align-items: center !important;
+}

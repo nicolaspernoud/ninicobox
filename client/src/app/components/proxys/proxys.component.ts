@@ -36,7 +36,12 @@ export class ProxysComponent implements OnInit {
   }
 
   add() {
-    const dialogRef = this.dialog.open(AddProxyDialogComponent);
+    const newProxy: Proxy = {
+      name: '',
+      url: '',
+      icon: 'home'
+    };
+    const dialogRef = this.dialog.open(AddProxyDialogComponent, { data: newProxy });
     dialogRef.afterClosed().subscribe(proxy => {
       if (proxy) {
         proxy.completeUrl = this.getIFrameUrl(proxy);
@@ -59,7 +64,7 @@ export class ProxysComponent implements OnInit {
   }
 
   save() {
-    this.proxysService.setProxys(this.proxys).subscribe(data => {}, err => {
+    this.proxysService.setProxys(this.proxys).subscribe(data => { }, err => {
       console.log(err);
     });
   }
