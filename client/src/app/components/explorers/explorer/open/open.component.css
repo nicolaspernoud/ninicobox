@@ -1,0 +1,28 @@
+:host {
+    display: flex;
+    flex-direction: column;
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    width: 70vw;
+}
+
+.buttons {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: line;
+}
+
+button {
+    margin-right: 10px;
+}
+
+img {
+    max-height: 60vh;
+}
+
+object, textarea {
+    height: 60vh;
+}

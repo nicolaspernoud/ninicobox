@@ -143,6 +143,22 @@ filesRouter.get('/:permissions/:basepath/:path?/download', function (req: Reques
     res.download(filePath);
 });
 
+// Get content
+filesRouter.get('/:permissions/:basepath/:path?/getcontent', function (req: Request, res: Response) {
+    const filePath = path.join(req.params.basepath, decodeURIComponent(req.params.path));
+    log(`File opened : ${filePath}`, req);
+    fs.readFile(filePath, 'utf-8', (err, data) => res.send(data));
+});
+
+// Set content
+filesRouter.put('/:permissions/:basepath/:path?/setcontent', function (req: Request, res: Response) {
+    const filePath = path.join(req.params.basepath, decodeURIComponent(req.params.path));
+    fs.writeFile(filePath, req.body, (err) => {
+        if (err) throw err;
+        log(`File saved : ${filePath}`, req);
+    });
+});
+
 // Delete
 filesRouter.delete('/:permissions/:basepath/:path?', function (req: Request, res: Response) {
     const filePath = path.join(req.params.basepath, req.params.path);

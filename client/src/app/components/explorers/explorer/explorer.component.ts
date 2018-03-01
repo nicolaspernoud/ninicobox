@@ -7,7 +7,7 @@ import { RenameDialogComponent } from './rename-dialog/rename-dialog.component';
 import { switchMap } from 'rxjs/operators/switchMap';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
-import { PreviewComponent } from './preview/preview.component';
+import { OpenComponent } from './open/open.component';
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
@@ -102,16 +102,44 @@ export class ExplorerComponent implements OnInit {
         });
     }
 
-    preview(file: File) {
-        this.fileService.getPreview(this.urlBase, file.path).subscribe(data => {
-            const src = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(data));
-            // tslint:disable-next-line:max-line-length
-            const isImage = /[^/]+(jpg|png|gif|svg|jpeg)$/.test(file.name.toLowerCase());
-            const isText = /[^/]+(txt|md|csv|sh)$/.test(file.name.toLowerCase());
-            if (isImage || isText) {
-                const dialogRef = this.dialog.open(PreviewComponent, { data: { url: src, file: file, isImage: isImage, isText: isText } });
+    open(file: File, editMode: boolean) {
+        let fileType: string;
+        if (/(jpg|png|gif|svg|jpeg|pdf)$/.test(file.name.toLowerCase())) {
+            fileType = 'image';
+            if (/(pdf)$/.test(file.name.toLowerCase())) {
+                fileType = 'other';
             }
-        });
+            this.fileService.getPreview(this.urlBase, file.path).subscribe(data => {
+                const src = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(data));
+                const dialogRef = this.dialog.open(OpenComponent, {
+                    data: {
+                        url: src,
+                        file: file,
+                        fileType: fileType,
+                        editMode: false
+                    }
+                });
+            });
+        } else if (this.isText(file)) {
+            fileType = 'text';
+            this.fileService.getContent(this.urlBase, file.path).subscribe(data => {
+                const dialogRef = this.dialog.open(OpenComponent, {
+                    data: {
+                        content: data,
+                        file: file,
+                        fileType: fileType,
+                        editMode: editMode
+                    }
+                });
+                if (editMode) {
+                    dialogRef.afterClosed().subscribe(newContent => {
+                        if (newContent && newContent.content) {
+                            this.fileService.setContent(this.urlBase, file.path, newContent.content).subscribe();
+                        }
+                    });
+                }
+            });
+        }
     }
 
     cut(file: File) {
@@ -159,6 +187,10 @@ export class ExplorerComponent implements OnInit {
             path: `${this.currentPath}\\${name}`,
             isDir: false
         });
+    }
+
+    isText(file) {
+        return /(txt|md|csv|sh)$/.test(file.name.toLowerCase());
     }
 }
 

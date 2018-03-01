@@ -52,6 +52,14 @@ export class FilesService {
         return this.http.get(`${urlBase}${path.length > 0 ? '/' + encodeURIComponent(path) : ''}/download`, { responseType: 'blob' });
     }
 
+    getContent(urlBase, path) {
+        return this.http.get(`${urlBase}${path.length > 0 ? '/' + encodeURIComponent(path) : ''}/getcontent`, {responseType: 'text'});
+    }
+
+    setContent(urlBase, path, content) {
+        return this.http.put(`${urlBase}${path.length > 0 ? '/' + encodeURIComponent(path) : ''}/setcontent`, content);
+    }
+
     delete(urlBase, path, isDir) {
         return this.executeRequest(`${urlBase}${path.length > 0 ? '/' + encodeURIComponent(path) : ''}`, 'DELETE', { isDir: isDir });
     }

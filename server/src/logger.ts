@@ -10,5 +10,5 @@ export function log(message: string, req?: Request) {
     const ip = req && req.ip ? req.ip : 'unknown_ip';
 
     const entry = `${date} | ${user} | ${message} | ${ip}${position ? ' | ' + position : ''}\n`;
-    fs.appendFile(logFile, entry, 'utf-8', err => console.log(err));
+    fs.appendFile(logFile, entry, 'utf-8', err => { if (err) console.log(err); });
 }

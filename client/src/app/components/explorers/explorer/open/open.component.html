@@ -1,0 +1,25 @@
+<!-- display mode -->
+<div class="main-content" *ngIf="!data.editMode">
+    <object *ngIf="data.fileType==='other'" [data]="data.url"></object>
+    <img *ngIf="data.fileType==='image'" [src]="data.url">
+    <mat-form-field *ngIf="data.fileType === 'text'">
+        <textarea matInput [value]="data.content"></textarea>
+    </mat-form-field>
+    <div class="buttons">
+        <button mat-raised-button (click)="dialogRef.close()">Close dialog</button>
+    </div>
+</div>
+
+<!-- edit mode -->
+<div class="main-content" *ngIf="data.fileType==='text' && data.editMode">
+    <mat-form-field>
+        <textarea matInput #fileContent [value]="data.content"></textarea>
+    </mat-form-field>
+    <div class="buttons">
+        <button mat-raised-button color="primary" (click)="dialogRef.close({
+            content: fileContent.value
+            })">Save
+        </button>
+        <button mat-raised-button (click)="dialogRef.close()">Close dialog</button>
+    </div>
+</div>

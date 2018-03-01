@@ -62,7 +62,7 @@ npm run debug
 - [ ] Add filesACL management
 - [x] Remove unused components from client and unused librairies
 - [ ] Improve global error handling
-- [ ] Provide basic text file editing in explorer
+- [x] Provide basic text file editing in explorer
 
 ### Deployment
 - [x] Put everything in docker containers (not tested)
