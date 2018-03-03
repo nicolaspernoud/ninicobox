@@ -8,7 +8,7 @@ WORKDIR       ${BUILD_FOLDER}
 
 COPY          . ${BUILD_FOLDER}/
 COPY          ./qemu-arm-static /usr/bin/qemu-arm-static
-RUN           cd server && npm install
+RUN           cd server && npm install && cd ../client && npm install
 RUN           cd server && npm run test
 RUN           cd server && npm run build
 RUN           cd server && npm prune --production
