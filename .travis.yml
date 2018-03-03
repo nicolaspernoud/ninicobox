@@ -18,6 +18,7 @@ script:
   - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
   - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH; fi`
   - echo $REPO:$TAG:$TRAVIS_BUILD_NUMBER
+  - cp /usr/bin/qemu-arm-static ./
   - docker build -t $REPO:$TRAVIS_BUILD_NUMBER .
   - docker tag $REPO:$TRAVIS_BUILD_NUMBER $REPO:$TAG
   - docker push $REPO
