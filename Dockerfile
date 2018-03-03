@@ -5,6 +5,7 @@ ENV           BUILD_FOLDER=/usr/src/app
 WORKDIR       ${BUILD_FOLDER}
 
 COPY          . ${BUILD_FOLDER}/
+COPY          /usr/bin/qemu-arm-static /usr/bin/qemu-arm-static
 RUN           npm run setup
 RUN           npm run build
 RUN           cd server && npm run test
@@ -21,7 +22,7 @@ ENV           APP_PATH=/usr/src/app
 
 WORKDIR       ${APP_PATH}
 
-
+COPY          /usr/bin/qemu-arm-static /usr/bin/qemu-arm-static
 COPY          --from=builder /usr/src/app/server/ ${APP_PATH}/server/
 COPY          --from=builder /usr/src/app/client/dist/ ${APP_PATH}/client/dist/
 
