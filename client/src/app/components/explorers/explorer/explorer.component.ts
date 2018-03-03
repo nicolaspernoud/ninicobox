@@ -52,13 +52,14 @@ export class ExplorerComponent implements OnInit {
         });
     }
 
-    createDir() {
+    create(isDir: boolean) {
+        const newName = isDir ? 'New folder' : 'New file';
         let variant = 0;
-        let directoryName = '';
+        let newFileName = '';
         while (true) {
-            directoryName = variant === 0 ? 'New folder' : `New folder ${variant}`;
+            newFileName = variant === 0 ? `${newName}${isDir ? '' : '.txt'}` : `${newName} ${variant}${isDir ? '' : '.txt'}`;
             const existingFile = this.files.filter((file: File) => {
-                return file.name.toLowerCase() === directoryName.toLowerCase();
+                return file.name.toLowerCase() === newFileName.toLowerCase();
             })[0];
 
             if (!existingFile) {
@@ -67,12 +68,15 @@ export class ExplorerComponent implements OnInit {
 
             variant++;
         }
-
-        this.fileService.createDir(this.urlBase, this.currentPath, directoryName).subscribe();
+        if (isDir) {
+            this.fileService.createDir(this.urlBase, this.currentPath, newFileName).subscribe();
+        } else {
+            this.fileService.setContent(this.urlBase, `${this.currentPath + '/' + encodeURIComponent(newFileName)}`, '').subscribe();
+        }
         this.files.push({
-            name: directoryName,
-            path: `${this.currentPath}\\${directoryName}`,
-            isDir: true
+            name: newFileName,
+            path: `${this.currentPath}\\${newFileName}`,
+            isDir: isDir
         });
     }
 

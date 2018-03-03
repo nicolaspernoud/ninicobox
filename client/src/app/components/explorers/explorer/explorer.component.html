@@ -42,8 +42,11 @@
 </mat-nav-list>
 
 <div class="actions-fabs">
-    <button mat-mini-fab (click)="createDir()" *ngIf="permissions=='rw'">
+    <button mat-mini-fab (click)="create(true)" *ngIf="permissions=='rw'">
         <mat-icon>create_new_folder</mat-icon>
+    </button>
+    <button mat-mini-fab (click)="create(false)" *ngIf="permissions=='rw'">
+        <mat-icon>note_add</mat-icon>
     </button>
     <app-file-uploader [path]="currentPath" (UploadComplete)="onUploadComplete($event)" [urlBase]="urlBase" *ngIf="permissions=='rw'"></app-file-uploader>
     <button mat-mini-fab (click)="paste()" *ngIf="cutCopyFile !== undefined" [@appearDisappear]>

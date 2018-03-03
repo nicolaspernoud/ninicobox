@@ -26,12 +26,6 @@ export let doProxy = (req: Request, res: Response) => {
     strictSSL: false
   };
 
-  // Allow proxying of transmission bittorrent client, remove if not useful
-  if (req.headers['x-transmission-session-id']) {
-    requestToOptions.headers['X-Transmission-Session-Id'] =
-      req.headers['x-transmission-session-id'];
-  }
-
   // Allow custom headers (Authorisation for example)
   const parsed_url = URL.parse(proxyServerBase, true);
   if (parsed_url.query && Object.prototype.hasOwnProperty.call(parsed_url.query, 'customHeader')) {
@@ -39,6 +33,10 @@ export let doProxy = (req: Request, res: Response) => {
     requestToOptions.headers[customHeader[0]] = customHeader[1].trim();
   }
 
+  // *** ALLOW PROXYING OF TRANSMISSION BITTORRENT CLIENT, REMOVE IF NOT USEFUL ***
+  if (req.headers['x-transmission-session-id']) {
+    requestToOptions.headers['X-Transmission-Session-Id'] = req.headers['x-transmission-session-id'];
+  }
 
   // Building of the main request to proxified server and error handling
   const requestTo = request(url, requestToOptions);
@@ -48,12 +46,17 @@ export let doProxy = (req: Request, res: Response) => {
     );
   });
 
+  // *** ALLOW PROXYING OF TRANSMISSION BITTORRENT CLIENT, REMOVE IF NOT USEFUL ***
+  if (req.headers['x-transmission-session-id'] && req.method === 'POST' && req.headers['content-type'].includes('text/plain')) {
+    requestTo.json(JSON.parse(req.body));
+  }
+
   // Transmitting the data according to content type
   if (req.method === 'POST') {
     if (req.headers['content-type'] === 'application/x-www-form-urlencoded') {
       requestTo.form(req.body);
     }
-    if (req.headers['content-type'].includes('json') || req.headers['content-type'].includes('text/plain')) {
+    if (req.headers['content-type'].includes('json')) {
       requestTo.json(req.body);
     }
   }

@@ -47,7 +47,7 @@ if (app.get('env') === 'development') {
 app.use(
   bodyParser.json({
     type: function (req) {
-      return (req.headers['content-type'].includes('json') || (req.baseUrl.includes('proxy') && req.headers['content-type'].includes('text/plain')));
+      return (req.headers['content-type'].includes('json'));
     }
   })
 );
