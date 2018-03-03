@@ -5,6 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialog } from '@angular/material/dialog';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { MaterialModule } from '../../../material.module';
+import { HttpClient, HttpHandler } from '@angular/common/http';
 
 describe('AddProxyDialogComponent', () => {
   let dialog: MatDialog;
@@ -16,7 +17,8 @@ describe('AddProxyDialogComponent', () => {
       imports: [
         MaterialModule,
         BrowserAnimationsModule
-      ]
+      ],
+      providers: [HttpClient, HttpHandler]
     });
 
     TestBed.overrideModule(BrowserDynamicTestingModule, {

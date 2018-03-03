@@ -23,7 +23,7 @@ describe('ProxysComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ProxysComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    // fixture.detectChanges();
   });
 
   it('should create', () => {

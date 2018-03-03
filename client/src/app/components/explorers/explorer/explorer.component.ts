@@ -190,7 +190,7 @@ export class ExplorerComponent implements OnInit {
     }
 
     isText(file) {
-        return /(txt|md|csv|sh)$/.test(file.name.toLowerCase());
+        return /(txt|md|csv|sh|nfo|log)$/.test(file.name.toLowerCase());
     }
 }
 

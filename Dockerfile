@@ -7,7 +7,7 @@ WORKDIR       ${BUILD_FOLDER}
 COPY          . ${BUILD_FOLDER}/
 RUN           npm run setup
 RUN           npm run build
-# RUN           cd server && npm run test
+RUN           cd server && npm run test
 RUN           npm run translate
 
 RUN           cd server && npm prune --production

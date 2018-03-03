@@ -10,6 +10,8 @@ services:
   - docker
 
 script:
+  # prepare qemu
+  - docker run --rm --privileged multiarch/qemu-user-static:register --reset
   - set -e
   - export REPO=nicolaspernoud/ninicobox
   - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"

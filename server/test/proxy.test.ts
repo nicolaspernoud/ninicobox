@@ -13,7 +13,7 @@ describe('GET /api/secured/proxy?url=[http://example.com/] with authentication',
     const agent = request(app);
     agent
       .post('/api/unsecured/login')
-      .send({ 'login': 'admin', 'password': 'password' })
+      .send({ 'login': 'admin', 'password': 'password', 'position': 'test' })
       .end((req, res) => {
         agent
           .get('/api/secured/admin/getproxytoken')
@@ -21,9 +21,8 @@ describe('GET /api/secured/proxy?url=[http://example.com/] with authentication',
           .set('Authorization', 'JWT ' + res.body.token)
           .end((req, res) => {
             agent
-              .get(`/api/secured/proxy?JWT=${res.body.token}url=[http://example.com/]`)
+              .get(`/api/secured/proxy?JWT=${res.body.token}&url=[http://example.com]`)
               .set('Accept', 'application/json')
-              .set('Authorization', 'JWT ' + res.body.token)
               .expect(200, done);
           });
       });
