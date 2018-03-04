@@ -48,7 +48,8 @@ export class ExplorerComponent implements OnInit {
     ngOnInit() {
         this.urlBase = `${environment.apiEndPoint}/secured/all/files/${this.permissions}/${encodeURIComponent(this.basePath)}`;
         this.fileService.explore(this.urlBase, this.currentPath).subscribe(data => {
-            this.files = data.sort(fileSortFunction);
+            this.files = data;
+            this.files.sort(fileSortFunction);
         });
     }
 
@@ -83,13 +84,19 @@ export class ExplorerComponent implements OnInit {
     explore(file: File) {
         this.currentPath += '/' + file.name;
         this.CurrentPathChanged.emit([this.name, this.currentPath]);
-        this.fileService.explore(this.urlBase, this.currentPath).subscribe(files => this.files = files.sort(fileSortFunction));
+        this.fileService.explore(this.urlBase, this.currentPath).subscribe(files => {
+            this.files = files;
+            this.files.sort(fileSortFunction);
+        });
     }
 
     goBack() {
         this.currentPath = this.currentPath.substring(0, this.currentPath.lastIndexOf('/'));
         this.CurrentPathChanged.emit([this.name, this.currentPath]);
-        this.fileService.explore(this.urlBase, this.currentPath).subscribe(files => this.files = files.sort(fileSortFunction));
+        this.fileService.explore(this.urlBase, this.currentPath).subscribe(files => {
+            this.files = files;
+            this.files.sort(fileSortFunction);
+        });
     }
 
     openRename(file: File) {
@@ -115,7 +122,7 @@ export class ExplorerComponent implements OnInit {
             }
             this.fileService.getPreview(this.urlBase, file.path).subscribe(data => {
                 const src = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(data));
-                const dialogRef = this.dialog.open(OpenComponent, {
+                this.dialog.open(OpenComponent, {
                     data: {
                         url: src,
                         file: file,
@@ -162,7 +169,8 @@ export class ExplorerComponent implements OnInit {
             .pipe(switchMap(data =>
                 this.fileService.explore(this.urlBase, this.currentPath)
             )).subscribe(data => {
-                this.files = data.sort(fileSortFunction);
+                this.files = data;
+                this.files.sort(fileSortFunction);
                 this.snackBar.open(`${action} done`, 'OK', { duration: 3000 });
             });
         this.cutCopyFile = undefined;

@@ -1,7 +1,7 @@
 <!-- display mode -->
 <div class="main-content" *ngIf="!data.editMode">
     <object *ngIf="data.fileType==='other'" [data]="data.url"></object>
-    <img *ngIf="data.fileType==='image'" [src]="data.url">
+    <img *ngIf="data.fileType==='image'" [src]="data.url" alt="Previewed image">
     <mat-form-field *ngIf="data.fileType === 'text'">
         <textarea matInput [value]="data.content"></textarea>
     </mat-form-field>
