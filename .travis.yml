@@ -23,8 +23,8 @@ services:
 
 script:
   # sonarcloud scan
-  - npm install -g typescript
-  - export NODE_PATH=$NVM_BIN
+  - npm install typescript
+  - npm install typescript-tools
   - sonar-scanner
   # prepare qemu
   - sudo apt install -y qemu qemu-user-static qemu-user binfmt-support
