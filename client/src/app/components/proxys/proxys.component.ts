@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ProxysService } from '../../services/proxys.service';
+import { ProxysService, ClientProxy } from '../../services/proxys.service';
 import { environment } from '../../../environments/environment';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Proxy } from '../../../../../common/interfaces';
 import { MatDialog } from '@angular/material';
 import { AddProxyDialogComponent } from './add-proxy-dialog/add-proxy-dialog.component';
 import { switchMap } from 'rxjs/operators';
@@ -14,7 +13,7 @@ import { switchMap } from 'rxjs/operators';
 })
 export class ProxysComponent implements OnInit {
 
-  public proxys: Proxy[];
+  public proxys: ClientProxy[];
   private proxyBase = `${environment.apiEndPoint}/secured/proxy`;
   private proxytoken: string;
 
@@ -36,7 +35,7 @@ export class ProxysComponent implements OnInit {
   }
 
   add() {
-    const newProxy: Proxy = {
+    const newProxy: ClientProxy = {
       name: '',
       url: '',
       icon: 'home'
@@ -51,7 +50,7 @@ export class ProxysComponent implements OnInit {
     });
   }
 
-  edit(proxy: Proxy) {
+  edit(proxy: ClientProxy) {
     const dialogRef = this.dialog.open(AddProxyDialogComponent, { data: proxy });
     dialogRef.afterClosed().subscribe(data => {
       if (data) {
@@ -69,11 +68,11 @@ export class ProxysComponent implements OnInit {
     });
   }
 
-  delete(proxy: Proxy) {
+  delete(proxy: ClientProxy) {
     this.proxys.splice(this.proxys.findIndex(value => value.url === proxy.url), 1);
   }
 
-  getIFrameUrl(proxy: Proxy) {
+  getIFrameUrl(proxy: ClientProxy) {
     return this.sanitizer.bypassSecurityTrustResourceUrl(
       `${this.proxyBase}?
 JWT=${this.proxytoken}

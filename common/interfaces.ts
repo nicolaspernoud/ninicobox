@@ -1,11 +1,8 @@
-import { SafeResourceUrl } from '../client/node_modules/@angular/platform-browser';
-
 export interface Proxy {
     name: string;
     url: string;
     customHeader?: string;
     icon?: string;
-    completeUrl?: SafeResourceUrl;
     rank?: number;
 }
 

@@ -27,10 +27,10 @@ export class ProxysService {
       .catch(handleHTTPError);
   }
 
-  setProxys(proxys: Proxy[]): Observable<void> {
-    const sendProxys: Proxy[] = [];
+  setProxys(proxys: ClientProxy[]): Observable<void> {
+    const sendProxys: ClientProxy[] = [];
     proxys.forEach(proxy => {
-      const sendProxy: Proxy = { ...proxy };
+      const sendProxy: ClientProxy = { ...proxy };
       delete sendProxy.completeUrl;
       sendProxys.push(sendProxy);
     }
@@ -40,4 +40,8 @@ export class ProxysService {
       .catch(handleHTTPError);
   }
 
+}
+
+export interface ClientProxy extends Proxy {
+  completeUrl?: SafeResourceUrl;
 }
