@@ -24,8 +24,7 @@ services:
 script:
   # sonarcloud scan
   - npm install -g typescript
-  - export NODE_PATH=/home/travis/.nvm/versions/node/v8.9.1/lib/
-  - env
+  - export NODE_PATH=$NVM_BIN
   - sonar-scanner
   # prepare qemu
   - sudo apt install -y qemu qemu-user-static qemu-user binfmt-support
