@@ -24,6 +24,7 @@ services:
 script:
   # sonarcloud scan
   - npm install -g typescript
+  - echo $NODE_PATH
   - sonar-scanner
   # prepare qemu
   - sudo apt install -y qemu qemu-user-static qemu-user binfmt-support
