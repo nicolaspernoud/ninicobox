@@ -24,8 +24,8 @@ services:
 script:
   # nsp scan
   - npm install nsp --global
-  - cd server && nsp check
-  - cd client && nsp check
+  - cd server && nsp check && cd ..
+  - cd client && nsp check && cd ..
   # sonarcloud scan
   - npm install typescript
   - sonar-scanner
