@@ -22,13 +22,17 @@ services:
   - docker
 
 script:
+  # nsp scan
+  - npm install nsp --global
+  - cd server && nsp check
+  - cd client && nsp check
   # sonarcloud scan
   - npm install typescript
-  - npm install typescript-tools
   - sonar-scanner
   # prepare qemu
   - sudo apt install -y qemu qemu-user-static qemu-user binfmt-support
   - docker run --rm --privileged multiarch/qemu-user-static:register --reset
+  # create container and push it
   - set -e
   - export REPO=nicolaspernoud/ninicobox
   - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"

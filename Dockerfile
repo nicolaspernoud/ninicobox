@@ -35,7 +35,6 @@ ENV           APP_PATH=/usr/src/app
 
 WORKDIR       ${APP_PATH}
 
-COPY          ./qemu-arm-static /usr/bin/qemu-arm-static
 COPY          --from=server-builder /usr/src/app/server/ ${APP_PATH}/server/
 COPY          --from=client-builder /usr/src/app/client/dist/ ${APP_PATH}/client/dist/
 
