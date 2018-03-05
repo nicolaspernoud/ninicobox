@@ -29,7 +29,7 @@ export let doProxy = (req: Request, res: Response) => {
   // Allow custom headers (Authorisation for example)
   const parsed_url = URL.parse(proxyServerBase, true);
   if (parsed_url.query && Object.prototype.hasOwnProperty.call(parsed_url.query, 'customHeader')) {
-    const customHeader = parsed_url.query['customHeader'].split(':');
+    const customHeader = (parsed_url.query['customHeader'] as string).split(':');
     requestToOptions.headers[customHeader[0]] = customHeader[1].trim();
   }
 
