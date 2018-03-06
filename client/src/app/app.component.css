@@ -20,3 +20,11 @@ mat-sidenav {
     display: flex;
     flex-direction: line;
 }
+
+.mat-nav-list .mat-list-item-focus {
+    background: none;
+}
+
+.active-link {
+    background: #3f51b5;
+}

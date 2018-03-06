@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from './services/auth.service';
+import { UpdateService } from './services/update.service';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +11,7 @@ export class AppComponent {
   title = 'NinicoBox';
   isDarkTheme: boolean;
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private update: UpdateService) {
     authService.autoLogin();
   }
 
