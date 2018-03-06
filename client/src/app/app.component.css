@@ -26,5 +26,5 @@ mat-sidenav {
 }
 
 .active-link {
-    background: #3f51b5;
+    background: #3f51b5 !important;
 }
