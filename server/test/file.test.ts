@@ -1,7 +1,7 @@
 import * as request from 'supertest';
 import { app } from '../src/app';
 
-
+app.set('env', 'test');
 
 describe('Access explorer without token', () => {
   it('should return 401 Unauthorized status', () => {

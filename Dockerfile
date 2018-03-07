@@ -38,6 +38,6 @@ WORKDIR       ${APP_PATH}
 COPY          --from=server-builder /usr/src/app/server/ ${APP_PATH}/server/
 COPY          --from=client-builder /usr/src/app/client/dist/ ${APP_PATH}/client/dist/
 
-EXPOSE        443
+EXPOSE        80 443
 
 CMD           cd server && npm start

@@ -18,11 +18,9 @@ import { getProxys } from './models/proxys';
 
 // Create Express server
 export const app = express();
+app.set('port', process.env.PORT || 80);
 if (app.get('env') === 'production') { app.use(helmet()); }
 app.use(passport.initialize());
-
-// Express configuration
-app.set('port', process.env.PORT || 3000);
 app.use(compression());
 
 // Development configuration
@@ -54,10 +52,27 @@ app.use(
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.raw({ type: 'text/plain' }));
 
+if (app.get('env') !== 'test') {
+  // Handle redirection to https (but for let's encrypt challenge)
+  app.get('/.well-known/acme-challenge/:fileid', function (req, res) {
+    res.send(`Requesting ${req.params.fileid}`);
+  });
+  app.use(function (req, res, next) {
+    if (req.secure) {
+      // request was via https, so do no special handling
+      next();
+    } else {
+      // request was via http, so redirect to https
+      res.redirect('https://' + req.headers.host + req.url);
+    }
+  });
+}
+
 // Unsecured app routes
 app.get('/test', function (req, res) {
-  res.send(`Usage : http://localhost:${app.get('port')}/proxy?url=[http://webServerToPro.xy]`);
+  res.send('This is a test !');
 });
+
 // Serving client
 app.use(express.static('../client/dist'));
 

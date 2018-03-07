@@ -2,6 +2,8 @@ import * as request from 'supertest';
 import { app } from '../src/app';
 import { setUsers, getUsers } from '../src/models/users';
 
+app.set('env', 'test');
+
 const usersIn = [
   {
     'id': 1,

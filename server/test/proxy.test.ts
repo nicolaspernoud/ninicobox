@@ -1,6 +1,8 @@
 import * as request from 'supertest';
 import { app } from '../src/app';
 
+app.set('env', 'test');
+
 describe('GET /api/secured/proxy?url=[http://example.com/] without authentication', () => {
   it('should return 401 Unauthorized', () => {
     return request(app).get('/api/secured/proxy?url=[http://example.com/]')

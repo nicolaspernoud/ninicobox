@@ -1,23 +1,9 @@
 {
     "index": "/index.html",
-    "dataGroups": [
-        {
-            "name": "api",
-            "urls": [
-                "/api"
-            ],
-            "cacheConfig": {
-                "maxSize": 0,
-                "maxAge": "0u",
-                "strategy": "freshness"
-            }
-        }
-    ],
     "assetGroups": [
         {
             "name": "app",
             "installMode": "prefetch",
-            "updateMode": "prefetch",
             "resources": {
                 "files": [
                     "/favicon.ico",
@@ -37,6 +23,9 @@
             "resources": {
                 "files": [
                     "/assets/**"
+                ],
+                "urls": [
+                    "https://fonts.googleapis.com/**"
                 ]
             }
         }
