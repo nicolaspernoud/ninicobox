@@ -53,11 +53,16 @@ export class FilesService {
     }
 
     getContent(urlBase, path) {
-        return this.http.get(`${urlBase}${path.length > 0 ? '/' + encodeURIComponent(path) : ''}/getcontent`, {responseType: 'text'});
+        return this.http.get(`${urlBase}${path.length > 0 ? '/' + encodeURIComponent(path) : ''}/getcontent`, { responseType: 'text' });
     }
 
     setContent(urlBase, path, content) {
         return this.http.put(`${urlBase}${path.length > 0 ? '/' + encodeURIComponent(path) : ''}/setcontent`, content);
+    }
+
+    getStream(urlBase, path) {
+        // tslint:disable-next-line:max-line-length
+        return this.http.get(`${urlBase}${path.length > 0 ? '/' + encodeURIComponent(path) : ''}/getstream`, { responseType: 'blob' });
     }
 
     delete(urlBase, path, isDir) {

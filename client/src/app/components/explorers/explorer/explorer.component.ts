@@ -114,12 +114,8 @@ export class ExplorerComponent implements OnInit {
     }
 
     open(file: File, editMode: boolean) {
-        let fileType: string;
-        if (/(jpg|png|gif|svg|jpeg|pdf)$/.test(file.name.toLowerCase())) {
-            fileType = 'image';
-            if (/(pdf)$/.test(file.name.toLowerCase())) {
-                fileType = 'other';
-            }
+        const fileType = this.getType(file);
+        if (fileType === 'image' || fileType === 'other') {
             this.fileService.getPreview(this.urlBase, file.path).subscribe(data => {
                 const src = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(data));
                 this.dialog.open(OpenComponent, {
@@ -131,8 +127,7 @@ export class ExplorerComponent implements OnInit {
                     }
                 });
             });
-        } else if (this.isText(file)) {
-            fileType = 'text';
+        } else if (fileType === 'text') {
             this.fileService.getContent(this.urlBase, file.path).subscribe(data => {
                 const dialogRef = this.dialog.open(OpenComponent, {
                     data: {
@@ -149,6 +144,18 @@ export class ExplorerComponent implements OnInit {
                         }
                     });
                 }
+            });
+        } else if (fileType === 'audio' || fileType === 'video') {
+            this.fileService.getStream(this.urlBase, file.path).subscribe(data => {
+                const src = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(data));
+                this.dialog.open(OpenComponent, {
+                    data: {
+                        url: src,
+                        file: file,
+                        fileType: fileType,
+                        editMode: false
+                    }
+                });
             });
         }
     }
@@ -201,8 +208,12 @@ export class ExplorerComponent implements OnInit {
         });
     }
 
-    isText(file) {
-        return /(txt|md|csv|sh|nfo|log)$/.test(file.name.toLowerCase());
+    getType(file): string {
+        if (/(txt|md|csv|sh|nfo|log)$/.test(file.name.toLowerCase())) { return 'text'; }
+        if (/(jpg|png|gif|svg|jpeg)$/.test(file.name.toLowerCase())) { return 'image'; }
+        if (/(mp3|wav|ogg)$/.test(file.name.toLowerCase())) { return 'audio'; }
+        if (/(mp4)$/.test(file.name.toLowerCase())) { return 'video'; }
+        if (/(pdf)$/.test(file.name.toLowerCase())) { return 'other'; }
     }
 }
 

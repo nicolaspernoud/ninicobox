@@ -159,6 +159,19 @@ filesRouter.put('/:permissions/:basepath/:path?/setcontent', function (req: Requ
     });
 });
 
+// Stream content
+filesRouter.get('/:permissions/:basepath/:path?/getstream', function (req: Request, res: Response) {
+    const filePath = path.join(req.params.basepath, decodeURIComponent(req.params.path));
+    log(`File opened (stream) : ${filePath}`, req);
+    const stat = fs.statSync(filePath);
+    res.writeHead(200, {
+        'Content-Type': 'application/octet-stream',
+        'Content-Length': stat.size
+    });
+    const readStream = fs.createReadStream(filePath);
+    readStream.pipe(res);
+});
+
 // Delete
 filesRouter.delete('/:permissions/:basepath/:path?', function (req: Request, res: Response) {
     const filePath = path.join(req.params.basepath, req.params.path);

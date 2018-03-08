@@ -1,7 +1,13 @@
 <!-- display mode -->
 <div class="main-content" *ngIf="!data.editMode">
     <object *ngIf="data.fileType==='other'" [data]="data.url"></object>
-    <img *ngIf="data.fileType==='image'" [src]="data.url" alt="Previewed image">
+    <img *ngIf="data.fileType==='image'" alt="Previewed image">
+    <audio *ngIf="data.fileType==='audio'" controls autoplay>
+        <source [src]="data.url">
+    </audio>
+    <video *ngIf="data.fileType==='video'" controls autoplay>
+        <source [src]="data.url">
+    </video>
     <mat-form-field *ngIf="data.fileType === 'text'">
         <textarea matInput [value]="data.content"></textarea>
     </mat-form-field>

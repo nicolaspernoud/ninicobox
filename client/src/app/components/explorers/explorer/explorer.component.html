@@ -21,7 +21,7 @@
                 <mat-icon>border_color</mat-icon>
                 <span>Rename</span>
             </button>
-            <button mat-menu-item (click)="open(file, true);" *ngIf="permissions=='rw' && !file.isDir && isText(file)">
+            <button mat-menu-item (click)="open(file, true);" *ngIf="permissions=='rw' && !file.isDir && getType(file)==='text'">
                 <mat-icon>edit</mat-icon>
                 <span>Edit</span>
             </button>
