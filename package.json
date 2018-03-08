@@ -13,7 +13,7 @@
     "setup": "npm install && cd server && npm install && cd ../client && npm install",
     "debug": "concurrently -k -p \"[{name}]\" -n \"Server,Client\" -c \"cyan.bold,green.bold\" \"cd server && npm run watch-debug\" \"cd client && ng serve\"",
     "build": "concurrently -p \"[{name}]\" -n \"Server,Client\" -c \"cyan.bold,green.bold\" \"cd server && npm run build\" \"cd client && npm run build\"",
-    "build-translate": "npm run build && npm run translate",
+    "build-translate": "npm run build && npm run translate && cd client && npm run ngsw-config",
     "translate": "node translate"
   },
   "devDependencies": {

@@ -14,7 +14,8 @@
     "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "ngsw-config": "ngsw-config dist src/ngsw-config.json && cp node_modules/@angular/service-worker/ngsw-worker.js dist/"
   },
   "private": true,
   "dependencies": {
