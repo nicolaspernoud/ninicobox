@@ -25,6 +25,7 @@ COPY          . ${BUILD_FOLDER}/
 RUN           cd client && npm install
 RUN           cd client && npm run build
 RUN           npm run translate
+RUN           cd client && npm run ngsw-config
 
 # Putting all together on arm container
 
