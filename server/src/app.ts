@@ -111,3 +111,7 @@ app.post('/api/secured/admin/proxys', function (req: express.Request, res: expre
 // Common secured app routes
 app.get('/api/secured/all/filesacl', (req, res) => res.json(getFilesACL()));
 app.use('/api/secured/all/files', filesRouter);
+
+/* TODO
+app.use('/api/secured/share', shareRouter); // Get streamed content with a share token
+*/

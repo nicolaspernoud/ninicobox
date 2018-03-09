@@ -68,6 +68,14 @@ export const getProxyToken = function (req: express.Request, res: express.Respon
     res.json({ message: 'ok', token: token });
 };
 
+export const getShareToken = function (filePath: string) {
+    const payload = {
+        role: 'share',
+        filePath: filePath
+    };
+    return jwt.sign(payload, jwtOptions.secretOrKey, { expiresIn: '7d' });
+};
+
 export const rolesFilter = function (req: express.Request, res: express.Response, next: express.NextFunction) {
     const roles = req.params.roles.split('_');
     if (!(roles.includes(req.user.role) || roles[0] === 'all')) {
@@ -83,7 +91,7 @@ passport.use(strategy);
 function randomString(length: number) {
     let text = '';
     const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for ( let i = 0; i < length; i++) {
+    for (let i = 0; i < length; i++) {
         text += possible.charAt(Math.floor(Math.random() * possible.length));
     }
     return text;

@@ -9,6 +9,7 @@ import * as Busboy from 'busboy';
 import * as mime from 'mime';
 import { File } from '../../../common/interfaces';
 import { log } from '../logger';
+import { getShareToken } from '../security';
 
 export const filesRouter = Router();
 
@@ -170,6 +171,14 @@ filesRouter.get('/:permissions/:basepath/:path?/getstream', function (req: Reque
     });
     const readStream = fs.createReadStream(filePath);
     readStream.pipe(res);
+});
+
+// Get share token
+filesRouter.get('/:permissions/:basepath/:path?/getsharetoken', function (req: Request, res: Response) {
+    const filePath = path.join(req.params.basepath, decodeURIComponent(req.params.path));
+    log(`Share token sent for file : ${filePath}`, req);
+    const token = getShareToken(filePath);
+    res.json({ message: 'ok', token: token });
 });
 
 // Delete
