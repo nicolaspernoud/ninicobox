@@ -31,6 +31,7 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { OpenComponent } from './components/explorers/explorer/open/open.component';
+import { BasicDialogComponent } from './components/basic-dialog/basic-dialog.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { OpenComponent } from './components/explorers/explorer/open/open.compone
     RenameDialogComponent,
     ConfirmDialogComponent,
     OpenComponent,
+    BasicDialogComponent,
   ],
   imports: [
     FormsModule,
@@ -75,6 +77,7 @@ import { OpenComponent } from './components/explorers/explorer/open/open.compone
     UsersService
   ],
   bootstrap: [AppComponent],
-  entryComponents: [AddProxyDialogComponent, RenameDialogComponent, CutCopyProgressBarComponent, ConfirmDialogComponent, OpenComponent]
+  // tslint:disable-next-line:max-line-length
+  entryComponents: [AddProxyDialogComponent, RenameDialogComponent, CutCopyProgressBarComponent, ConfirmDialogComponent, OpenComponent, BasicDialogComponent]
 })
 export class AppModule { }

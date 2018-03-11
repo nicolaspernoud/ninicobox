@@ -15,6 +15,7 @@ import { getUsers, setUsers } from './models/users';
 import { getFilesACL, setFilesACL } from './models/filesacl';
 import { setProxys } from './models/proxys';
 import { getProxys } from './models/proxys';
+import { shareRouter } from './controllers/share';
 
 // Create Express server
 export const app = express();
@@ -111,7 +112,4 @@ app.post('/api/secured/admin/proxys', function (req: express.Request, res: expre
 // Common secured app routes
 app.get('/api/secured/all/filesacl', (req, res) => res.json(getFilesACL()));
 app.use('/api/secured/all/files', filesRouter);
-
-/* TODO
-app.use('/api/secured/share', shareRouter); // Get streamed content with a share token
-*/
+app.use('/api/secured/share/', shareRouter); // Get streamed content with a share token

@@ -70,13 +70,13 @@ filesRouter.get('/:permissions/:basepath/:path?/explore', function (req: Request
         console.log(err);
     });
 
-    explorer.explore(path.join(req.params.basepath, !!req.params.path ? decodeURIComponent(req.params.path) : ''));
+    explorer.explore(path.join(decodeURIComponent(req.params.basepath), !!req.params.path ? decodeURIComponent(req.params.path) : ''));
 });
 
 // Create directory
 filesRouter.post('/:permissions/:basepath/:path?/createdir', function (req: Request, res: Response) {
     createRootDir(req.params.basepath, function () {
-        fs.mkdir(path.join(req.params.basepath, req.params.path ? req.params.path : '', req.body.directoryname), function (err: NodeJS.ErrnoException) {
+        fs.mkdir(path.join(decodeURIComponent(req.params.basepath), req.params.path ? decodeURIComponent(req.params.path) : '', req.body.directoryname), function (err: NodeJS.ErrnoException) {
             if (err) {
                 console.log(err);
             }
@@ -88,8 +88,8 @@ filesRouter.post('/:permissions/:basepath/:path?/createdir', function (req: Requ
 
 // Rename file or directory
 filesRouter.put('/:permissions/:basepath/:path?/rename', function (req: Request, res: Response) {
-    const oldPath = path.join(req.params.basepath, req.params.path);
-    const newPath = path.join(req.params.basepath, req.body.newpath);
+    const oldPath = path.join(decodeURIComponent(req.params.basepath), decodeURIComponent(req.params.path));
+    const newPath = path.join(decodeURIComponent(req.params.basepath), req.body.newpath);
     fs.rename(oldPath, newPath, function (err: NodeJS.ErrnoException) {
         if (err) {
             console.log(err);
@@ -101,8 +101,8 @@ filesRouter.put('/:permissions/:basepath/:path?/rename', function (req: Request,
 
 // Copy file or directory
 filesRouter.put('/:permissions/:basepath/:path?/copy', function (req: Request, res: Response) {
-    const oldPath = path.join(req.params.basepath, req.params.path);
-    const newPath = path.join(req.params.basepath, req.body.newpath);
+    const oldPath = path.join(decodeURIComponent(req.params.basepath), decodeURIComponent(req.params.path));
+    const newPath = path.join(decodeURIComponent(req.params.basepath), req.body.newpath);
     fs.copy(oldPath, newPath, function (err: NodeJS.ErrnoException) {
         if (err) {
             console.log(err);
@@ -117,7 +117,7 @@ filesRouter.post('/:permissions/:basepath/:path?/upload', function (req: Request
     const busboy = new Busboy({ headers: req.headers });
     busboy.on('file', function (fieldname: string, file: NodeJS.ReadableStream, filename: string, encoding: string, mimetype: string) {
         // console.log("File [" + fieldname + "]: filename: " + filename + ", encoding: " + encoding + ", mimetype: " + mimetype);
-        const stream = fs.createWriteStream(path.join(req.params.basepath, req.params.path ? req.params.path : '', filename));
+        const stream = fs.createWriteStream(path.join(decodeURIComponent(req.params.basepath), req.params.path ? decodeURIComponent(req.params.path) : '', filename));
         file.pipe(stream);
         file.on('data', function (data: Buffer) {
             // console.log("File [" + fieldname + "] got " + data.length + " bytes");
@@ -137,45 +137,25 @@ filesRouter.post('/:permissions/:basepath/:path?/upload', function (req: Request
     req.pipe(busboy);
 });
 
-// Download
-filesRouter.get('/:permissions/:basepath/:path?/download', function (req: Request, res: Response) {
-    const filePath = path.join(req.params.basepath, decodeURIComponent(req.params.path));
-    log(`File downloaded : ${filePath}`, req);
-    res.download(filePath);
-});
-
 // Get content
-filesRouter.get('/:permissions/:basepath/:path?/getcontent', function (req: Request, res: Response) {
-    const filePath = path.join(req.params.basepath, decodeURIComponent(req.params.path));
+filesRouter.get('/:permissions/:basepath/:path/getcontent', function (req: Request, res: Response) {
+    const filePath = path.join(decodeURIComponent(req.params.basepath), decodeURIComponent(req.params.path));
     log(`File opened : ${filePath}`, req);
     fs.readFile(filePath, 'utf-8', (err, data) => res.send(data));
 });
 
 // Set content
-filesRouter.put('/:permissions/:basepath/:path?/setcontent', function (req: Request, res: Response) {
-    const filePath = path.join(req.params.basepath, decodeURIComponent(req.params.path));
+filesRouter.put('/:permissions/:basepath/:path/setcontent', function (req: Request, res: Response) {
+    const filePath = path.join(decodeURIComponent(req.params.basepath), decodeURIComponent(req.params.path));
     fs.writeFile(filePath, req.body, (err) => {
         if (err) throw err;
         log(`File saved : ${filePath}`, req);
     });
 });
 
-// Stream content
-filesRouter.get('/:permissions/:basepath/:path?/getstream', function (req: Request, res: Response) {
-    const filePath = path.join(req.params.basepath, decodeURIComponent(req.params.path));
-    log(`File opened (stream) : ${filePath}`, req);
-    const stat = fs.statSync(filePath);
-    res.writeHead(200, {
-        'Content-Type': 'application/octet-stream',
-        'Content-Length': stat.size
-    });
-    const readStream = fs.createReadStream(filePath);
-    readStream.pipe(res);
-});
-
 // Get share token
-filesRouter.get('/:permissions/:basepath/:path?/getsharetoken', function (req: Request, res: Response) {
-    const filePath = path.join(req.params.basepath, decodeURIComponent(req.params.path));
+filesRouter.get('/:permissions/:basepath/:path/getsharetoken', function (req: Request, res: Response) {
+    const filePath = path.join(decodeURIComponent(req.params.basepath), decodeURIComponent(req.params.path));
     log(`Share token sent for file : ${filePath}`, req);
     const token = getShareToken(filePath);
     res.json({ message: 'ok', token: token });
@@ -183,7 +163,7 @@ filesRouter.get('/:permissions/:basepath/:path?/getsharetoken', function (req: R
 
 // Delete
 filesRouter.delete('/:permissions/:basepath/:path?', function (req: Request, res: Response) {
-    const filePath = path.join(req.params.basepath, req.params.path);
+    const filePath = path.join(decodeURIComponent(req.params.basepath), decodeURIComponent(req.params.path));
     if (req.body.isDir) {
         fs.remove(filePath, function (err: NodeJS.ErrnoException) {
             if (err) {
@@ -226,9 +206,9 @@ function createRootDir(basedir: string, callback: () => void) {
 }
 
 class Explorer extends EventEmitter {
-    explore(path: string) {
+    explore(mypath: string) {
         const self = this;
-        fs.readdir(path, function (err: NodeJS.ErrnoException, files: string[]) {
+        fs.readdir(mypath, function (err: NodeJS.ErrnoException, files: string[]) {
             if (err) {
                 self.emit('error', err);
             }
@@ -240,7 +220,7 @@ class Explorer extends EventEmitter {
             }
 
             files.forEach(function (file) {
-                const fpath = path + '/' + file;
+                const fpath = path.join(mypath, file);
                 fs.stat(fpath, function (err: NodeJS.ErrnoException, stats: fs.Stats) {
                     if (err) {
                         self.emit('error', err);

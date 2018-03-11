@@ -1,72 +1,67 @@
 ﻿import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { File } from '../../../../common/interfaces';
+import { File, TokenResponse } from '../../../../common/interfaces';
+import { Observable } from 'rxjs/Observable';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class FilesService {
     headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    urlBase = `${environment.apiEndPoint}/secured/all/files`;
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, ) { }
+
+    explore(permissions, basePath, filePath = '') {
+        return this.executeRequest(`${this.getUrl(permissions, basePath, filePath)}/explore`);
     }
 
-    explore(urlBase, path = '') {
-        return this.executeRequest(`${urlBase}${path.length > 0 ? '/' + encodeURIComponent(path) : ''}/explore`);
-    }
-
-    createDir(urlBase, path = '', directoryname) {
-        return this.executeRequest(`${urlBase}${path.length > 0 ? '/' + encodeURIComponent(path) : ''}/createDir`, 'POST', {
+    createDir(permissions, basePath, filePath = '', directoryname) {
+        return this.executeRequest(`${this.getUrl(permissions, basePath, filePath)}/createDir`, 'POST', {
             directoryname: directoryname
         });
     }
 
-    renameOrCopy(urlBase, oldpath, newpath, isCopy: boolean) {
+    renameOrCopy(permissions, basePath, oldpath, newpath, isCopy: boolean) {
         if (!isCopy) {
-            return this.executeRequest(`${urlBase}${oldpath.length > 0 ? '/' + encodeURIComponent(oldpath) : ''}/rename`, 'PUT', {
+            return this.executeRequest(`${this.getUrl(permissions, basePath, oldpath)}/rename`, 'PUT', {
                 newpath: newpath
             });
         } else {
             newpath = oldpath !== newpath ? newpath : newpath + ' (copy)';
-            return this.executeRequest(`${urlBase}${oldpath.length > 0 ? '/' + encodeURIComponent(oldpath) : ''}/copy`, 'PUT', {
+            return this.executeRequest(`${this.getUrl(permissions, basePath, oldpath)}/copy`, 'PUT', {
                 newpath: newpath
             });
         }
     }
 
-    upload(urlBase, path, file) {
+    upload(permissions, basePath, filePath, file) {
         const formData: FormData = new FormData();
         formData.append('uploadFile', file, file.name);
-        return this.http.post(`${urlBase}${path.length > 0 ? '/' + encodeURIComponent(path) : ''}/upload`, formData);
+        return this.http.post(`${this.getUrl(permissions, basePath, filePath)}/upload`, formData);
     }
 
-    download(urlBase, path) {
-        this.http.get(`${urlBase}${path.length > 0 ? '/' + encodeURIComponent(path) : ''}/download`,
-            { responseType: 'blob' }).subscribe(data => {
-                const link = document.createElement('a');
-                link.href = window.URL.createObjectURL(data);
-                link.download = path.replace(/^.*[\\\/]/, '');
-                link.click();
-            });
+    getPreview(permissions, basePath, filePath) {
+        return this.http.get(`${this.getUrl(permissions, basePath, filePath)}/download`, { responseType: 'blob' });
     }
 
-    getPreview(urlBase, path) {
-        return this.http.get(`${urlBase}${path.length > 0 ? '/' + encodeURIComponent(path) : ''}/download`, { responseType: 'blob' });
+    getContent(permissions, basePath, filePath) {
+        return this.http.get(`${this.getUrl(permissions, basePath, filePath)}/getcontent`, { responseType: 'text' });
     }
 
-    getContent(urlBase, path) {
-        return this.http.get(`${urlBase}${path.length > 0 ? '/' + encodeURIComponent(path) : ''}/getcontent`, { responseType: 'text' });
+    setContent(permissions, basePath, filePath, content) {
+        return this.http.put(`${this.getUrl(permissions, basePath, filePath)}/setcontent`, content);
     }
 
-    setContent(urlBase, path, content) {
-        return this.http.put(`${urlBase}${path.length > 0 ? '/' + encodeURIComponent(path) : ''}/setcontent`, content);
+    getShareToken(permissions, basePath, filePath): Observable<TokenResponse> {
+        return this.http.get<TokenResponse>(`${this.getUrl(permissions, basePath, filePath)}/getsharetoken`);
     }
 
-    getStream(urlBase, path) {
-        // tslint:disable-next-line:max-line-length
-        return this.http.get(`${urlBase}${path.length > 0 ? '/' + encodeURIComponent(path) : ''}/getstream`, { responseType: 'blob' });
+    delete(permissions, basePath, filePath, isDir) {
+        return this.executeRequest(`${this.getUrl(permissions, basePath, filePath)}`, 'DELETE', { isDir: isDir });
     }
 
-    delete(urlBase, path, isDir) {
-        return this.executeRequest(`${urlBase}${path.length > 0 ? '/' + encodeURIComponent(path) : ''}`, 'DELETE', { isDir: isDir });
+    private getUrl(permissions, basePath, filePath) {
+        return `${this.urlBase}/${permissions}/${encodeURIComponent(basePath)}${filePath ? '/' + encodeURIComponent(filePath) : ''}`;
     }
 
     private executeRequest(url, method = 'GET', sentData = null, params = null) {

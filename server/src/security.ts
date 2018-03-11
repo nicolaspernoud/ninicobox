@@ -28,12 +28,14 @@ const strategy = new JwtStrategy(jwtOptions, function (jwt_payload, next) {
     const users = getUsers();
     const user = users[_.findIndex(users, { id: jwt_payload.id })];
     const proxyUser = jwt_payload.role === 'proxy' ? { role: 'proxy' } : undefined;
+    const shareUser = jwt_payload.role === 'share' ? { role: 'share', path: jwt_payload.path } : undefined;
     if (user) {
         next(undefined, user);
     } else if (proxyUser) {
         next(undefined, proxyUser);
-    }
-    else {
+    } else if (shareUser) {
+        next(undefined, shareUser);
+    } else {
         next(undefined, false);
     }
 });
@@ -68,10 +70,10 @@ export const getProxyToken = function (req: express.Request, res: express.Respon
     res.json({ message: 'ok', token: token });
 };
 
-export const getShareToken = function (filePath: string) {
+export const getShareToken = function (path: string) {
     const payload = {
         role: 'share',
-        filePath: filePath
+        path: path
     };
     return jwt.sign(payload, jwtOptions.secretOrKey, { expiresIn: '7d' });
 };

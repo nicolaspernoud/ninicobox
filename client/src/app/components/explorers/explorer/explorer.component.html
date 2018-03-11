@@ -13,9 +13,13 @@
             <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-            <button mat-menu-item *ngIf="!file.isDir" (click)="download(file);">
+            <button mat-menu-item *ngIf="!file.isDir" (click)="download(file, false);">
                 <mat-icon>file_download</mat-icon>
                 <span>Download</span>
+            </button>
+            <button mat-menu-item *ngIf="!file.isDir" (click)="download(file, true);">
+                <mat-icon>share</mat-icon>
+                <span>Share</span>
             </button>
             <button mat-menu-item (click)="openRename(file);" *ngIf="permissions=='rw'">
                 <mat-icon>border_color</mat-icon>
@@ -48,7 +52,7 @@
     <button mat-mini-fab (click)="create(false)" *ngIf="permissions=='rw'">
         <mat-icon>note_add</mat-icon>
     </button>
-    <app-file-uploader [path]="currentPath" (UploadComplete)="onUploadComplete($event)" [urlBase]="urlBase" *ngIf="permissions=='rw'"></app-file-uploader>
+    <app-file-uploader [path]="currentPath" (UploadComplete)="onUploadComplete($event)" [basePath]="basePath" *ngIf="permissions=='rw'"></app-file-uploader>
     <button mat-mini-fab (click)="paste()" *ngIf="cutCopyFile !== undefined" [@appearDisappear]>
         <mat-icon>content_paste</mat-icon>
     </button>

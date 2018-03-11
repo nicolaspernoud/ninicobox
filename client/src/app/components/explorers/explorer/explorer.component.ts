@@ -9,6 +9,8 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 import { OpenComponent } from './open/open.component';
 import { DomSanitizer } from '@angular/platform-browser';
+import * as path from 'path';
+import { BasicDialogComponent } from '../../basic-dialog/basic-dialog.component';
 
 @Component({
     selector: 'app-explorer',
@@ -38,7 +40,6 @@ export class ExplorerComponent implements OnInit {
     @Input() permissions: string;
     @Input() basePath: string;
     @Output() CurrentPathChanged = new EventEmitter<[string, string]>();
-    urlBase: string;
     cutCopyFile: [File, boolean]; // Boolean is true if operation is a copy, false if it is a cut
 
     // tslint:disable-next-line:max-line-length
@@ -46,8 +47,7 @@ export class ExplorerComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.urlBase = `${environment.apiEndPoint}/secured/all/files/${this.permissions}/${encodeURIComponent(this.basePath)}`;
-        this.fileService.explore(this.urlBase, this.currentPath).subscribe(data => {
+        this.fileService.explore(this.permissions, this.basePath, this.currentPath).subscribe(data => {
             this.files = data;
             this.files.sort(fileSortFunction);
         });
@@ -70,9 +70,9 @@ export class ExplorerComponent implements OnInit {
             variant++;
         }
         if (isDir) {
-            this.fileService.createDir(this.urlBase, this.currentPath, newFileName).subscribe();
+            this.fileService.createDir(this.permissions, this.basePath, this.currentPath, newFileName).subscribe();
         } else {
-            this.fileService.setContent(this.urlBase, `${this.currentPath + '/' + encodeURIComponent(newFileName)}`, '').subscribe();
+            this.fileService.setContent(this.permissions, this.basePath, path.join(this.currentPath, newFileName), '').subscribe();
         }
         this.files.push({
             name: newFileName,
@@ -84,7 +84,7 @@ export class ExplorerComponent implements OnInit {
     explore(file: File) {
         this.currentPath += '/' + file.name;
         this.CurrentPathChanged.emit([this.name, this.currentPath]);
-        this.fileService.explore(this.urlBase, this.currentPath).subscribe(files => {
+        this.fileService.explore(this.permissions, this.basePath, this.currentPath).subscribe(files => {
             this.files = files;
             this.files.sort(fileSortFunction);
         });
@@ -93,7 +93,7 @@ export class ExplorerComponent implements OnInit {
     goBack() {
         this.currentPath = this.currentPath.substring(0, this.currentPath.lastIndexOf('/'));
         this.CurrentPathChanged.emit([this.name, this.currentPath]);
-        this.fileService.explore(this.urlBase, this.currentPath).subscribe(files => {
+        this.fileService.explore(this.permissions, this.basePath, this.currentPath).subscribe(files => {
             this.files = files;
             this.files.sort(fileSortFunction);
         });
@@ -104,7 +104,7 @@ export class ExplorerComponent implements OnInit {
         dialogRef.afterClosed().subscribe(fileAfterRename => {
             if (fileAfterRename && fileAfterRename.name) {
                 const newPath = `${this.currentPath}/${fileAfterRename.name}`;
-                this.fileService.renameOrCopy(this.urlBase, file.path, newPath, false).subscribe(() => {
+                this.fileService.renameOrCopy(this.permissions, this.basePath, file.path, newPath, false).subscribe(() => {
                     file.path = newPath;
                     file.name = fileAfterRename.name;
                 });
@@ -115,20 +115,8 @@ export class ExplorerComponent implements OnInit {
 
     open(file: File, editMode: boolean) {
         const fileType = this.getType(file);
-        if (fileType === 'image' || fileType === 'other') {
-            this.fileService.getPreview(this.urlBase, file.path).subscribe(data => {
-                const src = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(data));
-                this.dialog.open(OpenComponent, {
-                    data: {
-                        url: src,
-                        file: file,
-                        fileType: fileType,
-                        editMode: false
-                    }
-                });
-            });
-        } else if (fileType === 'text') {
-            this.fileService.getContent(this.urlBase, file.path).subscribe(data => {
+        if (fileType === 'text') {
+            this.fileService.getContent(this.permissions, this.basePath, file.path).subscribe(data => {
                 const dialogRef = this.dialog.open(OpenComponent, {
                     data: {
                         content: data,
@@ -140,17 +128,17 @@ export class ExplorerComponent implements OnInit {
                 if (editMode) {
                     dialogRef.afterClosed().subscribe(newContent => {
                         if (newContent && newContent.content) {
-                            this.fileService.setContent(this.urlBase, file.path, newContent.content).subscribe();
+                            this.fileService.setContent(this.permissions, this.basePath, file.path, newContent.content).subscribe();
                         }
                     });
                 }
             });
-        } else if (fileType === 'audio' || fileType === 'video') {
-            this.fileService.getStream(this.urlBase, file.path).subscribe(data => {
-                const src = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(data));
+        } else if (fileType === 'audio' || fileType === 'video' || fileType === 'image' || fileType === 'other') {
+            this.fileService.getShareToken(this.permissions, this.basePath, file.path).subscribe(data => {
                 this.dialog.open(OpenComponent, {
                     data: {
-                        url: src,
+                        // tslint:disable-next-line:max-line-length
+                        url: `${environment.apiEndPoint}/secured/share/${encodeURIComponent(this.basePath)}/${encodeURIComponent(file.path)}?JWT=${data.token}`,
                         file: file,
                         fileType: fileType,
                         editMode: false
@@ -172,9 +160,9 @@ export class ExplorerComponent implements OnInit {
         const newPath = `${this.currentPath}/${this.cutCopyFile[0].name}`;
         const action = this.cutCopyFile[1] === true ? 'Copy' : 'Cut';
         this.snackBar.openFromComponent(CutCopyProgressBarComponent);
-        this.fileService.renameOrCopy(this.urlBase, this.cutCopyFile[0].path, newPath, this.cutCopyFile[1])
+        this.fileService.renameOrCopy(this.permissions, this.basePath, this.cutCopyFile[0].path, newPath, this.cutCopyFile[1])
             .pipe(switchMap(data =>
-                this.fileService.explore(this.urlBase, this.currentPath)
+                this.fileService.explore(this.permissions, this.basePath, this.currentPath)
             )).subscribe(data => {
                 this.files = data;
                 this.files.sort(fileSortFunction);
@@ -183,15 +171,31 @@ export class ExplorerComponent implements OnInit {
         this.cutCopyFile = undefined;
     }
 
-    download(file: File) {
-        this.fileService.download(this.urlBase, file.path);
+    download(file: File, share: boolean) {
+        this.fileService.getShareToken(this.permissions, this.basePath, file.path).subscribe(data => {
+            const link = document.createElement('a');
+            link.download = file.name;
+            // tslint:disable-next-line:max-line-length
+            link.href = `${environment.apiEndPoint}/secured/share/${encodeURIComponent(this.basePath)}/${encodeURIComponent(file.path)}?JWT=${data.token}`;
+            console.log(link.download);
+            if (share) {
+                this.dialog.open(BasicDialogComponent, {
+                    data: {
+                        message1: 'The file will be available with the following link for 7 days :',
+                        message2: link.href
+                    }
+                });
+            } else {
+                link.click();
+            }
+        });
     }
 
     delete(file: File) {
         const dialogRef = this.dialog.open(ConfirmDialogComponent);
         dialogRef.afterClosed().subscribe(confirmed => {
             if (confirmed) {
-                this.fileService.delete(this.urlBase, file.path, file.isDir).subscribe(() => {
+                this.fileService.delete(this.permissions, this.basePath, file.path, file.isDir).subscribe(() => {
                     this.files = this.files.filter((item) => {
                         return item.name.toLowerCase() !== file.name.toLowerCase();
                     });
@@ -212,14 +216,14 @@ export class ExplorerComponent implements OnInit {
         if (/(txt|md|csv|sh|nfo|log)$/.test(file.name.toLowerCase())) { return 'text'; }
         if (/(jpg|png|gif|svg|jpeg)$/.test(file.name.toLowerCase())) { return 'image'; }
         if (/(mp3|wav|ogg)$/.test(file.name.toLowerCase())) { return 'audio'; }
-        if (/(mp4)$/.test(file.name.toLowerCase())) { return 'video'; }
+        if (/(mp4|avi|mkv)$/.test(file.name.toLowerCase())) { return 'video'; }
         if (/(pdf)$/.test(file.name.toLowerCase())) { return 'other'; }
     }
 }
 
 function fileSortFunction(a: File, b: File): number {
     if (a.isDir !== b.isDir) {
-        return Number(a.isDir < b.isDir);
+        if (a.isDir) { return -1; } else { return 1; }
     } else {
         return a.name.localeCompare(b.name);
     }
