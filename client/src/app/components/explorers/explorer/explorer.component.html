@@ -1,4 +1,5 @@
-<mat-nav-list>
+<mat-spinner *ngIf="loading"></mat-spinner>
+<mat-nav-list *ngIf="!loading">
     <a mat-list-item *ngIf="!!currentPath" tabindex="0" (click)="goBack()">
         <mat-icon matListIcon>arrow_back</mat-icon>
         <h3 mat-line>..</h3>

@@ -6,7 +6,19 @@
 .main-content {
     display: flex;
     flex-direction: column;
+}
+
+.main-content img {
+    max-width: 70vw;
+    max-height: 60vh;
+}
+
+.main-content mat-form-field {
     width: 70vw;
+}
+
+object, textarea {
+    height: 60vh;
 }
 
 .buttons {
@@ -17,12 +29,4 @@
 
 button {
     margin-right: 10px;
-}
-
-img {
-    max-height: 60vh;
-}
-
-object, textarea {
-    height: 60vh;
 }

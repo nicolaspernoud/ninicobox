@@ -36,6 +36,7 @@ import { BasicDialogComponent } from '../../basic-dialog/basic-dialog.component'
 export class ExplorerComponent implements OnInit {
     files: File[] = [];
     currentPath = '';
+    loading = true;
     @Input() name: string;
     @Input() permissions: string;
     @Input() basePath: string;
@@ -50,6 +51,7 @@ export class ExplorerComponent implements OnInit {
         this.fileService.explore(this.permissions, this.basePath, this.currentPath).subscribe(data => {
             this.files = data;
             this.files.sort(fileSortFunction);
+            this.loading = false;
         });
     }
 
@@ -82,11 +84,13 @@ export class ExplorerComponent implements OnInit {
     }
 
     explore(file: File) {
+        this.loading = true;
         this.currentPath += '/' + file.name;
         this.CurrentPathChanged.emit([this.name, this.currentPath]);
         this.fileService.explore(this.permissions, this.basePath, this.currentPath).subscribe(files => {
             this.files = files;
             this.files.sort(fileSortFunction);
+            this.loading = false;
         });
     }
 
@@ -135,10 +139,11 @@ export class ExplorerComponent implements OnInit {
             });
         } else if (fileType === 'audio' || fileType === 'video' || fileType === 'image' || fileType === 'other') {
             this.fileService.getShareToken(this.permissions, this.basePath, file.path).subscribe(data => {
+                // tslint:disable-next-line:max-line-length
+                const url = this.sanitizer.bypassSecurityTrustResourceUrl(`${environment.apiEndPoint}/secured/share/${encodeURIComponent(this.basePath)}/${encodeURIComponent(file.path)}?JWT=${data.token}`);
                 this.dialog.open(OpenComponent, {
                     data: {
-                        // tslint:disable-next-line:max-line-length
-                        url: `${environment.apiEndPoint}/secured/share/${encodeURIComponent(this.basePath)}/${encodeURIComponent(file.path)}?JWT=${data.token}`,
+                        url: url,
                         file: file,
                         fileType: fileType,
                         editMode: false
@@ -217,7 +222,7 @@ export class ExplorerComponent implements OnInit {
         if (/(jpg|png|gif|svg|jpeg)$/.test(file.name.toLowerCase())) { return 'image'; }
         if (/(mp3|wav|ogg)$/.test(file.name.toLowerCase())) { return 'audio'; }
         if (/(mp4|avi|mkv)$/.test(file.name.toLowerCase())) { return 'video'; }
-        if (/(pdf)$/.test(file.name.toLowerCase())) { return 'other'; }
+        // if (/(pdf)$/.test(file.name.toLowerCase())) { return 'other'; }
     }
 }
 

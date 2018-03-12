@@ -1,4 +1,13 @@
- .actions-fabs {
+:host {
+    display: flex;
+    flex-direction:  column;
+}
+
+mat-spinner {
+    margin: auto;
+}
+
+.actions-fabs {
     margin-top: 10px;
 }
 

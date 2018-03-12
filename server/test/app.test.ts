@@ -143,7 +143,7 @@ describe('POST users with admin authentication', () => {
   });
 });
 
-function loginResponseIsOK(res) {
+export function loginResponseIsOK(res) {
   if (res.body.message !== 'ok') throw new Error('incorrect message');
   if (!('token' in res.body)) throw new Error('missing token key in body');
 }
