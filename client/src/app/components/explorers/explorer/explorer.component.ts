@@ -95,11 +95,13 @@ export class ExplorerComponent implements OnInit {
     }
 
     goBack() {
+        this.loading = true;
         this.currentPath = this.currentPath.substring(0, this.currentPath.lastIndexOf('/'));
         this.CurrentPathChanged.emit([this.name, this.currentPath]);
         this.fileService.explore(this.permissions, this.basePath, this.currentPath).subscribe(files => {
             this.files = files;
             this.files.sort(fileSortFunction);
+            this.loading = false;
         });
     }
 
