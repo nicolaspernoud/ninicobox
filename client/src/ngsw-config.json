@@ -34,7 +34,8 @@
         {
             "name": "api",
             "urls": [
-                "/api"
+                "/api",
+                "!/api/secured/share"
             ],
             "cacheConfig": {
                 "maxSize": 0,
