@@ -4,6 +4,7 @@
         {
             "name": "app",
             "installMode": "prefetch",
+            "updateMode": "prefetch",
             "resources": {
                 "files": [
                     "/favicon.ico",
@@ -19,7 +20,6 @@
         {
             "name": "assets",
             "installMode": "lazy",
-            "updateMode": "prefetch",
             "resources": {
                 "files": [
                     "/assets/**"
@@ -27,20 +27,6 @@
                 "urls": [
                     "https://fonts.googleapis.com/**"
                 ]
-            }
-        }
-    ],
-    "dataGroups": [
-        {
-            "name": "api",
-            "urls": [
-                "/api",
-                "!/api/secured/share"
-            ],
-            "cacheConfig": {
-                "maxSize": 0,
-                "maxAge": "0u",
-                "strategy": "freshness"
             }
         }
     ]
