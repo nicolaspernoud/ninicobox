@@ -10,6 +10,7 @@
         <mat-icon color="primary" *ngIf="cutCopyFile !== undefined && file === cutCopyFile[0] && cutCopyFile[1] === false">content_cut</mat-icon>
         <mat-icon color="primary" *ngIf="cutCopyFile !== undefined && file === cutCopyFile[0] && cutCopyFile[1] === true">content_copy</mat-icon>
         <h3 matLine>{{file.name}}</h3>
+        <h4 matLine *ngIf="!file.isDir">{{getInfos(file)}}</h4>
         <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()" *ngIf="permissions=='rw' || !file.isDir">
             <mat-icon>more_vert</mat-icon>
         </button>

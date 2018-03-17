@@ -79,7 +79,9 @@ export class ExplorerComponent implements OnInit {
         this.files.push({
             name: newFileName,
             path: `${this.currentPath}\\${newFileName}`,
-            isDir: isDir
+            isDir: isDir,
+            size: 0,
+            mtime: new Date()
         });
     }
 
@@ -180,19 +182,22 @@ export class ExplorerComponent implements OnInit {
 
     download(file: File, share: boolean) {
         this.fileService.getShareToken(this.permissions, this.basePath, file.path).subscribe(data => {
-            const link = document.createElement('a');
-            link.download = file.name;
             // tslint:disable-next-line:max-line-length
-            link.href = `${environment.apiEndPoint}/secured/share/${encodeURIComponent(this.basePath)}/${encodeURIComponent(file.path)}?JWT=${data.token}`;
-            console.log(link.download);
+            const shareURL = `${environment.apiEndPoint}/secured/share/${encodeURIComponent(this.basePath)}/${encodeURIComponent(file.path)}?JWT=${data.token}`;
             if (share) {
                 this.dialog.open(BasicDialogComponent, {
                     data: {
-                        message1: 'The file will be available with the following link for 7 days :',
-                        message2: link.href
+                        message: 'The file will be available with the following link for 7 days :',
+                        link: {
+                            caption: file.name,
+                            href: shareURL
+                        }
                     }
                 });
             } else {
+                const link = document.createElement('a');
+                link.href = shareURL;
+                document.body.appendChild(link); // required in FF, optional for Chrome
                 link.click();
             }
         });
@@ -215,7 +220,9 @@ export class ExplorerComponent implements OnInit {
         this.files.push({
             name: name,
             path: `${this.currentPath}\\${name}`,
-            isDir: false
+            isDir: false,
+            size: 0,
+            mtime: new Date()
         });
     }
 
@@ -225,6 +232,13 @@ export class ExplorerComponent implements OnInit {
         if (/(mp3|wav|ogg)$/.test(file.name.toLowerCase())) { return 'audio'; }
         if (/(mp4|avi|mkv)$/.test(file.name.toLowerCase())) { return 'video'; }
         // if (/(pdf)$/.test(file.name.toLowerCase())) { return 'other'; }
+    }
+
+    getInfos(file: File): string {
+        const d = new Date(file.mtime);
+        const i = file.size === 0 ? 0 : Math.floor( Math.log(file.size) / Math.log(1024) );
+        const size = (file.size / Math.pow(1024, i)).toFixed(2) + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
+        return `${size} - ${d.toLocaleDateString()} ${d.toLocaleTimeString()}`;
     }
 }
 

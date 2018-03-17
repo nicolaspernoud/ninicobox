@@ -32,4 +32,6 @@ export interface File {
     name: string;
     path: string;
     isDir: boolean;
+    size: number;
+    mtime: Date;
 }

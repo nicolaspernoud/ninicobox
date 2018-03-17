@@ -45,18 +45,22 @@ filesRouter.use('/:permissions/:basepath/:path?', accessFilter);
 filesRouter.get('/:permissions/:basepath/:path?/explore', function (req: Request, res: Response) {
     const explorer = new Explorer();
     const files: File[] = [];
-    explorer.on('file', function (file: string) {
+    explorer.on('file', function (file: string, size: number, mtime: Date) {
         files.push({
             name: path.basename(file),
             path: file.substring(req.params.basepath.length),
+            size: size,
+            mtime: mtime,
             isDir: false
         });
     });
 
-    explorer.on('dir', function (dir: string) {
+    explorer.on('dir', function (dir: string, size: number, mtime: Date) {
         files.push({
             name: path.basename(dir),
             path: dir.substring(req.params.basepath.length),
+            size: size,
+            mtime: mtime,
             isDir: true
         });
     });
@@ -227,10 +231,10 @@ class Explorer extends EventEmitter {
                     }
 
                     if (stats.isFile()) {
-                        self.emit('file', fpath);
+                        self.emit('file', fpath, stats.size, stats.mtime);
                     }
                     else if (stats.isDirectory()) {
-                        self.emit('dir', fpath);
+                        self.emit('dir', fpath, stats.size, stats.mtime);
                     }
 
                     count--;
