@@ -16,7 +16,7 @@ shareRouter.get('/:basepath/:path', function (req: Request, res: Response) {
         const stat = fs.statSync(filePath);
         res.writeHead(200, {
             'Content-Length': stat.size,
-            'Content-Disposition': `attachment; filename="${path.basename(filePath)}"`
+            'Content-Disposition': !!req.query.inline ? 'inline' : `attachment; filename="${path.basename(filePath)}"`
         });
         const readStream = fs.createReadStream(filePath);
         readStream.pipe(res);

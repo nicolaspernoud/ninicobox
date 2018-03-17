@@ -144,7 +144,7 @@ export class ExplorerComponent implements OnInit {
         } else if (fileType === 'audio' || fileType === 'video' || fileType === 'image' || fileType === 'other') {
             this.fileService.getShareToken(this.permissions, this.basePath, file.path).subscribe(data => {
                 // tslint:disable-next-line:max-line-length
-                const url = this.sanitizer.bypassSecurityTrustResourceUrl(`${environment.apiEndPoint}/secured/share/${encodeURIComponent(this.basePath)}/${encodeURIComponent(file.path)}?JWT=${data.token}`);
+                const url = this.sanitizer.bypassSecurityTrustResourceUrl(`${environment.apiEndPoint}/secured/share/${encodeURIComponent(this.basePath)}/${encodeURIComponent(file.path)}?JWT=${data.token}&inline=true`);
                 this.dialog.open(OpenComponent, {
                     data: {
                         url: url,
@@ -231,7 +231,7 @@ export class ExplorerComponent implements OnInit {
         if (/(jpg|png|gif|svg|jpeg)$/.test(file.name.toLowerCase())) { return 'image'; }
         if (/(mp3|wav|ogg)$/.test(file.name.toLowerCase())) { return 'audio'; }
         if (/(mp4|avi|mkv)$/.test(file.name.toLowerCase())) { return 'video'; }
-        // if (/(pdf)$/.test(file.name.toLowerCase())) { return 'other'; }
+        if (/(pdf)$/.test(file.name.toLowerCase())) { return 'other'; }
     }
 
     getInfos(file: File): string {
