@@ -48,11 +48,7 @@ export class ExplorerComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.fileService.explore(this.permissions, this.basePath, this.currentPath).subscribe(data => {
-            this.files = data;
-            this.files.sort(fileSortFunction);
-            this.loading = false;
-        });
+        this.fileService.explore(this.permissions, this.basePath, this.currentPath).subscribe(this.displayFiles());
     }
 
     create(isDir: boolean) {
@@ -89,22 +85,22 @@ export class ExplorerComponent implements OnInit {
         this.loading = true;
         this.currentPath += '/' + file.name;
         this.CurrentPathChanged.emit([this.name, this.currentPath]);
-        this.fileService.explore(this.permissions, this.basePath, this.currentPath).subscribe(files => {
-            this.files = files;
-            this.files.sort(fileSortFunction);
-            this.loading = false;
-        });
+        this.fileService.explore(this.permissions, this.basePath, this.currentPath).subscribe(this.displayFiles());
     }
 
     goBack() {
         this.loading = true;
         this.currentPath = this.currentPath.substring(0, this.currentPath.lastIndexOf('/'));
         this.CurrentPathChanged.emit([this.name, this.currentPath]);
-        this.fileService.explore(this.permissions, this.basePath, this.currentPath).subscribe(files => {
+        this.fileService.explore(this.permissions, this.basePath, this.currentPath).subscribe(this.displayFiles());
+    }
+
+    private displayFiles(): (value: File[]) => void {
+        return files => {
             this.files = files;
             this.files.sort(fileSortFunction);
             this.loading = false;
-        });
+        };
     }
 
     openRename(file: File) {
