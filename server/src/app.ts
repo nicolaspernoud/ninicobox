@@ -55,9 +55,7 @@ app.use(bodyParser.raw({ type: 'text/plain' }));
 
 if (app.get('env') !== 'test') {
   // Handle redirection to https (but for let's encrypt challenge)
-  app.get('/.well-known/acme-challenge/:fileid', function (req, res) {
-    res.send(`Requesting ${req.params.fileid}`);
-  });
+  app.use('/.well-known', express.static('.well-known'));
   app.use(function (req, res, next) {
     if (req.secure) {
       // request was via https, so do no special handling
