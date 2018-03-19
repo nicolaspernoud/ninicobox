@@ -1,6 +1,6 @@
 <!-- display mode -->
 <div class="main-content" *ngIf="!data.editMode">
-    <object *ngIf="data.fileType==='other'" [data]="data.url"></object>
+    <embed *ngIf="data.fileType==='other'" [src]="data.url">
     <img *ngIf="data.fileType==='image'" [src]="data.url" alt="Previewed image">
     <audio *ngIf="data.fileType==='audio'" controls autoplay>
         <source [src]="data.url">
