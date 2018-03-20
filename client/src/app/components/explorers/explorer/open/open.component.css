@@ -13,11 +13,11 @@
     max-height: 60vh;
 }
 
-.main-content mat-form-field, .main-content embed {
+.main-content mat-form-field, .main-content object {
     width: 70vw;
 }
 
-embed, textarea {
+object, textarea {
     height: 60vh;
 }
 

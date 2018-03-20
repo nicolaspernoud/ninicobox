@@ -19,10 +19,12 @@
                 <mat-icon>file_download</mat-icon>
                 <span>Download</span>
             </button>
-            <button mat-menu-item *ngIf="!file.isDir" (click)="download(file, true);">
-                <mat-icon>share</mat-icon>
-                <span>Share</span>
-            </button>
+            <div *appShowToRoles="['admin']">
+                <button mat-menu-item *ngIf="!file.isDir" (click)="download(file, true);">
+                    <mat-icon>share</mat-icon>
+                    <span>Share</span>
+                </button>
+            </div>
             <button mat-menu-item (click)="openRename(file);" *ngIf="permissions=='rw'">
                 <mat-icon>border_color</mat-icon>
                 <span>Rename</span>
