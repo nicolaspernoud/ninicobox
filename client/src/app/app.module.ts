@@ -14,6 +14,7 @@ import { TokenInterceptor } from './services/token.interceptor';
 import { ErrorInterceptor } from './services/errors.interceptor';
 import { RouteGuard } from './services/route.guard';
 import { ShowToRolesDirective } from './directives/showtoroles.directive';
+import { ClickStopPropagationDirective } from './directives/click-stop-propagation.directive'
 import { AuthService } from './services/auth.service';
 import { UpdateService } from './services/update.service';
 // Business modules
@@ -38,6 +39,7 @@ import { BasicDialogComponent } from './components/basic-dialog/basic-dialog.com
     AppComponent,
     LoginComponent,
     ShowToRolesDirective,
+    ClickStopPropagationDirective,
     FileUploadComponent,
     ExplorersComponent,
     ExplorerComponent,

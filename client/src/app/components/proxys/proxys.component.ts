@@ -34,6 +34,11 @@ export class ProxysComponent implements OnInit {
       });
   }
 
+  refresh(proxy) {
+    const iframe = document.getElementById(proxy.name) as HTMLIFrameElement;
+    if (iframe) { iframe.contentWindow.location.reload(true); }
+  }
+
   add() {
     const newProxy: ClientProxy = {
       name: '',

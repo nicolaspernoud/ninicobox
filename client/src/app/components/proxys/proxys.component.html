@@ -4,15 +4,18 @@
             <mat-icon>{{proxy.icon}}</mat-icon>
             {{proxy.name}}
         </mat-panel-title>
-        <button mat-icon-button (click)="edit(proxy);">
+        <button mat-icon-button appClickStopPropagation (click)="refresh(proxy);">
+            <mat-icon>refresh</mat-icon>
+        </button>
+        <button mat-icon-button appClickStopPropagation (click)="edit(proxy);">
             <mat-icon>edit_content</mat-icon>
         </button>
-        <button mat-icon-button (click)="delete(proxy);">
+        <button mat-icon-button appClickStopPropagation (click)="delete(proxy);">
             <mat-icon>delete</mat-icon>
         </button>
     </mat-expansion-panel-header>
     <ng-template matExpansionPanelContent>
-        <iframe [src]="proxy.completeUrl" title="proxy.name" width="100%" onload="this.height = this.contentWindow.document.body.scrollHeight > 150 ? this.contentWindow.document.body.scrollHeight : 600"></iframe>
+        <iframe [id]="proxy.name" [src]="proxy.completeUrl" [title]="proxy.name" width="100%" onload="this.height = this.contentWindow.document.body.scrollHeight > 150 ? this.contentWindow.document.body.scrollHeight : 600"></iframe>
     </ng-template>
 </mat-expansion-panel>
 
