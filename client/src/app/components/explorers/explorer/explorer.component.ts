@@ -11,6 +11,7 @@ import { OpenComponent } from './open/open.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as path from 'path';
 import { BasicDialogComponent } from '../../basic-dialog/basic-dialog.component';
+import { Subscribable } from 'rxjs/Observable';
 
 @Component({
     selector: 'app-explorer',
@@ -47,8 +48,22 @@ export class ExplorerComponent implements OnInit {
     constructor(private fileService: FilesService, public dialog: MatDialog, public snackBar: MatSnackBar, private sanitizer: DomSanitizer) {
     }
 
+    private exploreCurrentDirectory(): Subscribable<File[]> {
+        return this.fileService.explore(this.permissions, this.basePath, this.currentPath);
+    }
+
+    private displayFiles(action?: string): (value: File[]) => void {
+        return files => {
+            this.files = files;
+            this.files.sort(fileSortFunction);
+            this.loading = false;
+            // tslint:disable-next-line:no-unused-expression
+            action ? this.snackBar.open(`${action} done`, 'OK', { duration: 3000 }) : '';
+        };
+    }
+
     ngOnInit() {
-        this.fileService.explore(this.permissions, this.basePath, this.currentPath).subscribe(this.displayFiles());
+        this.exploreCurrentDirectory().subscribe(this.displayFiles());
     }
 
     create(isDir: boolean) {
@@ -68,39 +83,26 @@ export class ExplorerComponent implements OnInit {
             variant++;
         }
         if (isDir) {
-            this.fileService.createDir(this.permissions, this.basePath, this.currentPath, newFileName).subscribe();
+            this.fileService.createDir(this.permissions, this.basePath, this.currentPath, newFileName)
+                .pipe(switchMap(data => this.exploreCurrentDirectory())).subscribe(this.displayFiles());
         } else {
-            this.fileService.setContent(this.permissions, this.basePath, path.join(this.currentPath, newFileName), '').subscribe();
+            this.fileService.setContent(this.permissions, this.basePath, path.join(this.currentPath, newFileName), '')
+                .pipe(switchMap(data => this.exploreCurrentDirectory())).subscribe(this.displayFiles());
         }
-        this.files.push({
-            name: newFileName,
-            path: `${this.currentPath}\\${newFileName}`,
-            isDir: isDir,
-            size: 0,
-            mtime: new Date()
-        });
     }
 
     explore(file: File) {
         this.loading = true;
         this.currentPath += '/' + file.name;
         this.CurrentPathChanged.emit([this.name, this.currentPath]);
-        this.fileService.explore(this.permissions, this.basePath, this.currentPath).subscribe(this.displayFiles());
+        this.exploreCurrentDirectory().subscribe(this.displayFiles());
     }
 
     goBack() {
         this.loading = true;
         this.currentPath = this.currentPath.substring(0, this.currentPath.lastIndexOf('/'));
         this.CurrentPathChanged.emit([this.name, this.currentPath]);
-        this.fileService.explore(this.permissions, this.basePath, this.currentPath).subscribe(this.displayFiles());
-    }
-
-    private displayFiles(): (value: File[]) => void {
-        return files => {
-            this.files = files;
-            this.files.sort(fileSortFunction);
-            this.loading = false;
-        };
+        this.exploreCurrentDirectory().subscribe(this.displayFiles());
     }
 
     openRename(file: File) {
@@ -108,11 +110,8 @@ export class ExplorerComponent implements OnInit {
         dialogRef.afterClosed().subscribe(fileAfterRename => {
             if (fileAfterRename && fileAfterRename.name) {
                 const newPath = `${this.currentPath}/${fileAfterRename.name}`;
-                this.fileService.renameOrCopy(this.permissions, this.basePath, file.path, newPath, false).subscribe(() => {
-                    file.path = newPath;
-                    file.name = fileAfterRename.name;
-                });
-                this.files.sort(fileSortFunction);
+                this.fileService.renameOrCopy(this.permissions, this.basePath, file.path, newPath, false)
+                    .pipe(switchMap(data => this.exploreCurrentDirectory())).subscribe(this.displayFiles());
             }
         });
     }
@@ -131,8 +130,9 @@ export class ExplorerComponent implements OnInit {
                 });
                 if (editMode) {
                     dialogRef.afterClosed().subscribe(newContent => {
-                        if (newContent && newContent.content) {
-                            this.fileService.setContent(this.permissions, this.basePath, file.path, newContent.content).subscribe();
+                        if (newContent) {
+                            this.fileService.setContent(this.permissions, this.basePath, file.path, newContent.content)
+                            .pipe(switchMap(value => this.exploreCurrentDirectory())).subscribe(this.displayFiles());
                         }
                     });
                 }
@@ -166,13 +166,7 @@ export class ExplorerComponent implements OnInit {
         const action = this.cutCopyFile[1] === true ? 'Copy' : 'Cut';
         this.snackBar.openFromComponent(CutCopyProgressBarComponent);
         this.fileService.renameOrCopy(this.permissions, this.basePath, this.cutCopyFile[0].path, newPath, this.cutCopyFile[1])
-            .pipe(switchMap(data =>
-                this.fileService.explore(this.permissions, this.basePath, this.currentPath)
-            )).subscribe(data => {
-                this.files = data;
-                this.files.sort(fileSortFunction);
-                this.snackBar.open(`${action} done`, 'OK', { duration: 3000 });
-            });
+            .pipe(switchMap(data => this.exploreCurrentDirectory())).subscribe(this.displayFiles(action));
         this.cutCopyFile = undefined;
     }
 
@@ -203,23 +197,14 @@ export class ExplorerComponent implements OnInit {
         const dialogRef = this.dialog.open(ConfirmDialogComponent);
         dialogRef.afterClosed().subscribe(confirmed => {
             if (confirmed) {
-                this.fileService.delete(this.permissions, this.basePath, file.path, file.isDir).subscribe(() => {
-                    this.files = this.files.filter((item) => {
-                        return item.name.toLowerCase() !== file.name.toLowerCase();
-                    });
-                });
+                this.fileService.delete(this.permissions, this.basePath, file.path, file.isDir)
+                    .pipe(switchMap(data => this.exploreCurrentDirectory())).subscribe(this.displayFiles());
             }
         });
     }
 
     onUploadComplete(name) {
-        this.files.push({
-            name: name,
-            path: `${this.currentPath}\\${name}`,
-            isDir: false,
-            size: 0,
-            mtime: new Date()
-        });
+        this.exploreCurrentDirectory().subscribe(this.displayFiles('Download'));
     }
 
     getType(file): string {
@@ -232,7 +217,7 @@ export class ExplorerComponent implements OnInit {
 
     getInfos(file: File): string {
         const d = new Date(file.mtime);
-        const i = file.size === 0 ? 0 : Math.floor( Math.log(file.size) / Math.log(1024) );
+        const i = file.size === 0 ? 0 : Math.floor(Math.log(file.size) / Math.log(1024));
         const size = (file.size / Math.pow(1024, i)).toFixed(2) + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
         return `${size} - ${d.toLocaleDateString()} ${d.toLocaleTimeString()}`;
     }

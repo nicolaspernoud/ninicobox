@@ -154,6 +154,7 @@ filesRouter.put('/:permissions/:basepath/:path/setcontent', function (req: Reque
     fs.writeFile(filePath, req.body, (err) => {
         if (err) throw err;
         log(`File saved : ${filePath}`, req);
+        res.json({ message: 'ok'});
     });
 });
 

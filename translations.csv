@@ -1,34 +1,38 @@
-Login;Utilisateur
-Password;Mot de passe
-Name;Prénom
-Surname;Nom
-Toggle theme;Changer les couleurs
-Explorer;Explorateur
-Proxys services;Services
-Users management;Gestion des utilisateurs
-Rename;Renommer
-Cut;Couper
+ done; : effectué
+Add/Edit proxy;Ajouter/Éditer un proxy
+Are you sure ?;Êtes-vous sûr ?
+Authentication error;Erreur d'authentification
+Browser not compatible;Navigateur incompatible
+Close dialog;Fermer
+Confirm;Confirmation
 Copy;Copier
+Cut;Couper
 Delete;Supprimer
+Dismiss;OK
+Download;Télécharger
+Edit;Éditer
+Explorer;Explorateur
+Login success;Connexion acceptée
+Login;Utilisateur
+Name;Prénom
+New name;Nouveau nom
+No;Non
+Operation in progress...;Opération en cours...
+Password;Mot de passe
+Please allow geolocation to login;Merci d'activer la géolocalisation pour vous connecter
+Proxy custom header;En-tête http personnalisé
+Proxy display rank;Ordre d'affichage
+Proxy icon;Icone
 Proxy name;Nom du proxy
 Proxy url;Adresse du proxy
-Proxy custom header;En-tête http personnalisé
-Proxy icon;Icone
-Proxy display rank;Ordre d'affichage
+Proxys services;Services
+Rename;Renommer
 Save;Enregistrer
-Close dialog;Fermer
-Login success;Connexion acceptée
-Please allow geolocation to login;Merci d'activer la géolocalisation pour vous connecter
-Browser not compatible;Navigateur incompatible
-Authentication error;Erreur d'authentification
- done; : effectué
-Download;Télécharger
-Dismiss;OK
-Operation in progress...;Opération en cours...
-New name;Nouveau nom
-Edit;Éditer
+Share;Partager
+Surname;Nom
+The file will be available with the following link for 7 days :;Le fichier sera accessible pendant 7 jours avec le lien suivant :
+Toggle theme;Changer les couleurs
 Update available;Nouvelle version disponible
 Update;Mettre à jour
-The file will be available with the following link for 7 days :;Le fichier sera accessible pendant 7 jours avec le lien suivant :
-Share;Partager
-Add/Edit proxy;Ajouter/Éditer un proxy
+Users management;Gestion des utilisateurs
+Yes;Oui
