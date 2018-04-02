@@ -14,14 +14,29 @@ shareRouter.get('/:basepath/:path', function (req: Request, res: Response) {
     if (req.user.path === filePath) {
         log(`File opened (stream) : ${filePath}`, req);
         const stat = fs.statSync(filePath);
-        res.writeHead(200, {
-            'Content-Length': stat.size,
-            'Content-Disposition': !!req.query.inline ? 'inline' : `attachment; filename="${path.basename(filePath)}"`
-        });
-        const readStream = fs.createReadStream(filePath);
-        readStream.pipe(res);
-    }
-    else {
+        const fileSize = stat.size;
+        const range = req.headers.range as string;
+        if (range) {
+            const parts = range.replace(/bytes=/, '').split('-');
+            const start = parseInt(parts[0], 10);
+            const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+            const chunksize = (end - start) + 1;
+            res.writeHead(206, {
+                'Content-Range': `bytes ${start}-${end}/${fileSize}`,
+                'Accept-Ranges': 'bytes',
+                'Content-Length': chunksize
+            });
+            const readStream = fs.createReadStream(filePath, { start, end });
+            readStream.pipe(res);
+        } else {
+            res.writeHead(200, {
+                'Content-Length': fileSize,
+                'Content-Disposition': !!req.query.inline ? 'inline' : `attachment; filename="${path.basename(filePath)}"`
+            });
+            const readStream = fs.createReadStream(filePath);
+            readStream.pipe(res);
+        }
+    } else {
         res.status(403).send();
     }
 });
