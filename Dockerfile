@@ -26,6 +26,7 @@ RUN           cd client && npm install
 RUN           cd client && npm run build
 RUN           npm run translate
 RUN           cd client && npm run ngsw-config
+RUN           node patchsw
 
 # Putting all together on arm container
 
