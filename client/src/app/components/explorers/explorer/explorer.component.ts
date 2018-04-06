@@ -57,8 +57,7 @@ export class ExplorerComponent implements OnInit {
             this.files = files;
             this.files.sort(fileSortFunction);
             this.loading = false;
-            // tslint:disable-next-line:no-unused-expression
-            action ? this.snackBar.open(`${action} done`, 'OK', { duration: 3000 }) : '';
+            if (action) { this.snackBar.open(`${action} done`, 'OK', { duration: 3000 }); }
         };
     }
 
@@ -132,7 +131,7 @@ export class ExplorerComponent implements OnInit {
                     dialogRef.afterClosed().subscribe(newContent => {
                         if (newContent) {
                             this.fileService.setContent(this.permissions, this.basePath, file.path, newContent.content)
-                            .pipe(switchMap(value => this.exploreCurrentDirectory())).subscribe(this.displayFiles());
+                                .pipe(switchMap(value => this.exploreCurrentDirectory())).subscribe(this.displayFiles());
                         }
                     });
                 }
