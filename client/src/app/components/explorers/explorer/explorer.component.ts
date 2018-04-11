@@ -140,12 +140,20 @@ export class ExplorerComponent implements OnInit {
             this.fileService.getShareToken(this.permissions, this.basePath, file.path).subscribe(data => {
                 // tslint:disable-next-line:max-line-length
                 const url = this.sanitizer.bypassSecurityTrustResourceUrl(`${environment.apiEndPoint}/secured/share/${encodeURIComponent(this.basePath)}/${encodeURIComponent(file.path)}?JWT=${data.token}&inline=true`);
-                this.dialog.open(OpenComponent, {
+                const dialogRef = this.dialog.open(OpenComponent, {
                     data: {
                         url: url,
                         file: file,
                         fileType: fileType,
                         editMode: false
+                    }
+                });
+                dialogRef.afterClosed().subscribe(offset => {
+                    if (offset && typeof (offset.value) === 'number') {
+                        const nextFile = this.files[this.files.indexOf(file) + offset.value];
+                        if (nextFile) {
+                            this.open(nextFile, false);
+                        }
                     }
                 });
             });

@@ -10,12 +10,12 @@
         <span class="flex-spacer"></span>
         <span class="version"><span class="flex-spacer"></span>v2.0.7c</span>
     </mat-sidenav>
-    <mat-toolbar color="primary" class="mat-elevation-z6">
+    <mat-toolbar class="main-toolbar mat-elevation-z6">
         <button mat-icon-button (click)="menu.open()" *appShowToRoles="['*']">
             <mat-icon>menu</mat-icon>
-        </button>{{ title }}
+        </button>
         <span class="flex-spacer"></span>
-        <img alt="Home" height="40" src="assets/ninicobox_logo.svg" title="Home">
+        <img height="40" src="assets/ninicobox_logo.svg" class="main-logo">{{title}}
         <span class="flex-spacer"></span>
         <button mat-icon-button routerLink="/login" (click)="logout(); menu.close();" *appShowToRoles="['*']">
             <mat-icon>exit_to_app</mat-icon>

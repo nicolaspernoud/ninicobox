@@ -5,6 +5,15 @@
     align-items: center;
 }
 
+.main-toolbar {
+    background: #303030;
+    color: white;
+}
+
+.main-logo {
+    margin-right: 5px;
+}
+
 .flex-spacer {
     flex: 1 1 auto;
 }
@@ -26,5 +35,10 @@ mat-sidenav {
 }
 
 .active-link {
-    background: #3f51b5 !important;
+    background: #0d47a1 !important;
+    color: white;
+}
+
+.mat-drawer-container {
+    background: transparent;
 }
