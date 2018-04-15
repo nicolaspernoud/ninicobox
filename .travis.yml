@@ -29,12 +29,16 @@ script:
   # sonarcloud scan
   - npm install typescript
   - sonar-scanner
+  # prepare qemu
+  - sudo apt install -y qemu qemu-user-static qemu-user binfmt-support
+  - docker run --rm --privileged multiarch/qemu-user-static:register --reset
   # create container and push it to docker hub
   - set -e
   - export REPO=nicolaspernoud/ninicobox
   - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
   - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH; fi`
   - echo $REPO:$TAG:$TRAVIS_BUILD_NUMBER
+  - cp /usr/bin/qemu-arm-static ./
   - docker build -t $REPO:$TRAVIS_BUILD_NUMBER .
   - docker tag $REPO:$TRAVIS_BUILD_NUMBER $REPO:$TAG
   - docker push $REPO
