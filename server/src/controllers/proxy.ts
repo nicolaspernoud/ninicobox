@@ -15,7 +15,7 @@ export let doProxy = (req: Request, res: Response) => {
   url = url.startsWith('http') ? url : 'http://' + url;
 
   // Get the base url to add before proxied url
-  const proxyServerBase: string = `${req.protocol}://${req.hostname}:${req.socket.localPort}${req.originalUrl.replace(/&url=.*/, '')}&url=`;
+  const proxyServerBase: string = `${req.protocol}://${req.hostname}${req.originalUrl.replace(/&url=.*/, '')}&url=`;
 
   // Object containing the initial request headers
   const requestToOptions: request.CoreOptions = {
