@@ -97,8 +97,13 @@ export class AuthService {
                             });
                 },
                 error => {
-                    this.snackBar.open('Please allow geolocation to login', 'OK', { duration: 2000 });
-                }
+                    if (error.code === 1) {
+                        this.snackBar.open('Please allow geolocation to login', 'OK', { duration: 2000 });
+                    } else {
+                        this.snackBar.open('Geolocation failure', 'OK', { duration: 2000 });
+                    }
+                },
+                { timeout: 2000 }
             );
         } else {
             this.snackBar.open('Browser not compatible', 'OK', {
