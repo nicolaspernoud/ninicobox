@@ -16,6 +16,9 @@ export const NOT_LOGGED = 'not_logged';
 @Injectable()
 export class AuthService {
 
+    private loginInProgressOrLoggedSource = new BehaviorSubject<boolean>(false);
+    loginInProgressOrLogged = this.loginInProgressOrLoggedSource.asObservable();
+
     private userRoleSubject = new BehaviorSubject<string>(NOT_LOGGED);
     public userRole = this.userRoleSubject.asObservable();
 
@@ -59,6 +62,7 @@ export class AuthService {
     }
 
     logout() {
+        this.loginInProgressOrLoggedSource.next(false);
         localStorage.removeItem(TOKEN_NAME);
         this.userRoleSubject.next(NOT_LOGGED);
     }
@@ -76,6 +80,7 @@ export class AuthService {
     }
 
     login(user) {
+        this.loginInProgressOrLoggedSource.next(true);
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 success => {
@@ -102,6 +107,7 @@ export class AuthService {
                     } else {
                         this.snackBar.open('Geolocation failure', 'OK', { duration: 2000 });
                     }
+                    this.loginInProgressOrLoggedSource.next(false);
                 },
                 { timeout: 2000 }
             );
