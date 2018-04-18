@@ -10,8 +10,9 @@
       <mat-placeholder>
         <mat-icon>vpn_key</mat-icon>Password</mat-placeholder>
     </mat-form-field>
-    <button mat-fab color="primary" type="submit" name="action">
+    <button mat-fab color="primary" type="submit" name="action" *ngIf="!loginInProgressOrLogged">
       <mat-icon>lock_open</mat-icon>
     </button>
+    <mat-spinner *ngIf="loginInProgressOrLogged" [diameter]="56"></mat-spinner>
   </form>
 </mat-card>
