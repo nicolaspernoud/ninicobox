@@ -8,14 +8,14 @@
             <a mat-list-item routerLink="/users" routerLinkActive="active-link" (click)="menu.close()" *appShowToRoles="['admin']"><mat-icon>account_box</mat-icon>Users management</a>
         </mat-nav-list>
         <span class="flex-spacer"></span>
-        <span class="version"><span class="flex-spacer"></span>v2.0.9a</span>
+        <span class="version"><span class="flex-spacer"></span>v2.0.10</span>
     </mat-sidenav>
     <mat-toolbar class="main-toolbar mat-elevation-z6">
         <button mat-icon-button (click)="menu.open()" *appShowToRoles="['*']">
             <mat-icon>menu</mat-icon>
         </button>
         <span class="flex-spacer"></span>
-        <img height="40" src="assets/ninicobox_logo.svg" class="main-logo">{{title}}
+        <span class="horizontal-flex-container" [@appear]><img height="40" src="assets/ninicobox_logo.svg" class="main-logo">{{title}}</span>
         <span class="flex-spacer"></span>
         <button mat-icon-button routerLink="/login" (click)="logout(); menu.close();" *appShowToRoles="['*']">
             <mat-icon>exit_to_app</mat-icon>

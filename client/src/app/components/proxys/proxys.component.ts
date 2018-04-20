@@ -5,11 +5,13 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { MatDialog } from '@angular/material';
 import { AddProxyDialogComponent } from './add-proxy-dialog/add-proxy-dialog.component';
 import { switchMap } from 'rxjs/operators';
+import { appAnimations } from '../../animations';
 
 @Component({
   selector: 'app-proxys',
   templateUrl: './proxys.component.html',
-  styleUrls: ['./proxys.component.scss']
+  styleUrls: ['./proxys.component.scss'],
+  animations: [appAnimations]
 })
 export class ProxysComponent implements OnInit {
 

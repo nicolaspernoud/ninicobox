@@ -12,26 +12,14 @@ import { DomSanitizer } from '@angular/platform-browser';
 import * as path from 'path';
 import { BasicDialogComponent } from '../../basic-dialog/basic-dialog.component';
 import { Subscribable } from 'rxjs/Observable';
+import { appAnimations } from '../../../animations';
 
 @Component({
     selector: 'app-explorer',
     templateUrl: './explorer.component.html',
     styleUrls: ['./explorer.component.css'],
     providers: [FilesService],
-    animations: [
-        trigger(
-            'appearDisappear', [
-                transition(':enter', [
-                    style({ transform: 'scale(0)', opacity: 0 }),
-                    animate('200ms', style({ transform: 'scale(1)', opacity: 1 }))
-                ]),
-                transition(':leave', [
-                    style({ transform: 'scale(1)', opacity: 1 }),
-                    animate('200ms', style({ transform: 'scale(0)', opacity: 0 }))
-                ])
-            ]
-        )
-    ]
+    animations: [appAnimations]
 })
 
 export class ExplorerComponent implements OnInit {

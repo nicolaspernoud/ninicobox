@@ -18,3 +18,22 @@ body {
     display: flex !important;
     align-items: center !important;
 }
+
+.horizontal-flex-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: line;
+}
+
+.vertical-flex-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+mat-expansion-panel {
+    width: 100%;
+    margin-bottom: 5px !important;
+}
