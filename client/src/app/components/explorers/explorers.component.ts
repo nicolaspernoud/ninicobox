@@ -3,12 +3,14 @@ import { ExplorerComponent } from './explorer/explorer.component';
 import { FilesaclService } from '../../services/filesacl.service';
 import { AuthService } from '../../services/auth.service';
 import { FilesAC } from '../../../../../common/interfaces';
+import { appAnimations } from '../../animations';
 
 @Component({
   selector: 'app-explorers',
   templateUrl: './explorers.component.html',
   styleUrls: ['./explorers.component.css'],
-  providers: [FilesaclService]
+  providers: [FilesaclService],
+  animations: [appAnimations]
 })
 export class ExplorersComponent implements OnInit {
 

@@ -1,44 +1,46 @@
-<mat-card *ngFor="let user of users" tabindex="0">
-  <mat-form-field>
-    <input matInput type="number" [(ngModel)]="user.id" />
-    <mat-placeholder>
-      <mat-icon>format_list_numbered</mat-icon>Id</mat-placeholder>
-  </mat-form-field>
-  <mat-form-field>
-    <input matInput type="text" [(ngModel)]="user.login" />
-    <mat-placeholder>
-      <mat-icon>account_circle</mat-icon>Login</mat-placeholder>
-  </mat-form-field>
-  <mat-form-field>
-    <input matInput type="text" [(ngModel)]="user.password" />
-    <mat-placeholder>
-      <mat-icon>vpn_key</mat-icon>Password</mat-placeholder>
-  </mat-form-field>
-  <mat-form-field>
-    <input matInput type="text" [(ngModel)]="user.role" />
-    <mat-placeholder>
-      <mat-icon>security</mat-icon>Role</mat-placeholder>
-  </mat-form-field>
-  <mat-form-field>
-    <input matInput type="text" [(ngModel)]="user.name" />
-    <mat-placeholder>
-      <mat-icon>face</mat-icon>Name</mat-placeholder>
-  </mat-form-field>
-  <mat-form-field>
-    <input matInput type="text" [(ngModel)]="user.surname" />
-    <mat-placeholder>
-      <mat-icon>face</mat-icon>Surname</mat-placeholder>
-  </mat-form-field>
-  <button mat-icon-button (click)="delete(user);">
-    <mat-icon>delete</mat-icon>
-  </button>
-</mat-card>
+<div class="vertical-flex-container" [@appear]>
+  <mat-card *ngFor="let user of users" tabindex="0">
+    <mat-form-field>
+      <input matInput type="number" [(ngModel)]="user.id" />
+      <mat-placeholder>
+        <mat-icon>format_list_numbered</mat-icon>Id</mat-placeholder>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="text" [(ngModel)]="user.login" />
+      <mat-placeholder>
+        <mat-icon>account_circle</mat-icon>Login</mat-placeholder>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="text" [(ngModel)]="user.password" />
+      <mat-placeholder>
+        <mat-icon>vpn_key</mat-icon>Password</mat-placeholder>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="text" [(ngModel)]="user.role" />
+      <mat-placeholder>
+        <mat-icon>security</mat-icon>Role</mat-placeholder>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="text" [(ngModel)]="user.name" />
+      <mat-placeholder>
+        <mat-icon>face</mat-icon>Name</mat-placeholder>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="text" [(ngModel)]="user.surname" />
+      <mat-placeholder>
+        <mat-icon>face</mat-icon>Surname</mat-placeholder>
+    </mat-form-field>
+    <button mat-icon-button (click)="delete(user);">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </mat-card>
 
-<mat-card>
-  <button mat-mini-fab (click)="addUser()">
-    <mat-icon>add_circle</mat-icon>
-  </button>
-  <button mat-mini-fab (click)="save()">
-    <mat-icon>done</mat-icon>
-  </button>
-</mat-card>
+  <mat-card>
+    <button mat-mini-fab (click)="addUser()">
+      <mat-icon>add_circle</mat-icon>
+    </button>
+    <button mat-mini-fab (click)="save()">
+      <mat-icon>done</mat-icon>
+    </button>
+  </mat-card>
+</div>

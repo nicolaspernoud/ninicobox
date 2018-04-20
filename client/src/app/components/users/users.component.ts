@@ -3,11 +3,13 @@ import { UsersService } from '../../services/users.service';
 import { User } from '../../../../../common/interfaces';
 import { $ } from 'protractor';
 import { switchMap } from 'rxjs/operators';
+import { appAnimations } from '../../animations';
 
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
-  styleUrls: ['./users.component.css']
+  styleUrls: ['./users.component.css'],
+  animations: [appAnimations]
 })
 export class UsersComponent implements OnInit {
 
