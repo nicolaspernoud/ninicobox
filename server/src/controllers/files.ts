@@ -162,7 +162,7 @@ filesRouter.put('/:permissions/:basepath/:path/setcontent', function (req: Reque
 filesRouter.get('/:permissions/:basepath/:path/getsharetoken', function (req: Request, res: Response) {
     const filePath = path.join(decodeURIComponent(req.params.basepath), decodeURIComponent(req.params.path));
     log(`Share token sent for file : ${filePath}`, req);
-    const token = getShareToken(filePath);
+    const token = getShareToken(filePath, req.user.login);
     res.json({ message: 'ok', token: token });
 });
 

@@ -73,52 +73,14 @@ export class AuthService {
         }
     }
 
-    getAddressFromPosition(coords): Observable<Address> {
-        // tslint:disable-next-line:max-line-length
-        return this.http.get<Address>(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${coords.latitude}&lon=${coords.longitude}`)
-            .catch(handleHTTPError);
-    }
-
     login(user) {
         this.loginInProgressOrLoggedSource.next(true);
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                success => {
-                    user.position = `latitude: ${success.coords.latitude}, longitude: ${success.coords.longitude}`;
-                    this.getAddressFromPosition(success.coords)
-                        .pipe(switchMap(
-                            data => {
-                                user.position += `, address: ${data.display_name}`;
-                                return this.http.post<TokenResponse>(`${this.apiEndPoint}/unsecured/login`, user);
-                            }
-                        )).catch((e) => {
-                            return this.http.post<TokenResponse>(`${this.apiEndPoint}/unsecured/login`, user);
-                        }).subscribe(
-                            data => {
-                                this.setToken(data.token);
-                                this.userRoleSubject.next(this.getRoleFromToken());
-                                this.snackBar.open('Login success', 'OK', { duration: 2000 });
-                                this.router.navigate(['/']);
-                            });
-                },
-                error => {
-                    if (error.code === 1) {
-                        this.snackBar.open('Please allow geolocation to login', 'OK', { duration: 2000 });
-                    } else {
-                        this.snackBar.open('Geolocation failure', 'OK', { duration: 2000 });
-                    }
-                    this.loginInProgressOrLoggedSource.next(false);
-                },
-                { timeout: 2000 }
-            );
-        } else {
-            this.snackBar.open('Browser not compatible', 'OK', {
-                duration: 2000,
+        return this.http.post<TokenResponse>(`${this.apiEndPoint}/unsecured/login`, user).subscribe(
+            data => {
+                this.setToken(data.token);
+                this.userRoleSubject.next(this.getRoleFromToken());
+                this.snackBar.open('Login success', 'OK', { duration: 2000 });
+                this.router.navigate(['/']);
             });
-        }
     }
-}
-
-interface Address {
-    display_name: string;
 }
