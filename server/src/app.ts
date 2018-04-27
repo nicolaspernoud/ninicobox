@@ -27,7 +27,7 @@ if (app.get('env') === 'production') {
 }
 app.use(passport.initialize());
 app.use(compression());
-app.set('trust proxy', 'loopback');
+app.set('trust proxy', 'loopback, linklocal, uniquelocal');
 
 // Development configuration
 if (app.get('env') === 'development') {
