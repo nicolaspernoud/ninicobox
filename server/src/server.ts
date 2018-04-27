@@ -13,11 +13,13 @@ const server = app.listen(app.get('port'), () => {
 /**
  * Start HTTPS server.
  */
-const securePort = process.env.SECURE_PORT ? process.env.SECURE_PORT : 443;
-const certPath = process.env.SSL_CERT_LOCATION ? process.env.SSL_CERT_LOCATION + '/fullchain.pem' : './certificates/localhost.crt';
-const keyPath = process.env.SSL_CERT_LOCATION ? process.env.SSL_CERT_LOCATION + '/private/privkey.pem' : './certificates/localhost.key';
-const options = {
-  cert: fs.readFileSync(certPath),
-  key: fs.readFileSync(keyPath)
-};
-https.createServer(options, app).listen(securePort);
+if (process.env.SECURE_PORT) {
+  const securePort = process.env.SECURE_PORT;
+  const certPath = process.env.SSL_CERT_LOCATION ? process.env.SSL_CERT_LOCATION + '/fullchain.pem' : './certificates/localhost.crt';
+  const keyPath = process.env.SSL_CERT_LOCATION ? process.env.SSL_CERT_LOCATION + '/private/privkey.pem' : './certificates/localhost.key';
+  const options = {
+    cert: fs.readFileSync(certPath),
+    key: fs.readFileSync(keyPath)
+  };
+  https.createServer(options, app).listen(securePort);
+}

@@ -21,7 +21,7 @@ export function log(message: string, req?: Request) {
 
     // If the connection is from the local network, we write directly to the log
     if (lanIPsRegExs.some(rx => rx.test(ip)) || !process.env.GEO_IP_DATABASE_LOCATION) {
-        const city = 'local network';
+        const city = process.env.GEO_IP_DATABASE_LOCATION ? 'local network' : 'no ip geolocation database';
         const entry = `${date} | ${user} | ${message} | ${ip} | ${city}\n`;
         fs.appendFile(logFile, entry, 'utf8', err => { if (err) console.log(err); });
     }

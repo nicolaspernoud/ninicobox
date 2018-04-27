@@ -57,7 +57,7 @@ app.use(
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.raw({ type: 'text/plain' }));
 
-if (app.get('env') !== 'test') {
+if (process.env.SECURE_PORT) {
   // Handle redirection to https (but for let's encrypt challenge)
   app.use('/.well-known', express.static('.well-known'));
   app.use(function (req, res, next) {
