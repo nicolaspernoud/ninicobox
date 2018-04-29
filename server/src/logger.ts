@@ -4,7 +4,7 @@ import * as maxmind from 'maxmind';
 
 const lanIPsRegExs: RegExp[] = [/::1/, /.*127\.0.+/, /.*192\.168\..+/];
 
-const logFile = process.env.LOG_FILE ? process.env.LOG_FILE : '../data/app.log';
+const logFile = process.env.LOG_FILE;
 
 const maxmindOptions = {
     watchForUpdates: true,
@@ -23,7 +23,7 @@ export function log(message: string, req?: Request) {
     if (lanIPsRegExs.some(rx => rx.test(ip)) || !process.env.GEO_IP_DATABASE_LOCATION) {
         const city = process.env.GEO_IP_DATABASE_LOCATION ? 'local network' : 'no ip geolocation database';
         const entry = `${date} | ${user} | ${message} | ${ip} | ${city}\n`;
-        fs.appendFile(logFile, entry, 'utf8', err => { if (err) console.log(err); });
+        logFile ? fs.appendFile(logFile, entry, 'utf8', err => { if (err) console.log(err); }) : console.log(entry);
     }
 
     // If not, we lookup the location of the ip, before writing to the log
@@ -39,7 +39,7 @@ export function log(message: string, req?: Request) {
                 city = cityObj ? `${cityObj.postal ? cityObj.postal.code + ' ' : ''}${cityObj.city ? cityObj.city.names['en'] + ', ' : ''}${cityObj.country.names['en']}` : 'unknown location';
             }
             const entry = `${date} | ${user} | ${message} | ${ip} | ${city}\n`;
-            fs.appendFile(logFile, entry, 'utf8', err => { if (err) console.log(err); });
+            logFile ? fs.appendFile(logFile, entry, 'utf8', err => { if (err) console.log(err); }) : console.log(entry);
         });
     }
 }
