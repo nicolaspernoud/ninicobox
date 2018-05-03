@@ -10,7 +10,7 @@ export class UpdateService {
                 .open('Update available', 'Update', { duration: 10000 })
                 .onAction()
                 .subscribe(() => {
-                    swUpdate.activateUpdate().then(() => document.location.reload());
+                    swUpdate.activateUpdate().then(() => document.location.assign('/'));
                 });
         });
         swUpdate.checkForUpdate();
