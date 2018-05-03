@@ -17,6 +17,11 @@
         <span class="flex-spacer"></span>
         <span class="horizontal-flex-container" [@appear]><img height="40" src="assets/ninicobox_logo.svg" class="main-logo">{{title}}</span>
         <span class="flex-spacer"></span>
+        <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>bookmark</mat-icon></button>
+        <mat-menu #menu="matMenu">
+            <a mat-menu-item href="https://mail.ninico.fr/SOGo"><mat-icon>email</mat-icon><span>NinicoMail</span></a>
+            <a mat-menu-item href="https://mail.ninico.fr"><mat-icon>settings_applications</mat-icon><span>NinicoMail Admin</span></a>
+        </mat-menu>
         <button mat-icon-button routerLink="/login" (click)="logout(); menu.close();" *appShowToRoles="['*']">
             <mat-icon>exit_to_app</mat-icon>
         </button>

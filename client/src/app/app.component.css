@@ -42,3 +42,7 @@ mat-sidenav {
 .mat-drawer-container {
     background: transparent;
 }
+
+.mat-menu-item span {
+    vertical-align: middle;
+}
