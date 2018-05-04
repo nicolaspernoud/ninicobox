@@ -1,6 +1,6 @@
 {
   "name": "ninicobox-server",
-  "version": "2.0.x",
+  "version": "2.0.0",
   "description": "Server for NinicoBox",
   "repository": {
     "type": "git",

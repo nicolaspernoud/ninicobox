@@ -1,6 +1,6 @@
 {
   "name": "ninicobox-client",
-  "version": "2.0.x",
+  "version": "2.0.0",
   "description": "Client for NinicoBox",
   "repository": {
     "type": "git",
