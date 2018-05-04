@@ -1,7 +1,9 @@
+
+import {catchError} from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/catch';
+import { Observable } from 'rxjs';
+
 import { environment } from '../../environments/environment';
 import { SafeResourceUrl } from '@angular/platform-browser/src/security/dom_sanitization_service';
 import { TokenResponse, Proxy } from '../../../../common/interfaces';
@@ -17,17 +19,17 @@ export class ProxysService {
 
   getProxyToken(): Observable<TokenResponse> {
     return this.http
-      .get<TokenResponse>(this.tokenEndpoint)
-      .catch(handleHTTPError);
+      .get<TokenResponse>(this.tokenEndpoint).pipe(
+      catchError(handleHTTPError));
   }
 
   getProxys(): Observable<Proxy[]> {
     return this.http
-      .get<Proxy[]>(this.endpoint)
-      .catch(handleHTTPError);
+      .get<Proxy[]>(this.endpoint).pipe(
+      catchError(handleHTTPError));
   }
 
-  setProxys(proxys: ClientProxy[]): Observable<void> {
+  setProxys(proxys: ClientProxy[]): Observable<ClientProxy[]> {
     const sendProxys: ClientProxy[] = [];
     proxys.forEach(proxy => {
       const sendProxy: ClientProxy = { ...proxy };
@@ -36,8 +38,8 @@ export class ProxysService {
     }
     );
     return this.http
-      .post(this.endpoint, sendProxys)
-      .catch(handleHTTPError);
+      .post<ClientProxy[]>(this.endpoint, sendProxys).pipe(
+      catchError(handleHTTPError));
   }
 
 }

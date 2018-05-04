@@ -1,9 +1,12 @@
+
+import {throwError as observableThrowError,  Observable } from 'rxjs';
+
+import {catchError, tap} from 'rxjs/operators';
 import { Injectable, Injector } from '@angular/core';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/throw';
+
+
+
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { AuthService } from './auth.service';
@@ -15,10 +18,10 @@ export class ErrorInterceptor implements HttpInterceptor {
     constructor(private snackBar: MatSnackBar, private router: Router, private injector: Injector) { }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        return next.handle(req)
-            .do((ev: HttpEvent<any>) => {
-            })
-            .catch((response: any) => {
+        return next.handle(req).pipe(
+            tap((ev: HttpEvent<any>) => {
+            }),
+            catchError((response: any) => {
                 if (response instanceof HttpErrorResponse) {
                     if (response.status === 401 || response.status === 403) {
                         this.snackBar.open('Authentication error', 'Dismiss', {
@@ -29,8 +32,8 @@ export class ErrorInterceptor implements HttpInterceptor {
                     }
                 }
 
-                return Observable.throw(response);
-            });
+                return observableThrowError(response);
+            }), );
     }
 
 }

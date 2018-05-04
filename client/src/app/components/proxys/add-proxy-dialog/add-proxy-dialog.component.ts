@@ -1,9 +1,10 @@
+
+import {catchError,  switchMap } from 'rxjs/operators';
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import { switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { handleHTTPError } from '../../../utility_functions';
 
 @Component({
@@ -20,8 +21,8 @@ export class AddProxyDialogComponent implements OnInit {
 
   ngOnInit() {
     // tslint:disable-next-line:max-line-length
-    this.http.get('https://raw.githubusercontent.com/google/material-design-icons/master/iconfont/codepoints', { responseType: 'text' })
-      .catch(handleHTTPError)
+    this.http.get('https://raw.githubusercontent.com/google/material-design-icons/master/iconfont/codepoints', { responseType: 'text' }).pipe(
+      catchError(handleHTTPError))
       .subscribe(data => {
         this.icons = data.split('\n').map(line => {
           const icon = new Icon(line.split(' ')[0]);

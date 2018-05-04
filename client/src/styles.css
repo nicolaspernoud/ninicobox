@@ -37,3 +37,7 @@ mat-expansion-panel {
     width: 100%;
     margin-bottom: 5px !important;
 }
+
+.mat-mini-fab, .mat-raised-button, mat-form-field {
+    margin: 0px 5px 0px 5px !important;
+}

@@ -19,7 +19,7 @@ import { shareRouter } from './controllers/share';
 
 // Create Express server
 export const app = express();
-app.set('port', process.env.PORT || 80);
+app.set('port', process.env.PORT || 2080);
 if (app.get('env') === 'production') {
   app.use(helmet({
     noSniff: false // Allow pdf preview

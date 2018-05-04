@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import * as jwt_decode from 'jwt-decode';
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable ,  BehaviorSubject } from 'rxjs';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { TokenResponse } from '../../../../common/interfaces';

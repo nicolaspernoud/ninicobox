@@ -1,5 +1,6 @@
+
+import {throwError as observableThrowError,  Observable } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
 
 export function handleHTTPError(error: HttpErrorResponse) {
   console.error(error);
@@ -13,5 +14,5 @@ export function handleHTTPError(error: HttpErrorResponse) {
     errorMessage = `Server returned code: ${error.status}, error message is: ${error.message}`;
   }
   console.error(errorMessage);
-  return Observable.throw(errorMessage);
+  return observableThrowError(errorMessage);
 }

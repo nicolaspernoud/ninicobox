@@ -4,14 +4,13 @@ import { environment } from '../../../../environments/environment';
 import { File } from '../../../../../../common/interfaces';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { RenameDialogComponent } from './rename-dialog/rename-dialog.component';
-import { switchMap } from 'rxjs/operators/switchMap';
+import { switchMap } from 'rxjs/operators';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 import { OpenComponent } from './open/open.component';
 import { DomSanitizer } from '@angular/platform-browser';
-import * as path from 'path';
 import { BasicDialogComponent } from '../../basic-dialog/basic-dialog.component';
-import { Subscribable } from 'rxjs/Observable';
+import { Subscribable } from 'rxjs';
 import { appAnimations } from '../../../animations';
 
 @Component({
@@ -73,7 +72,7 @@ export class ExplorerComponent implements OnInit {
             this.fileService.createDir(this.permissions, this.basePath, this.currentPath, newFileName)
                 .pipe(switchMap(data => this.exploreCurrentDirectory())).subscribe(this.displayFiles());
         } else {
-            this.fileService.setContent(this.permissions, this.basePath, path.join(this.currentPath, newFileName), '')
+            this.fileService.setContent(this.permissions, this.basePath, this.currentPath + newFileName, '')
                 .pipe(switchMap(data => this.exploreCurrentDirectory())).subscribe(this.displayFiles());
         }
     }
