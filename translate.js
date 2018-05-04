@@ -36,7 +36,7 @@ function translateFiles(dir, done) {
                 } else {
                     results.push(file);
                     // Translate the file
-                    if (/.*main.*bundle.js/.test(file)) {
+                    if (/.*main.*.js/.test(file)) {
                         fs.readFile(file, 'utf-8', (err, data) => {
                             if (err) throw err;
                             for (let line of translationsArray) {
