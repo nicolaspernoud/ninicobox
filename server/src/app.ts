@@ -16,6 +16,7 @@ import { getFilesACL, setFilesACL } from './models/filesacl';
 import { setProxys } from './models/proxys';
 import { getProxys } from './models/proxys';
 import { shareRouter } from './controllers/share';
+import { getInfos } from './models/infos';
 
 // Create Express server
 export const app = express();
@@ -76,6 +77,7 @@ if (process.env.SECURE_PORT) {
 app.get('/test', function (req, res) {
   res.send('This is a test !');
 });
+app.get('/api/unsecured/infos', (req, res) => res.json(getInfos()));
 
 // Serving client
 app.use(express.static('../client/dist'));

@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import * as jwt_decode from 'jwt-decode';
-import { Observable ,  BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
-import { TokenResponse } from '../../../../common/interfaces';
+import { TokenResponse, Infos } from '../../../../common/interfaces';
 import { environment } from '../../environments/environment';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, catchError } from 'rxjs/operators';
 import { handleHTTPError } from '../utility_functions';
 
 export const TOKEN_NAME = 'jwt_token';
@@ -81,5 +81,11 @@ export class AuthService {
                 this.snackBar.open('Login success', 'OK', { duration: 2000 });
                 this.router.navigate(['/']);
             });
+    }
+
+    getInfos(): Observable<Infos> {
+        return this.http
+            .get<Infos>(`${this.apiEndPoint}/unsecured/infos`).pipe(
+                catchError(handleHTTPError));
     }
 }

@@ -35,3 +35,15 @@ export interface File {
     size: number;
     mtime: Date;
 }
+
+export interface Infos {
+    server_version: string;
+    client_version: string;
+    bookmarks?: Bookmark[];
+}
+
+export interface Bookmark {
+    name: string;
+    url: string;
+    icon: string;
+}

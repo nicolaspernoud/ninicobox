@@ -43,6 +43,14 @@ describe('GET /random-url', () => {
   });
 });
 
+describe('GET infos without authentication', () => {
+  it('should return 200 OK and infos body', (done) => {
+    request(app).get('/api/unsecured/infos')
+    .expect(200)
+    .expect(/.+server_version.+/, done);
+  });
+});
+
 describe('Authenticate with correct admin credentials', () => {
   it('should return a token', () => {
     return request(app)
