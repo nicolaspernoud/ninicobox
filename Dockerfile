@@ -37,5 +37,6 @@ WORKDIR       ${APP_PATH}
 
 COPY          --from=server-builder /usr/src/app/server/ ${APP_PATH}/server/
 COPY          --from=client-builder /usr/src/app/client/dist/ ${APP_PATH}/client/dist/
+COPY          --from=client-builder /usr/src/app/client/package.json ${APP_PATH}/client/package.json
 
 CMD           cd server && npm start
