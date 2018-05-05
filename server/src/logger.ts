@@ -13,6 +13,7 @@ const maxmindOptions = {
         max: 500
     }
 };
+const cityLookup = process.env.GEO_IP_DATABASE_LOCATION ? maxmind.openSync(process.env.GEO_IP_DATABASE_LOCATION, maxmindOptions) : undefined;
 
 export function log(message: string, req?: Request) {
     const date = new Date().toLocaleString('fr-FR', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' });
@@ -20,7 +21,7 @@ export function log(message: string, req?: Request) {
     const ip = req && req.ip ? req.ip : 'unknown_ip';
 
     // If the connection is from the local network, we write directly to the log
-    if (lanIPsRegExs.some(rx => rx.test(ip)) || !process.env.GEO_IP_DATABASE_LOCATION) {
+    if (lanIPsRegExs.some(rx => rx.test(ip)) || !cityLookup) {
         const city = process.env.GEO_IP_DATABASE_LOCATION ? 'local network' : 'no ip geolocation database';
         const entry = `${date} | ${user} | ${message} | ${ip} | ${city}\n`;
         logFile ? fs.appendFile(logFile, entry, 'utf8', err => { if (err) console.log(err); }) : console.log(entry);
@@ -28,18 +29,9 @@ export function log(message: string, req?: Request) {
 
     // If not, we lookup the location of the ip, before writing to the log
     else {
-        maxmind.open(process.env.GEO_IP_DATABASE_LOCATION, maxmindOptions, (err, cityLookup) => {
-            let city: string;
-            if (err) {
-                console.log(err);
-                city = 'unknown_location';
-            }
-            else {
-                const cityObj = cityLookup.get(ip);
-                city = cityObj ? `${cityObj.postal ? cityObj.postal.code + ' ' : ''}${cityObj.city ? cityObj.city.names['en'] + ', ' : ''}${cityObj.country.names['en']}` : 'unknown location';
-            }
-            const entry = `${date} | ${user} | ${message} | ${ip} | ${city}\n`;
-            logFile ? fs.appendFile(logFile, entry, 'utf8', err => { if (err) console.log(err); }) : console.log(entry);
-        });
+        const cityObj = cityLookup.get(ip);
+        const city = cityObj ? `${cityObj.postal ? cityObj.postal.code + ' ' : ''}${cityObj.city ? cityObj.city.names['en'] + ', ' : ''}${cityObj.country.names['en']}` : 'unknown location';
+        const entry = `${date} | ${user} | ${message} | ${ip} | ${city}\n`;
+        logFile ? fs.appendFile(logFile, entry, 'utf8', err => { if (err) console.log(err); }) : console.log(entry);
     }
 }
