@@ -22,12 +22,6 @@ export class AppComponent implements OnInit {
 
   constructor(private authService: AuthService, private update: UpdateService, private router: Router) {
     authService.autoLogin();
-    window.onfocus = () => {
-      if (authService.isTokenExpired()) {
-        authService.logout();
-        router.navigate(['/login']);
-      }
-    };
   }
 
   ngOnInit() {

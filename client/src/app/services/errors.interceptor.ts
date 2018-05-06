@@ -28,7 +28,6 @@ export class ErrorInterceptor implements HttpInterceptor {
                             duration: 3000,
                         });
                         this.injector.get(AuthService).logout();
-                        this.router.navigate(['/login']);
                     }
                 }
 

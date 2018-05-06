@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import * as jwt_decode from 'jwt-decode';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, timer } from 'rxjs';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { TokenResponse, Infos } from '../../../../common/interfaces';
@@ -60,15 +60,25 @@ export class AuthService {
         return !(date.valueOf() > new Date().valueOf());
     }
 
+    getTokenRemainingMs(): number {
+        const token = this.getToken();
+        if (!token) { return 0; }
+        const date = this.getTokenExpirationDate(token);
+        if (date === undefined) { return 0; }
+        return date.valueOf() - new Date().valueOf();
+    }
+
     logout() {
         this.loginInProgressOrLoggedSource.next(false);
         localStorage.removeItem(TOKEN_NAME);
         this.userRoleSubject.next(NOT_LOGGED);
+        this.router.navigate(['/login']);
     }
 
     autoLogin() {
         if (!this.isTokenExpired()) {
             this.userRoleSubject.next(this.getRoleFromToken());
+            this.startSessionTimeout();
         }
     }
 
@@ -80,7 +90,15 @@ export class AuthService {
                 this.userRoleSubject.next(this.getRoleFromToken());
                 this.snackBar.open('Login success', 'OK', { duration: 2000 });
                 this.router.navigate(['/']);
+                this.startSessionTimeout();
             });
+    }
+
+    private startSessionTimeout() {
+        timer(this.getTokenRemainingMs()).subscribe(val => {
+            this.snackBar.open('Session expired, please login.', 'OK', { duration: 2000 });
+            this.logout();
+        });
     }
 
     getInfos(): Observable<Infos> {

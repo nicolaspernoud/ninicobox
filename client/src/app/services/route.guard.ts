@@ -14,7 +14,6 @@ export class RouteGuard implements CanActivate {
             return true;
         }
         this.authService.logout();
-        this.router.navigate(['/login']);
         return false;
     }
 }
