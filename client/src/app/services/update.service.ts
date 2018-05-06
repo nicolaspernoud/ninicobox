@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { SwUpdate } from '@angular/service-worker';
+import { interval } from 'rxjs';
 
 @Injectable()
 export class UpdateService {
@@ -13,6 +14,6 @@ export class UpdateService {
                     swUpdate.activateUpdate().then(() => document.location.assign('/'));
                 });
         });
-        swUpdate.checkForUpdate();
+        interval(1000 * 60 * 2).subscribe(() => swUpdate.checkForUpdate()); // Check for updates every 2 minutes
     }
 }
