@@ -4,6 +4,7 @@ import { UpdateService } from './services/update.service';
 import { Router } from '@angular/router';
 import { appAnimations } from './animations';
 import { Infos } from '../../../common/interfaces';
+import * as packageJson from '../../package.json';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +20,7 @@ export class AppComponent implements OnInit {
     client_version: '...',
     bookmarks: []
   };
+  loaded_client_version = (<any>packageJson).version;
 
   constructor(private authService: AuthService, private update: UpdateService, private router: Router) {
     authService.autoLogin();
