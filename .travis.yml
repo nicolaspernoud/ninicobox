@@ -23,8 +23,9 @@ services:
 
 script:
   # npm audit
-  - cd server && npm audit && cd ..
-  - cd client && npm audit && cd ..
+  - npm install -g npm
+  - cd server && npm audit ; cd ..
+  - cd client && npm audit ; cd ..
   # sonarcloud scan
   - npm install typescript
   - sonar-scanner
