@@ -1,9 +1,3 @@
-/* SystemJS module definition */
-declare var module: NodeModule;
-interface NodeModule {
-  id: string;
-}
-
 /* Enable json imports */
 declare module '*.json' {
   const value: any;
