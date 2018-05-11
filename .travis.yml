@@ -22,10 +22,9 @@ services:
   - docker
 
 script:
-  # nsp scan
-  - npm install nsp --global
-  - nsp check server
-  - nsp check client
+  # npm audit
+  - cd server && npm audit && cd ..
+  - cd client && npm audit && cd ..
   # sonarcloud scan
   - npm install typescript
   - sonar-scanner
