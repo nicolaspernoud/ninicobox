@@ -198,7 +198,7 @@ export class ExplorerComponent implements OnInit {
     }
 
     onUploadComplete(name) {
-        this.exploreCurrentDirectory().subscribe(this.displayFiles('Download'));
+        this.exploreCurrentDirectory().subscribe(this.displayFiles('Upload'));
     }
 
     getType(file): string {

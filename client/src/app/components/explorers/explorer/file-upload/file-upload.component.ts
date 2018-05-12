@@ -1,26 +1,30 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { FilesService } from '../../../../services/files.service';
-import { MatSnackBar } from '@angular/material';
-import { CutCopyProgressBarComponent } from '../explorer.component';
 
 @Component({
     selector: 'app-file-uploader',
     templateUrl: './file-upload.component.html'
 })
 
-export class FileUploadComponent {
+export class FileUploadComponent implements OnInit {
     @Input() path;
     @Input() basePath: string;
     @Output() UploadComplete: EventEmitter<void> = new EventEmitter<void>();
+    progress: number;
 
-    constructor(private fileService: FilesService, public snackBar: MatSnackBar) {
+    constructor(private filesService: FilesService) {}
+
+    ngOnInit() {
+        this.filesService.uploadProgress.subscribe(value => {
+            this.progress = value;
+        });
     }
 
     onChange(event) {
         if (event.target.files.length > 0) {
-            this.snackBar.openFromComponent(CutCopyProgressBarComponent);
-            this.fileService.upload('rw', this.basePath, this.path, event.target.files[0]).subscribe(
+            this.filesService.upload('rw', this.basePath, this.path, event.target.files[0]).subscribe(
                 data => {
+                    this.progress = 0;
                     if (!!this.UploadComplete) {
                         this.UploadComplete.emit(event.target.files[0].name);
                     }

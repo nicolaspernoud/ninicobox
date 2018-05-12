@@ -1,15 +1,21 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpRequest, HttpEvent, HttpEventType } from '@angular/common/http';
 import { File, TokenResponse } from '../../../../common/interfaces';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { map, last, catchError } from 'rxjs/operators';
+import { handleHTTPError } from '../utility_functions';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root',
+})
 export class FilesService {
     headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     urlBase = `${environment.apiEndPoint}/secured/all/files`;
 
-    constructor(private http: HttpClient, ) { }
+    uploadProgress = new BehaviorSubject<number>(0);
+
+    constructor(private http: HttpClient) { }
 
     explore(permissions, basePath, filePath = '') {
         return this.executeRequest(`${this.getUrl(permissions, basePath, filePath)}/explore`);
@@ -37,7 +43,14 @@ export class FilesService {
     upload(permissions, basePath, filePath, file) {
         const formData: FormData = new FormData();
         formData.append('uploadFile', file, file.name);
-        return this.http.post(`${this.getUrl(permissions, basePath, filePath)}/upload`, formData);
+        const req = new HttpRequest('POST', `${this.getUrl(permissions, basePath, filePath)}/upload`, formData, {
+            reportProgress: true
+        });
+        return this.http.request(req).pipe(
+            map(event => this.getEventMessage(event, file)),
+            last(), // return last (completed) message to caller
+            catchError(handleHTTPError)
+        );
     }
 
     getPreview(permissions, basePath, filePath) {
@@ -70,5 +83,25 @@ export class FilesService {
             params: params,
             body: JSON.stringify(sentData)
         });
+    }
+
+    /** Return distinct message for sent, upload progress, & response events */
+    private getEventMessage(event: HttpEvent<any>, file: File) {
+        switch (event.type) {
+            case HttpEventType.Sent:
+                return `Uploading file "${file.name}" of size ${file.size}.`;
+
+            case HttpEventType.UploadProgress:
+                // Compute and show the % done:
+                const percentDone = Math.round(100 * event.loaded / event.total);
+                this.uploadProgress.next(percentDone);
+                return `File "${file.name}" is ${percentDone}% uploaded.`;
+
+            case HttpEventType.Response:
+                return `File "${file.name}" was completely uploaded!`;
+
+            default:
+                return `File "${file.name}" surprising upload event: ${event.type}.`;
+        }
     }
 }

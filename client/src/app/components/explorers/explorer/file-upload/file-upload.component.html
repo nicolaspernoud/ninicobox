@@ -1,4 +1,8 @@
-<button mat-mini-fab (click)="fileUploadInput.click()">
+<button mat-mini-fab (click)="fileUploadInput.click()" *ngIf="progress == 0">
   <mat-icon>file_upload</mat-icon>
+</button>
+<button mat-mini-fab *ngIf="progress > 0">
+  <mat-progress-spinner style="display: contents;" mode="determinate" [diameter]=40 [value]="progress" strokeWidth=3></mat-progress-spinner>
+  {{progress}}
 </button>
 <input #fileUploadInput type="file" (change)="onChange($event)" hidden />
