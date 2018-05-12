@@ -14,6 +14,6 @@ export class UpdateService {
                     swUpdate.activateUpdate().then(() => document.location.assign('/'));
                 });
         });
-        interval(1000 * 60 * 2).subscribe(() => swUpdate.checkForUpdate()); // Check for updates every 2 minutes
+        swUpdate.checkForUpdate(); // Check for updates at startup
     }
 }
