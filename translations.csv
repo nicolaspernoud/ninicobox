@@ -31,6 +31,7 @@ Proxy url;Adresse du proxy
 Proxys services;Services
 Rename;Renommer
 Save;Enregistrer
+Server communication error;Erreur de communication avec le serveur
 Session expired, please login.;Session terminée, veuillez vous reconnecter.
 Share;Partager
 Surname;Nom

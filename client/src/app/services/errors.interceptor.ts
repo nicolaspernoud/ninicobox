@@ -1,7 +1,7 @@
 
-import {throwError as observableThrowError,  Observable } from 'rxjs';
+import { throwError as observableThrowError, Observable } from 'rxjs';
 
-import {catchError, tap} from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { Injectable, Injector } from '@angular/core';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
@@ -28,11 +28,15 @@ export class ErrorInterceptor implements HttpInterceptor {
                             duration: 3000,
                         });
                         this.injector.get(AuthService).logout();
+                    } else {
+                        this.snackBar.open(`Server communication error`, 'Dismiss', {
+                            duration: 3000,
+                        });
                     }
                 }
 
                 return observableThrowError(response);
-            }), );
+            }));
     }
 
 }
