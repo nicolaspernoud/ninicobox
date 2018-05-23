@@ -15,12 +15,12 @@
             <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-            <button mat-menu-item *ngIf="!file.isDir" (click)="download(file, false);">
+            <button mat-menu-item (click)="download(file, false);">
                 <mat-icon>file_download</mat-icon>
                 <span>Download</span>
             </button>
             <div *appShowToRoles="['admin']">
-                <button mat-menu-item *ngIf="!file.isDir" (click)="download(file, true);">
+                <button mat-menu-item (click)="download(file, true);">
                     <mat-icon>share</mat-icon>
                     <span>Share</span>
                 </button>

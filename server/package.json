@@ -1,6 +1,6 @@
 {
   "name": "ninicobox-server",
-  "version": "2.0.22",
+  "version": "2.0.23",
   "description": "Server for NinicoBox",
   "repository": {
     "type": "git",
@@ -18,7 +18,7 @@
     "test": "jest --forceExit --coverage --verbose"
   },
   "dependencies": {
-    "@types/maxmind": "^2.0.2",
+    "archiver": "^2.1.1",
     "bcrypt": "^2.0.1",
     "body-parser": "^1.18.3",
     "busboy": "^0.2.14",
@@ -36,6 +36,8 @@
     "request": "^2.86.0"
   },
   "devDependencies": {
+    "@types/archiver": "^2.1.1",
+    "@types/maxmind": "^2.0.2",
     "@types/bcrypt": "^2.0.0",
     "@types/body-parser": "^1.17.0",
     "@types/busboy": "^0.2.3",

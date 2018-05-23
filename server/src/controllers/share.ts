@@ -5,6 +5,7 @@ import { Router } from 'express';
 import { log } from '../logger';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as Archiver from 'archiver';
 
 export const shareRouter = Router();
 
@@ -29,12 +30,25 @@ shareRouter.get('/:basepath/:path', function (req: Request, res: Response) {
             const readStream = fs.createReadStream(filePath, { start, end });
             readStream.pipe(res);
         } else {
-            res.writeHead(200, {
-                'Content-Length': fileSize,
-                'Content-Disposition': !!req.query.inline ? 'inline' : `attachment; filename="${path.basename(filePath)}"`
-            });
-            const readStream = fs.createReadStream(filePath);
-            readStream.pipe(res);
+            if (stat.isDirectory()) {
+                const archive = Archiver('zip');
+                archive.on('error', (err: any) => {
+                    res.status(500).send({ error: err.message });
+                });
+                // Set the archive name
+                res.attachment(path.basename(filePath) + '.zip');
+                archive.pipe(res);
+                archive.directory(filePath, false);
+                archive.finalize();
+            }
+            else {
+                res.writeHead(200, {
+                    'Content-Length': fileSize,
+                    'Content-Disposition': !!req.query.inline ? 'inline' : `attachment; filename="${path.basename(filePath)}"`
+                });
+                const readStream = fs.createReadStream(filePath);
+                readStream.pipe(res);
+            }
         }
     } else {
         res.status(403).send();
