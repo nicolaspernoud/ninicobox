@@ -23,7 +23,7 @@ export function log(message: string, req?: Request) {
     // If the connection is from the local network, we write directly to the log
     if (lanIPsRegExs.some(rx => rx.test(ip)) || !cityLookup) {
         const city = process.env.GEO_IP_DATABASE_LOCATION ? 'local network' : 'no ip geolocation database';
-        const entry = `${date} | ${user} | ${message} | ${ip} | ${city}\n`;
+        const entry = `${date} | ${user} | ${message} | ${ip} | ${city}`;
         logFile ? fs.appendFile(logFile, entry, 'utf8', err => { if (err) console.log(err); }) : console.log(entry);
     }
 
@@ -31,7 +31,7 @@ export function log(message: string, req?: Request) {
     else {
         const cityObj = cityLookup.get(ip);
         const city = cityObj ? `${cityObj.postal ? cityObj.postal.code + ' ' : ''}${cityObj.city ? cityObj.city.names['en'] + ', ' : ''}${cityObj.country.names['en']}` : 'unknown location';
-        const entry = `${date} | ${user} | ${message} | ${ip} | ${city}\n`;
+        const entry = `${date} | ${user} | ${message} | ${ip} | ${city}`;
         logFile ? fs.appendFile(logFile, entry, 'utf8', err => { if (err) console.log(err); }) : console.log(entry);
     }
 }
