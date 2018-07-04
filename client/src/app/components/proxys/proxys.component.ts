@@ -45,7 +45,8 @@ export class ProxysComponent implements OnInit {
     const newProxy: ClientProxy = {
       name: '',
       url: '',
-      icon: 'home'
+      icon: 'home',
+      rank: this.proxys.length
     };
     const dialogRef = this.dialog.open(AddProxyDialogComponent, { data: newProxy });
     dialogRef.afterClosed().subscribe(proxy => {
